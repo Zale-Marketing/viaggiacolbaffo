@@ -161,9 +161,104 @@ require_once ROOT . '/includes/header.php';
   </div>
 </section>
 
-<!-- GALLERY SECTION — Plan 03 appends here -->
-<!-- TAGS SECTION — Plan 03 appends here -->
-<!-- RELATED TRIPS — Plan 03 appends here -->
+<!-- ========================================================
+     GALLERY SECTION
+     ======================================================== -->
+<section class="trip-section trip-section--dark" id="galleria">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-header__title">Galleria</h2>
+    </div>
+    <?php if (!empty($trip['gallery'])): ?>
+    <div class="gallery-grid" id="gallery-grid">
+      <?php foreach ($trip['gallery'] as $idx => $img_url): ?>
+      <div class="gallery-item" data-index="<?php echo $idx; ?>">
+        <img src="<?php echo htmlspecialchars($img_url); ?>" alt="<?php echo htmlspecialchars($trip['title']); ?> foto <?php echo $idx + 1; ?>" loading="lazy">
+      </div>
+      <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
+  </div>
+</section>
+
+<!-- ========================================================
+     LIGHTBOX
+     ======================================================== -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+  <button class="lightbox__close" id="lb-close" aria-label="Chiudi">&times;</button>
+  <span class="lightbox__counter" id="lb-counter"></span>
+  <button class="lightbox__prev" id="lb-prev" aria-label="Foto precedente"><i class="fa-solid fa-chevron-left"></i></button>
+  <img class="lightbox__img" id="lb-img" src="" alt="">
+  <button class="lightbox__next" id="lb-next" aria-label="Foto successiva"><i class="fa-solid fa-chevron-right"></i></button>
+</div>
+
+<!-- ========================================================
+     TAGS SECTION
+     ======================================================== -->
+<?php if (!empty($trip['tags'])): ?>
+<section class="trip-section" id="tags">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-header__title">Questo viaggio è perfetto per:</h2>
+    </div>
+    <?php
+    $continent_slugs = ['america','asia','europa','africa','oceania','medio-oriente'];
+    ?>
+    <div class="trip-tags">
+      <?php foreach ($trip['tags'] as $tag): ?>
+        <?php
+        if (in_array($tag, $continent_slugs)) {
+            $href = '/viaggi?continent=' . urlencode($tag);
+        } else {
+            $href = '/viaggi?tipo=' . urlencode($tag);
+        }
+        ?>
+        <a href="<?php echo $href; ?>" class="trip-tag"><?php echo htmlspecialchars($tag); ?></a>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</section>
+<?php endif; ?>
+
+<!-- ========================================================
+     RELATED TRIPS
+     ======================================================== -->
+<?php
+// Get up to 3 trips sharing the same continent (excluding current trip)
+$all_trips_raw = array_filter(load_trips(), fn($t) =>
+    $t['published'] === true &&
+    $t['slug'] !== $trip['slug'] &&
+    $t['continent'] === $trip['continent']
+);
+$related = array_slice(array_values($all_trips_raw), 0, 3);
+$status_labels_rel = ['confermata'=>'Confermata','ultimi-posti'=>'Ultimi posti','sold-out'=>'Sold out','programmata'=>'In programmazione'];
+?>
+<?php if (!empty($related)): ?>
+<section class="trip-section section--dark" id="related">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-header__title">Altri viaggi che potrebbero piacerti</h2>
+    </div>
+    <div class="related-grid">
+      <?php foreach ($related as $rel): ?>
+      <div class="trip-card">
+        <img class="trip-card__image" src="<?php echo htmlspecialchars($rel['hero_image']); ?>" alt="<?php echo htmlspecialchars($rel['title']); ?>">
+        <div class="trip-card__overlay"></div>
+        <div class="trip-card__continent"><?php echo htmlspecialchars(ucfirst($rel['continent'])); ?></div>
+        <div class="trip-card__status status--<?php echo htmlspecialchars($rel['status']); ?>"><?php echo htmlspecialchars($status_labels_rel[$rel['status']] ?? ucfirst($rel['status'])); ?></div>
+        <div class="trip-card__content">
+          <h3 class="trip-card__title"><?php echo htmlspecialchars($rel['title']); ?></h3>
+          <div class="trip-card__dates"><?php echo htmlspecialchars(fmt_date($rel['date_start'])); ?></div>
+          <div class="trip-card__price">Da €<?php echo number_format($rel['price_from'], 0, ',', '.'); ?></div>
+          <a href="/viaggio/<?php echo htmlspecialchars($rel['slug']); ?>" class="btn btn--outline-white" style="margin-top:0.5rem;padding:8px 18px;font-size:0.85rem;">Scopri il viaggio</a>
+        </div>
+      </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</section>
+<?php endif; ?>
+
 <!-- QUOTE FORM — Plan 03 appends here -->
 
 </main>
