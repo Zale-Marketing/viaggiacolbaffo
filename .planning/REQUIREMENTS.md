@@ -92,8 +92,8 @@
 
 ### Admin Panel
 
-- [ ] **ADMIN-01**: admin/login.php: minimal dark login form with logo, password field, submit; PHP session auth; password from config.php; all admin pages redirect to login if not authenticated
-- [ ] **ADMIN-02**: admin/index.php dashboard: table of all trips (title, continent, tags, status, published); actions per trip: Edit, Preview (new tab), Delete, Toggle Published; stats bar (total/published/draft count); "Crea Nuovo Viaggio" gold button
+- [x] **ADMIN-01**: admin/login.php: minimal dark login form with logo, password field, submit; PHP session auth; password from config.php; all admin pages redirect to login if not authenticated
+- [x] **ADMIN-02**: admin/index.php dashboard: table of all trips (title, continent, tags, status, published); actions per trip: Edit, Preview (new tab), Delete, Toggle Published; stats bar (total/published/draft count); "Crea Nuovo Viaggio" gold button
 - [ ] **ADMIN-03**: admin/edit-trip.php: full trip form — basic info (title, slug auto-generated, continent select, status select, published toggle), dates + price (start date, end date, auto-calculated duration, price_from)
 - [ ] **ADMIN-04**: Admin edit form: media fields — hero image URL with live preview thumbnail, gallery images (textarea one URL per line with preview grid)
 - [ ] **ADMIN-05**: Admin edit form: content fields — short description (max 160 chars with counter), full description (rich textarea)
@@ -200,8 +200,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | B2B-04 | Phase 5 — Destinations + B2B | Complete |
 | B2B-05 | Phase 5 — Destinations + B2B | Complete |
 | B2B-06 | Phase 5 — Destinations + B2B | Complete |
-| ADMIN-01 | Phase 6 — Admin Panel | Pending |
-| ADMIN-02 | Phase 6 — Admin Panel | Pending |
+| ADMIN-01 | Phase 6 — Admin Panel | Complete |
+| ADMIN-02 | Phase 6 — Admin Panel | Complete |
 | ADMIN-03 | Phase 6 — Admin Panel | Pending |
 | ADMIN-04 | Phase 6 — Admin Panel | Pending |
 | ADMIN-05 | Phase 6 — Admin Panel | Pending |
