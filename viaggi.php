@@ -9,22 +9,59 @@ $hero_page  = true;
 $all_trips    = array_values(array_filter(load_trips(), fn($t) => $t['published'] === true));
 $all_tags_raw = load_tags();
 
-// Categorize tags into 4 filter groups
-$continent_slugs   = ['america', 'asia', 'europa', 'africa', 'oceania', 'medio-oriente'];
-$travel_type_slugs = ['road-trip', 'avventura', 'cultura', 'gastronomia', 'parchi-naturali', 'relax'];
-$period_slugs      = ['aprile', 'maggio', 'giugno', 'settembre', 'ottobre', 'primavera'];
-$group_type_slugs  = ['coppia', 'famiglia', 'gruppo'];
-
-$continents   = array_values(array_filter($all_tags_raw, fn($t) => in_array($t['slug'], $continent_slugs)));
-$travel_types = array_values(array_filter($all_tags_raw, fn($t) => in_array($t['slug'], $travel_type_slugs)));
-$periods      = array_values(array_filter($all_tags_raw, fn($t) => in_array($t['slug'], $period_slugs)));
-$group_types  = array_values(array_filter($all_tags_raw, fn($t) => in_array($t['slug'], $group_type_slugs)));
-
-// URL pre-apply
+// URL pre-apply (new param scheme)
+$init_search    = htmlspecialchars($_GET['search']    ?? '');
 $init_continent = htmlspecialchars($_GET['continent'] ?? '');
-$init_type      = htmlspecialchars($_GET['type']      ?? '');
-$init_period    = htmlspecialchars($_GET['period']    ?? '');
-$init_group     = htmlspecialchars($_GET['group']     ?? '');
+$init_tipo_raw  = trim($_GET['tipo']   ?? '');
+$init_mese_raw  = trim($_GET['mese']   ?? '');
+$init_per_raw   = trim($_GET['per']    ?? '');
+$init_sort      = htmlspecialchars($_GET['sort']      ?? 'date-asc');
+
+$init_tipo = $init_tipo_raw ? array_map('htmlspecialchars', explode(',', $init_tipo_raw)) : [];
+$init_mese = $init_mese_raw ? array_map('htmlspecialchars', explode(',', $init_mese_raw)) : [];
+$init_per  = $init_per_raw  ? array_map('htmlspecialchars', explode(',', $init_per_raw))  : [];
+
+// Filter categories (from tags.json)
+$continent_slugs = ['america', 'asia', 'europa', 'africa', 'oceania', 'medio-oriente'];
+$continents = array_values(array_filter($all_tags_raw, fn($t) => in_array($t['slug'], $continent_slugs)));
+
+// Hardcoded ordered options for tipo/mese/per (not all may exist in tags.json yet)
+$tipo_options = [
+  ['slug' => 'avventura',      'label' => 'Avventura'],
+  ['slug' => 'cultura',        'label' => 'Cultura'],
+  ['slug' => 'relax',          'label' => 'Relax'],
+  ['slug' => 'gastronomia',    'label' => 'Gastronomia'],
+  ['slug' => 'road-trip',      'label' => 'Road Trip'],
+  ['slug' => 'parchi-naturali','label' => 'Parchi Naturali'],
+  ['slug' => 'mare',           'label' => 'Mare'],
+  ['slug' => 'neve',           'label' => 'Neve'],
+  ['slug' => 'lusso',          'label' => 'Lusso'],
+  ['slug' => 'economico',      'label' => 'Economico'],
+];
+
+$mese_options = [
+  ['slug' => 'gennaio',   'label' => 'Gennaio',   'num' => 1],
+  ['slug' => 'febbraio',  'label' => 'Febbraio',  'num' => 2],
+  ['slug' => 'marzo',     'label' => 'Marzo',     'num' => 3],
+  ['slug' => 'aprile',    'label' => 'Aprile',    'num' => 4],
+  ['slug' => 'maggio',    'label' => 'Maggio',    'num' => 5],
+  ['slug' => 'giugno',    'label' => 'Giugno',    'num' => 6],
+  ['slug' => 'luglio',    'label' => 'Luglio',    'num' => 7],
+  ['slug' => 'agosto',    'label' => 'Agosto',    'num' => 8],
+  ['slug' => 'settembre', 'label' => 'Settembre', 'num' => 9],
+  ['slug' => 'ottobre',   'label' => 'Ottobre',   'num' => 10],
+  ['slug' => 'novembre',  'label' => 'Novembre',  'num' => 11],
+  ['slug' => 'dicembre',  'label' => 'Dicembre',  'num' => 12],
+];
+
+$per_options = [
+  ['slug' => 'coppia',   'label' => 'Per Coppia'],
+  ['slug' => 'famiglia', 'label' => 'Per Famiglie'],
+  ['slug' => 'single',   'label' => 'Single'],
+  ['slug' => 'gruppo',   'label' => 'Piccoli Gruppi'],
+  ['slug' => 'over-50',  'label' => 'Over 50'],
+  ['slug' => 'giovani',  'label' => 'Giovani'],
+];
 
 require_once ROOT . '/includes/header.php';
 ?>
@@ -43,67 +80,121 @@ require_once ROOT . '/includes/header.php';
   </div>
 
   <!-- ============================================================
-       FILTER BAR (sticky, single row of dropdowns)
+       FILTER BAR (sticky, single row)
        ============================================================ -->
   <div class="filter-bar" id="filter-bar">
-    <div class="filter-bar__dropdowns">
 
-      <div class="filter-dropdown">
-        <label for="filter-continent">Destinazione</label>
-        <select id="filter-continent">
-          <option value="">Tutte le destinazioni</option>
-          <?php foreach ($continents as $c): ?>
-            <option value="<?= htmlspecialchars($c['slug']) ?>"
-              <?= $init_continent === $c['slug'] ? 'selected' : '' ?>>
-              <?= htmlspecialchars($c['label']) ?>
-            </option>
-          <?php endforeach; ?>
-        </select>
-      </div>
-
-      <div class="filter-dropdown">
-        <label for="filter-type">Tipo di viaggio</label>
-        <select id="filter-type">
-          <option value="">Tutti i tipi</option>
-          <?php foreach ($travel_types as $t): ?>
-            <option value="<?= htmlspecialchars($t['slug']) ?>"
-              <?= $init_type === $t['slug'] ? 'selected' : '' ?>>
-              <?= htmlspecialchars($t['label']) ?>
-            </option>
-          <?php endforeach; ?>
-        </select>
-      </div>
-
-      <div class="filter-dropdown">
-        <label for="filter-period">Periodo</label>
-        <select id="filter-period">
-          <option value="">Tutti i periodi</option>
-          <?php foreach ($periods as $p): ?>
-            <option value="<?= htmlspecialchars($p['slug']) ?>"
-              <?= $init_period === $p['slug'] ? 'selected' : '' ?>>
-              <?= htmlspecialchars($p['label']) ?>
-            </option>
-          <?php endforeach; ?>
-        </select>
-      </div>
-
-      <div class="filter-dropdown">
-        <label for="filter-group">Per chi</label>
-        <select id="filter-group">
-          <option value="">Tutti</option>
-          <?php foreach ($group_types as $g): ?>
-            <option value="<?= htmlspecialchars($g['slug']) ?>"
-              <?= $init_group === $g['slug'] ? 'selected' : '' ?>>
-              <?= htmlspecialchars($g['label']) ?>
-            </option>
-          <?php endforeach; ?>
-        </select>
-      </div>
-
-      <button class="filter-reset-btn" id="filter-reset" type="button">Azzera filtri</button>
-
+    <!-- Search -->
+    <div class="filter-search" id="filter-search-wrap">
+      <input type="text" id="search-trips"
+             placeholder="🔍 Cerca destinazione, tema..."
+             autocomplete="off"
+             value="<?= $init_search ?>">
+      <button class="filter-search__clear" id="search-clear" type="button" aria-label="Cancella ricerca">×</button>
     </div>
+
+    <!-- Continente (single select / radio) -->
+    <div class="filter-dropdown" id="dd-continent">
+      <button class="filter-dropdown__toggle<?= $init_continent ? ' has-selection' : '' ?>"
+              id="toggle-continent" type="button">
+        <?php
+          if ($init_continent) {
+            $cont_label = '';
+            foreach ($continents as $c) { if ($c['slug'] === $init_continent) { $cont_label = $c['label']; break; } }
+            echo htmlspecialchars($cont_label ?: 'Continente');
+          } else {
+            echo 'Continente';
+          }
+        ?>
+      </button>
+      <div class="filter-dropdown__panel" id="panel-continent">
+        <label>
+          <input type="radio" name="continent" value="">
+          Tutti
+        </label>
+        <?php foreach ($continents as $c): ?>
+          <label>
+            <input type="radio" name="continent"
+                   value="<?= htmlspecialchars($c['slug']) ?>"
+                   <?= $init_continent === $c['slug'] ? 'checked' : '' ?>>
+            <?= htmlspecialchars($c['label']) ?>
+          </label>
+        <?php endforeach; ?>
+      </div>
+    </div>
+
+    <!-- Tipo viaggio (multi select / checkbox) -->
+    <div class="filter-dropdown" id="dd-tipo">
+      <button class="filter-dropdown__toggle<?= $init_tipo ? ' has-selection' : '' ?>"
+              id="toggle-tipo" type="button">
+        <?= $init_tipo ? 'Tipo (' . count($init_tipo) . ')' : 'Tipo viaggio' ?>
+      </button>
+      <div class="filter-dropdown__panel" id="panel-tipo">
+        <?php foreach ($tipo_options as $t): ?>
+          <label>
+            <input type="checkbox" name="tipo"
+                   value="<?= htmlspecialchars($t['slug']) ?>"
+                   <?= in_array($t['slug'], $init_tipo) ? 'checked' : '' ?>>
+            <?= htmlspecialchars($t['label']) ?>
+          </label>
+        <?php endforeach; ?>
+      </div>
+    </div>
+
+    <!-- Mese (multi select / checkbox) -->
+    <div class="filter-dropdown" id="dd-mese">
+      <button class="filter-dropdown__toggle<?= $init_mese ? ' has-selection' : '' ?>"
+              id="toggle-mese" type="button">
+        <?= $init_mese ? 'Mese (' . count($init_mese) . ')' : 'Mese' ?>
+      </button>
+      <div class="filter-dropdown__panel" id="panel-mese">
+        <?php foreach ($mese_options as $m): ?>
+          <label>
+            <input type="checkbox" name="mese"
+                   value="<?= htmlspecialchars($m['slug']) ?>"
+                   <?= in_array($m['slug'], $init_mese) ? 'checked' : '' ?>>
+            <?= htmlspecialchars($m['label']) ?>
+          </label>
+        <?php endforeach; ?>
+      </div>
+    </div>
+
+    <!-- Per chi (multi select / checkbox) -->
+    <div class="filter-dropdown" id="dd-per">
+      <button class="filter-dropdown__toggle<?= $init_per ? ' has-selection' : '' ?>"
+              id="toggle-per" type="button">
+        <?= $init_per ? 'Per chi (' . count($init_per) . ')' : 'Per chi' ?>
+      </button>
+      <div class="filter-dropdown__panel" id="panel-per">
+        <?php foreach ($per_options as $p): ?>
+          <label>
+            <input type="checkbox" name="per"
+                   value="<?= htmlspecialchars($p['slug']) ?>"
+                   <?= in_array($p['slug'], $init_per) ? 'checked' : '' ?>>
+            <?= htmlspecialchars($p['label']) ?>
+          </label>
+        <?php endforeach; ?>
+      </div>
+    </div>
+
   </div><!-- /.filter-bar -->
+
+  <!-- ============================================================
+       SORT BAR
+       ============================================================ -->
+  <div class="sort-bar">
+    <span class="sort-bar__label">Ordina per:</span>
+    <button class="sort-pill<?= $init_sort === 'date-asc'   ? ' sort-pill--active' : '' ?>"
+            data-sort="date-asc"   type="button">Data partenza ↑</button>
+    <button class="sort-pill<?= $init_sort === 'date-desc'  ? ' sort-pill--active' : '' ?>"
+            data-sort="date-desc"  type="button">Data partenza ↓</button>
+    <button class="sort-pill<?= $init_sort === 'price-asc'  ? ' sort-pill--active' : '' ?>"
+            data-sort="price-asc"  type="button">Prezzo ↑</button>
+    <button class="sort-pill<?= $init_sort === 'price-desc' ? ' sort-pill--active' : '' ?>"
+            data-sort="price-desc" type="button">Prezzo ↓</button>
+    <button class="sort-pill<?= $init_sort === 'newest'     ? ' sort-pill--active' : '' ?>"
+            data-sort="newest"     type="button">Novità</button>
+  </div>
 
   <!-- ============================================================
        TRIP GRID SECTION
@@ -111,17 +202,36 @@ require_once ROOT . '/includes/header.php';
   <section class="section">
     <div class="container">
 
-      <!-- Count display (between filter bar and grid) -->
-      <p class="catalog-count">
-        Mostrando <span id="trip-count" class="catalog-count__number"><?= count($all_trips) ?></span> viaggi
-      </p>
+      <!-- Results bar -->
+      <div class="results-bar">
+        <p class="results-bar__count">
+          Mostrando <span id="trip-count" class="count-number"><?= count($all_trips) ?></span> viaggi
+        </p>
+        <button class="filter-reset-btn<?= ($init_search || $init_continent || $init_tipo || $init_mese || $init_per) ? ' is-visible' : '' ?>"
+                id="filter-reset" type="button">
+          Reset filtri
+        </button>
+      </div>
 
       <!-- Trip grid -->
       <div id="trips-grid" class="trip-grid">
-        <?php foreach ($all_trips as $trip): ?>
+        <?php foreach ($all_trips as $idx => $trip):
+          $trip_month = (int) date('n', strtotime($trip['date_start']));
+          $search_text = strtolower(
+            $trip['title'] . ' ' .
+            $trip['continent'] . ' ' .
+            ($trip['short_description'] ?? '') . ' ' .
+            implode(' ', $trip['tags'] ?? [])
+          );
+        ?>
         <div class="trip-card-wrapper"
              data-continent="<?= htmlspecialchars($trip['continent']) ?>"
-             data-tags="<?= htmlspecialchars(implode(' ', $trip['tags'] ?? [])) ?>">
+             data-tags="<?= htmlspecialchars(implode(' ', $trip['tags'] ?? [])) ?>"
+             data-month="<?= $trip_month ?>"
+             data-price="<?= (int)($trip['price_from'] ?? 0) ?>"
+             data-date="<?= htmlspecialchars($trip['date_start']) ?>"
+             data-index="<?= $idx ?>"
+             data-search="<?= htmlspecialchars($search_text) ?>">
           <div class="trip-card">
             <img class="trip-card__image"
                  src="<?= htmlspecialchars($trip['hero_image']) ?>"
@@ -153,19 +263,31 @@ require_once ROOT . '/includes/header.php';
         <?php endforeach; ?>
       </div><!-- /#trips-grid -->
 
-      <!-- Empty state (shown when no trips match active filters) -->
+      <!-- Empty state -->
       <div id="empty-state" class="catalog-empty">
-        <h2 class="catalog-empty__title">Nessun viaggio trovato</h2>
-        <p class="catalog-empty__text">Nessun viaggio trovato per i tuoi filtri. Non trovate quello che cercate? Proponeteci un viaggio su misura!</p>
-        <?php if (TALLY_CATALOG_URL): ?>
-          <iframe src="<?= htmlspecialchars(TALLY_CATALOG_URL) ?>"
+        <div class="catalog-empty__icon">
+          <i class="fas fa-compass"></i>
+        </div>
+        <h3 class="catalog-empty__title">Nessun viaggio trovato</h3>
+        <p class="catalog-empty__text">Non hai trovato quello che cercavi? Proponi un viaggio su misura!</p>
+        <?php if (defined('TALLY_CUSTOM_URL') && TALLY_CUSTOM_URL): ?>
+          <button class="catalog-empty__cta"
+                  onclick="window.open('<?= htmlspecialchars(TALLY_CUSTOM_URL) ?>', '_blank')">
+            Richiedi viaggio personalizzato
+          </button>
+          <iframe src="<?= htmlspecialchars(TALLY_CUSTOM_URL) ?>"
                   title="Richiedi un viaggio su misura"
-                  frameborder="0"
-                  marginheight="0"
-                  marginwidth="0">
+                  frameborder="0" marginheight="0" marginwidth="0">
           </iframe>
+        <?php elseif (defined('TALLY_CATALOG_URL') && TALLY_CATALOG_URL): ?>
+          <button class="catalog-empty__cta"
+                  onclick="window.open('<?= htmlspecialchars(TALLY_CATALOG_URL) ?>', '_blank')">
+            Richiedi viaggio personalizzato
+          </button>
         <?php else: ?>
-          <p class="catalog-empty__cta-fallback">Scrivici su <a href="https://wa.me/<?= str_replace(['+', ' '], '', WHATSAPP_NUMBER) ?>">WhatsApp</a> per un viaggio su misura.</p>
+          <a class="catalog-empty__cta" href="/agenzie.php">
+            Richiedi viaggio personalizzato
+          </a>
         <?php endif; ?>
       </div><!-- /#empty-state -->
 
@@ -176,85 +298,16 @@ require_once ROOT . '/includes/header.php';
 
 <?php require_once ROOT . '/includes/footer.php'; ?>
 
+<!-- Pass PHP init state to JS -->
 <script>
-(function() {
-  var selContinent = document.getElementById('filter-continent');
-  var selType      = document.getElementById('filter-type');
-  var selPeriod    = document.getElementById('filter-period');
-  var selGroup     = document.getElementById('filter-group');
-  var resetBtn     = document.getElementById('filter-reset');
-
-  var wrappers = Array.from(document.querySelectorAll('.trip-card-wrapper'));
-  var countEl  = document.getElementById('trip-count');
-  var gridEl   = document.getElementById('trips-grid');
-  var emptyEl  = document.getElementById('empty-state');
-
-  function applyFilters() {
-    var continent = selContinent.value;
-    var type      = selType.value;
-    var period    = selPeriod.value;
-    var group     = selGroup.value;
-
-    var visible = 0;
-    wrappers.forEach(function(w) {
-      var wContinent = w.dataset.continent;
-      var wTags      = w.dataset.tags ? w.dataset.tags.split(' ') : [];
-
-      var m1 = !continent || wContinent === continent;
-      var m2 = !type      || wTags.indexOf(type)   !== -1;
-      var m3 = !period    || wTags.indexOf(period)  !== -1;
-      var m4 = !group     || wTags.indexOf(group)   !== -1;
-
-      if (m1 && m2 && m3 && m4) {
-        w.style.display = '';
-        visible++;
-      } else {
-        w.style.display = 'none';
-      }
-    });
-
-    // Update count with fade transition
-    countEl.classList.add('count-fade');
-    setTimeout(function() {
-      countEl.textContent = visible;
-      countEl.classList.remove('count-fade');
-    }, 150);
-
-    // Toggle grid / empty state
-    var hasResults = visible > 0;
-    gridEl.style.display  = hasResults ? '' : 'none';
-    emptyEl.style.display = hasResults ? 'none' : 'block';
-
-    // Highlight active dropdowns
-    [selContinent, selType, selPeriod, selGroup].forEach(function(sel) {
-      sel.classList.toggle('filter-active', sel.value !== '');
-    });
-
-    // Sync URL for deep-linking
-    var params = new URLSearchParams();
-    if (continent) params.set('continent', continent);
-    if (type)      params.set('type',      type);
-    if (period)    params.set('period',    period);
-    if (group)     params.set('group',     group);
-    var newUrl = params.toString() ? '?' + params.toString() : window.location.pathname;
-    history.replaceState(null, '', newUrl);
-  }
-
-  // Bind dropdowns
-  [selContinent, selType, selPeriod, selGroup].forEach(function(sel) {
-    sel.addEventListener('change', applyFilters);
-  });
-
-  // Reset button
-  resetBtn.addEventListener('click', function() {
-    selContinent.value = '';
-    selType.value      = '';
-    selPeriod.value    = '';
-    selGroup.value     = '';
-    applyFilters();
-  });
-
-  // Initialize — apply URL pre-filters immediately
-  applyFilters();
-})();
+window.FILTERS_INIT = {
+  search:    <?= json_encode($init_search) ?>,
+  continent: <?= json_encode($init_continent) ?>,
+  tipo:      <?= json_encode(array_values($init_tipo)) ?>,
+  mese:      <?= json_encode(array_values($init_mese)) ?>,
+  per:       <?= json_encode(array_values($init_per)) ?>,
+  sort:      <?= json_encode($init_sort) ?>,
+  meseMap:   <?= json_encode(array_column($mese_options, 'num', 'slug')) ?>
+};
 </script>
+<script src="/assets/js/filters.js"></script>

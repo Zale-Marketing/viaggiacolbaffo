@@ -875,136 +875,284 @@ body.has-hero #site-header.scrolled nav a {
   margin: 0;
 }
 
-/* --- 2. Filter bar (sticky, below sticky header) --- */
-/* NOTE: top: 80px clears the sticky site header (~82px rendered height).
-   If filter bar overlaps header in UAT, increase to top: 84px. */
+/* --- 2. Filter bar (sticky, single row) --- */
 
 .filter-bar {
   position: sticky;
-  top: 80px;
-  z-index: 90;
-  background: var(--dark-card);
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  padding: 0.875rem 0;
-}
-
-/* --- 3. Filter dropdowns (single horizontal row) --- */
-
-.filter-bar__dropdowns {
+  top: 70px;
+  z-index: 100;
+  background: #111827;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding: 12px 24px;
   display: flex;
-  gap: 1rem;
+  align-items: center;
+  gap: 10px;
   flex-wrap: wrap;
-  padding: 0 1.5rem;
-  align-items: flex-end;
 }
 
-.filter-dropdown {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  flex: 1;
-  min-width: 130px;
-  max-width: 220px;
+/* Search input */
+.filter-search {
+  position: relative;
+  flex-grow: 1;
+  max-width: 280px;
 }
 
-.filter-dropdown label {
-  font-size: 0.68rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--grey);
-  font-family: var(--font-body);
-}
-
-.filter-dropdown select {
-  background-color: rgba(255,255,255,0.06);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888888' d='M6 8 1 3h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 12px;
-  border: 1.5px solid rgba(255,255,255,0.2);
-  border-radius: 8px;
+.filter-search input {
+  width: 100%;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
   color: var(--white);
   font-family: var(--font-body);
   font-size: 0.875rem;
-  padding: 8px 30px 8px 12px;
-  cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
-  transition: border-color 0.2s ease, background-color 0.2s ease;
-  width: 100%;
-}
-
-.filter-dropdown select:focus {
+  padding: 8px 32px 8px 14px;
   outline: none;
-  border-color: #000744;
+  transition: border-color 0.2s;
 }
 
-.filter-dropdown select option {
-  background: var(--dark-card);
-  color: var(--white);
+.filter-search input::placeholder {
+  color: rgba(255,255,255,0.35);
 }
 
-.filter-dropdown select.filter-active {
-  border-color: #000744;
-  background-color: rgba(0, 7, 68, 0.35);
+.filter-search input:focus {
+  border-color: rgba(255,255,255,0.45);
 }
 
-.filter-reset-btn {
-  background: transparent;
-  border: 1.5px solid rgba(255,255,255,0.2);
-  border-radius: 8px;
+.filter-search__clear {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
   color: var(--grey);
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  padding: 8px 14px;
   cursor: pointer;
-  align-self: flex-end;
-  transition: var(--transition);
-  white-space: nowrap;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 2px 4px;
+  display: none;
+}
+
+.filter-search.has-text .filter-search__clear {
+  display: block;
+}
+
+/* --- 3. Custom dropdown menus --- */
+
+.filter-dropdown {
+  position: relative;
   flex-shrink: 0;
 }
 
-.filter-reset-btn:hover {
-  border-color: rgba(255,255,255,0.5);
+.filter-dropdown__toggle {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  padding: 8px 28px 8px 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  transition: border-color 0.2s, background-color 0.2s;
+  position: relative;
+}
+
+.filter-dropdown__toggle::after {
+  content: '▾';
+  position: absolute;
+  right: 10px;
+  font-size: 0.7rem;
+  opacity: 0.55;
+  transition: transform 0.2s;
+}
+
+.filter-dropdown.is-open .filter-dropdown__toggle::after {
+  transform: rotate(180deg);
+}
+
+.filter-dropdown__toggle:hover {
+  border-color: rgba(255,255,255,0.4);
+}
+
+.filter-dropdown__toggle.has-selection {
+  background: #000744;
+  border-color: #000744;
+}
+
+.filter-dropdown__panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 190px;
+  background: #1e2535;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 6px 0;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.55);
+  z-index: 200;
+  display: none;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.filter-dropdown__panel::-webkit-scrollbar {
+  width: 4px;
+}
+
+.filter-dropdown__panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.filter-dropdown__panel::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.15);
+  border-radius: 2px;
+}
+
+.filter-dropdown.is-open .filter-dropdown__panel {
+  display: block;
+}
+
+.filter-dropdown__panel label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 16px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: rgba(255,255,255,0.82);
+  transition: background 0.12s;
+  user-select: none;
+}
+
+.filter-dropdown__panel label:hover {
+  background: rgba(255,255,255,0.07);
+}
+
+.filter-dropdown__panel input[type="radio"],
+.filter-dropdown__panel input[type="checkbox"] {
+  accent-color: #000744;
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* --- 4. Sort bar (below filter bar, not sticky) --- */
+
+.sort-bar {
+  background: #0d1117;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sort-bar__label {
+  font-size: 0.78rem;
+  color: var(--grey);
+  font-family: var(--font-body);
+  white-space: nowrap;
+}
+
+.sort-pill {
+  font-size: 0.78rem;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: transparent;
+  color: rgba(255,255,255,0.65);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.sort-pill:hover {
+  border-color: rgba(255,255,255,0.38);
   color: var(--white);
 }
 
-@media (max-width: 600px) {
-  .filter-bar__dropdowns {
-    gap: 0.625rem;
-  }
-  .filter-dropdown {
-    min-width: calc(50% - 0.625rem);
-    max-width: none;
-  }
-  .filter-reset-btn {
-    width: 100%;
-    text-align: center;
-    margin-top: 0.25rem;
-  }
+.sort-pill.sort-pill--active {
+  background: #000744;
+  border-color: #000744;
+  color: var(--white);
 }
 
-/* --- 4. Count display (between filter bar and grid) --- */
+/* --- 5. Results bar --- */
 
-.catalog-count {
-  text-align: center;
-  padding: 1.25rem 0 0.5rem;
+.results-bar {
+  padding: 14px 24px 6px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.results-bar__count {
   font-size: 0.9rem;
   color: var(--grey);
 }
 
-.catalog-count__number {
+.results-bar__count .count-number {
   color: var(--white);
   font-weight: 600;
+}
+
+.count-number.count-fade {
+  opacity: 0;
   transition: opacity 0.15s ease;
 }
 
-.count-fade {
-  opacity: 0;
+.filter-reset-btn {
+  background: transparent;
+  border: 1px solid #CC0031;
+  border-radius: 6px;
+  color: #CC0031;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: none;
 }
 
-/* --- 5. Empty state --- */
+.filter-reset-btn.is-visible {
+  display: inline-block;
+}
+
+.filter-reset-btn:hover {
+  background: #CC0031;
+  color: var(--white);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .filter-bar {
+    padding: 10px 16px;
+    gap: 8px;
+  }
+  .filter-search {
+    max-width: 100%;
+    width: 100%;
+    flex-basis: 100%;
+    order: -1;
+  }
+  .filter-dropdown__toggle {
+    font-size: 0.8rem;
+    padding: 7px 24px 7px 10px;
+  }
+  .sort-bar,
+  .results-bar {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+/* --- 6. Empty state --- */
 
 .catalog-empty {
   display: none;
@@ -1013,6 +1161,12 @@ body.has-hero #site-header.scrolled nav a {
   background: var(--dark);
   border-radius: var(--radius);
   margin: 2rem 0;
+}
+
+.catalog-empty__icon {
+  font-size: 3rem;
+  color: rgba(255,255,255,0.2);
+  margin-bottom: 1.25rem;
 }
 
 .catalog-empty__title {
@@ -1043,15 +1197,31 @@ body.has-hero #site-header.scrolled nav a {
   line-height: 1.6;
 }
 
+.catalog-empty__cta {
+  display: inline-block;
+  padding: 12px 28px;
+  background: #000744;
+  color: var(--white);
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 0.925rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition);
+  border: none;
+  cursor: pointer;
+}
+
+.catalog-empty__cta:hover {
+  background: #0009aa;
+  color: var(--white);
+}
+
 .catalog-empty iframe {
   width: 100%;
   max-width: 600px;
-  height: 400px; /* Adjust once Tally form field count is known */
+  height: 400px;
   border: none;
   border-radius: var(--radius);
-}
-
-.catalog-empty__cta-fallback {
-  color: rgba(255,255,255,0.6);
-  font-style: italic;
+  margin-top: 1.5rem;
 }
