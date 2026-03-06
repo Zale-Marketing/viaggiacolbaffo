@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 06-admin-panel-02-PLAN.md
-last_updated: "2026-03-06T21:31:22.439Z"
+stopped_at: Completed 06-admin-panel-04-PLAN.md
+last_updated: "2026-03-06T21:32:22.955Z"
 last_activity: 2026-03-06 — Roadmap created, 56 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 25
-  completed_plans: 20
+  completed_plans: 22
   percent: 0
 ---
 
@@ -71,6 +71,8 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 06-admin-panel P01 | 8min | 2 tasks | 7 files |
 | Phase 06-admin-panel P05 | 2min | 2 tasks | 6 files |
 | Phase 06-admin-panel P02 | 3min | 2 tasks | 2 files |
+| Phase 06-admin-panel P04 | 3min | 2 tasks | 3 files |
+| Phase 06-admin-panel P03 | 4min | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -134,6 +136,8 @@ Recent decisions affecting current work:
 - [Phase 06-admin-panel]: generate-form.php fully migrated to Anthropic claude-sonnet-4-6; OPENAI_API_KEY removed; response parsed via content[0].text
 - [Phase 06-admin-panel]: destinazione.php and destinazioni.php migrated from static destinations-data.php require to load_destinations() live JSON source
 - [Phase 06-admin-panel]: JSON-body detection for reorder AJAX: Content-Type application/json decoded from php://input before action switch
+- [Phase 06-admin-panel]: settings.php reads existing admin-config.json first and merges POST fields to preserve unknown keys
+- [Phase 06-admin-panel]: tags.php cascade delete: save_tags() then save_trips() in same PHP request
 
 ### Pending Todos
 
@@ -154,6 +158,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T21:31:22.436Z
-Stopped at: Completed 06-admin-panel-02-PLAN.md
+Last session: 2026-03-06T21:32:17.697Z
+Stopped at: Completed 06-admin-panel-04-PLAN.md
 Resume file: None
