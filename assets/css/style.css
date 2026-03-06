@@ -153,6 +153,7 @@ h1, h2, h3, h4 {
   background: var(--dark-card);
   box-shadow: var(--shadow);
   transition: var(--transition);
+  min-height: 280px;
 }
 
 .trip-card:hover {
@@ -170,7 +171,7 @@ h1, h2, h3, h4 {
 .trip-card__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.85) 100%);
+  background: linear-gradient(to bottom, transparent 0%, transparent 30%, rgba(0, 0, 0, 0.75) 60%, rgba(0, 0, 0, 0.92) 100%);
   z-index: 1;
   border-radius: inherit;
 }
@@ -226,7 +227,7 @@ h1, h2, h3, h4 {
 .trip-card__content {
   position: absolute;
   bottom: 0;
-  padding: 1.25rem;
+  padding: 3.5rem 1.25rem 1.25rem;
   width: 100%;
   z-index: 2;
 }
