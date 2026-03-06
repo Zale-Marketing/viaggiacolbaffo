@@ -41,7 +41,7 @@ if ($is_new) {
         'included'        => [],
         'excluded'        => [],
         'tags'            => [],
-        'form_config'     => (object)[],
+        'form_config'     => [],
     ];
 } elseif ($slug_param) {
     $trip = get_trip_by_slug($slug_param);
@@ -186,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'included'          => $included,
         'excluded'          => $excluded,
         'tags'              => $tags,
-        'form_config'       => $trip['form_config'] ?? (object)[],
+        'form_config'       => $trip['form_config'] ?? [],
     ];
 
     if (empty($errors)) {
@@ -1094,7 +1094,7 @@ const slugLocked = <?= json_encode($slug_locked) ?>;
 const isNew      = <?= json_encode($is_new) ?>;
 let previewToken = '<?= htmlspecialchars($preview_token_val) ?>';
 const tripSlug   = '<?= htmlspecialchars($trip['slug'] ?? '') ?>';
-const currentFormConfig = <?= json_encode($trip['form_config'] ?? (object)[], JSON_UNESCAPED_UNICODE) ?>;
+const currentFormConfig = <?= json_encode($trip['form_config'] ?? [], JSON_UNESCAPED_UNICODE) ?>;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Tab switching (with localStorage persistence)
