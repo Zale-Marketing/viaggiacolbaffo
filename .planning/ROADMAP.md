@@ -65,7 +65,11 @@ Plans:
   3. Adding a tag filter on row 2 further narrows results (AND logic) — and removing all filters restores the full list with smooth CSS transition
   4. Sharing a URL with ?continent=america&tag=famiglia opens the catalog with those filters pre-applied
   5. When no trips match the active filters, the friendly empty-state message and custom request form (Tally embed) appear
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — CSS extension + catalog page: style.css Phase 3 section, viaggi.php with hero, filter bar, trip grid, count display, empty state, inline JS filter engine
+- [ ] 03-02-PLAN.md — Human verification: browser smoke test of hero height, sticky filter bar, live filtering, URL deep-linking, and empty state behavior
 
 ### Phase 4: Trip Detail + Quote Form
 **Goal**: A visitor arriving on a specific trip page gets the full itinerary experience and can submit a quote request that reaches Lorenzo
@@ -114,7 +118,7 @@ Note: Phase 5 depends on Phase 1 (not Phase 3/4), so it could run in parallel wi
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete   | 2026-03-06 |
 | 2. Homepage | 3/3 | Complete   | 2026-03-06 |
-| 3. Trip Catalog | 0/TBD | Not started | - |
+| 3. Trip Catalog | 0/2 | Not started | - |
 | 4. Trip Detail + Quote Form | 0/TBD | Not started | - |
 | 5. Destinations + B2B | 0/TBD | Not started | - |
 | 6. Admin Panel | 0/TBD | Not started | - |
