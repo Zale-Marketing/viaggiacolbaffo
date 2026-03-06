@@ -2278,3 +2278,406 @@ body.has-hero #site-header.scrolled nav a {
 .hotel-colazione-no { display: inline-block; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #888; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; }
 @media (max-width: 900px) { .hotel-grid { grid-template-columns: repeat(2,1fr); } }
 @media (max-width: 600px) { .hotel-grid { grid-template-columns: 1fr; } }
+
+
+/* === PHASE 5: DESTINATIONS + B2B === */
+
+/* ── Destination Hero ── */
+
+.dest-hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-end;
+}
+
+.dest-hero__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.dest-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.2) 100%);
+  z-index: 1;
+}
+
+.dest-hero__content {
+  position: relative;
+  z-index: 2;
+  padding: 2rem 0 4rem;
+  width: 100%;
+}
+
+.dest-hero__breadcrumb {
+  list-style: none;
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  margin: 0 0 0.75rem;
+  padding: 0;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.65);
+}
+
+.dest-hero__breadcrumb li::after {
+  content: '›';
+  margin-left: 0.4rem;
+}
+
+.dest-hero__breadcrumb li:last-child::after {
+  content: '';
+}
+
+.dest-hero__breadcrumb a {
+  color: rgba(255,255,255,0.65);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.dest-hero__breadcrumb a:hover {
+  color: var(--white);
+}
+
+.dest-hero__title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.1;
+  margin: 0;
+}
+
+/* ── Editorial Intro ── */
+
+.dest-intro {
+  color: rgba(255,255,255,0.85);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  max-width: 780px;
+}
+
+/* ── Practical Info Grid ── */
+
+.dest-info-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 480px) {
+  .dest-info-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 900px) {
+  .dest-info-grid { grid-template-columns: repeat(5, 1fr); }
+}
+
+.dest-info-box {
+  background: var(--dark-card);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+}
+
+.dest-info-box__icon {
+  font-size: 1.5rem;
+  color: var(--gold);
+}
+
+.dest-info-box__label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--grey);
+}
+
+.dest-info-box__value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--white);
+}
+
+/* ── "Cosa Vedere" Sub-destination Cards ── */
+
+.dest-cosa-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 600px) {
+  .dest-cosa-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .dest-cosa-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.dest-cosa-card {
+  display: block;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--dark-card);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.dest-cosa-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+}
+
+.dest-cosa-card__img {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  display: block;
+}
+
+.dest-cosa-card__body {
+  padding: 1rem;
+}
+
+.dest-cosa-card__name {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  color: var(--white);
+  margin: 0 0 0.35rem;
+}
+
+.dest-cosa-card__desc {
+  font-size: 0.85rem;
+  color: var(--grey);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ── Curiosita Cards ── */
+
+.dest-curiosita-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .dest-curiosita-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.dest-curiosita-card {
+  background: var(--dark-card);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.5rem 1.5rem 1.75rem;
+  border-left: 4px solid var(--gold);
+}
+
+.dest-curiosita-card__icon {
+  font-size: 1.75rem;
+  color: var(--gold);
+  margin-bottom: 0.75rem;
+}
+
+.dest-curiosita-card__title {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  color: var(--white);
+  margin: 0 0 0.5rem;
+}
+
+.dest-curiosita-card__text {
+  color: rgba(255,255,255,0.75);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── Destination Waitlist Box ── */
+
+.dest-waitlist {
+  background: var(--dark-card);
+  border-radius: var(--radius);
+  padding: 2.5rem;
+  max-width: 560px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.dest-waitlist__title {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--white);
+  margin: 0 0 0.5rem;
+}
+
+.dest-waitlist__sub {
+  color: var(--grey);
+  font-size: 0.95rem;
+  margin: 0 0 1.5rem;
+}
+
+.dest-waitlist .form-msg {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+}
+
+.dest-waitlist .form-msg--success {
+  background: rgba(34,197,94,0.15);
+  color: #86efac;
+}
+
+.dest-waitlist .form-msg--error {
+  background: rgba(239,68,68,0.15);
+  color: #fca5a5;
+}
+
+/* ── B2B Page Components ── */
+
+.b2b-trust-bar {
+  background: rgba(255,255,255,0.06);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding: 1.25rem 0;
+}
+
+.b2b-trust-bar__list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.8);
+}
+
+.b2b-trust-bar__item::before {
+  content: '•';
+  color: var(--gold);
+  margin-right: 0.5rem;
+}
+
+.b2b-trust-bar__item:first-child::before {
+  display: none;
+}
+
+.b2b-value-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .b2b-value-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.b2b-value-card {
+  background: var(--dark-card);
+  border-radius: var(--radius);
+  padding: 2rem;
+  text-align: center;
+}
+
+.b2b-value-card__icon {
+  font-size: 2rem;
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+
+.b2b-value-card__title {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  color: var(--white);
+  margin: 0 0 0.5rem;
+}
+
+.b2b-value-card__text {
+  color: rgba(255,255,255,0.75);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.b2b-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .b2b-steps { flex-direction: row; }
+}
+
+.b2b-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+}
+
+.b2b-step__number {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.b2b-step__title {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  color: var(--white);
+  margin: 0;
+}
+
+.b2b-step__text {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.b2b-guarantee {
+  background: var(--dark-card);
+  border-left: 4px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 2rem 2rem 2rem 1.75rem;
+}
+
+.b2b-guarantee__title {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  color: var(--white);
+  margin: 0 0 0.75rem;
+}
+
+.b2b-guarantee__text {
+  color: rgba(255,255,255,0.8);
+  line-height: 1.75;
+  margin: 0 0 0.5rem;
+}
+
+.b2b-tally-wrap {
+  max-width: 680px;
+  margin: 0 auto;
+}

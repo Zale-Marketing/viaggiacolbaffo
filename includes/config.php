@@ -33,3 +33,7 @@ define('ROOT', __DIR__ . '/..');
 
 // Absolute path to the data directory.
 define('DATA_DIR', ROOT . '/data/');
+
+// Phase 5: Destinations + B2B
+define('WAITLIST_WEBHOOK_URL', '');      // POST target for destination waitlist form
+define('WHATSAPP_B2B_FALLBACK', '');     // WhatsApp link when TALLY_B2B_URL is empty
