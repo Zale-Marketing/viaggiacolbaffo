@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Infrastructure, design system, and data layer that all other phases depend on (completed 2026-03-06)
 - [x] **Phase 2: Homepage** - Full cinematic homepage that conveys Lorenzo's intimacy and premium experience (completed 2026-03-06)
-- [ ] **Phase 3: Trip Catalog** - Browsable trip catalog with dual-row continent + tag filtering
+- [x] **Phase 3: Trip Catalog** - Browsable trip catalog with dual-row continent + tag filtering (completed 2026-03-06)
 - [ ] **Phase 4: Trip Detail + Quote Form** - Full trip experience: itinerary, gallery, and AI-powered quote form
 - [ ] **Phase 5: Destinations + B2B** - Editorial destination pages and agency partnership page
 - [ ] **Phase 6: Admin Panel** - Lorenzo manages trips end-to-end without touching code
@@ -118,7 +118,7 @@ Note: Phase 5 depends on Phase 1 (not Phase 3/4), so it could run in parallel wi
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete   | 2026-03-06 |
 | 2. Homepage | 3/3 | Complete   | 2026-03-06 |
-| 3. Trip Catalog | 0/2 | Not started | - |
+| 3. Trip Catalog | 2/2 | Complete   | 2026-03-06 |
 | 4. Trip Detail + Quote Form | 0/TBD | Not started | - |
 | 5. Destinations + B2B | 0/TBD | Not started | - |
 | 6. Admin Panel | 0/TBD | Not started | - |
