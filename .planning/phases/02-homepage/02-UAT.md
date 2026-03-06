@@ -1,5 +1,5 @@
 ---
-status: complete
+status: diagnosed
 phase: 02-homepage
 source: [02-01-SUMMARY.md, 02-02-SUMMARY.md, 02-03-SUMMARY.md]
 started: 2026-03-06T13:30:00Z
@@ -69,7 +69,16 @@ skipped: 0
   reason: "User reported: on mobile the trip title text overlaps with the status pill badge in the top-right corner. The card title 'West America Aprile 2026' rises too high and collides with the 'ULTIMI POSTI' orange pill."
   severity: major
   test: 4
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "Two missing CSS constraints: (1) .trip-card has no min-height — at 85% viewport width on mobile the card collapses to ~239px, below the required 280px; (2) .trip-card__content uses padding: 1.25rem on all sides — no top guard to keep content below the badge zone (~44px). Together, when the title wraps to 2 lines the content block's top edge reaches the badge zone. Secondary: gradient starts at transparent 0%, providing insufficient opacity in the top-badge zone, making overlap visually worse."
+  artifacts:
+    - path: "assets/css/style.css"
+      issue: "Line ~149: .trip-card missing min-height: 280px"
+    - path: "assets/css/style.css"
+      issue: "Line ~229: .trip-card__content padding: 1.25rem (all sides) — needs padding-top: 3.5rem to clear badge zone"
+    - path: "assets/css/style.css"
+      issue: "Line ~173: .trip-card__overlay gradient starts transparent 0% — needs 4-stop gradient with dark coverage from 60% for readability"
+  missing:
+    - "Add min-height: 280px to .trip-card"
+    - "Change .trip-card__content padding from 1.25rem to 3.5rem 1.25rem 1.25rem"
+    - "Update .trip-card__overlay gradient: transparent 0%, transparent 30%, rgba(0,0,0,0.75) 60%, rgba(0,0,0,0.92) 100%"
+  debug_session: ".planning/debug/trip-card-mobile-overlap.md"
