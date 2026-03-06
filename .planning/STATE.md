@@ -122,9 +122,10 @@ None yet.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 1 | Fix logo visibility on dark backgrounds — white pill behind logo image in header and footer | 2026-03-06 | 00c034e | [1-fix-logo-visibility-on-dark-backgrounds-](./quick/1-fix-logo-visibility-on-dark-backgrounds-/) |
+| 2 | Timeline itinerary, accompagnatore section, Dettagli Volo, tag pills on viaggio.php | 2026-03-06 | 1ccd33d | [2-timeline-itinerary-accompagnatore-sectio](./quick/2-timeline-itinerary-accompagnatore-sectio/) |
 
 ## Session Continuity
 
-Last session: 2026-03-06T17:19:18.287Z
-Stopped at: Completed 04-trip-detail-quote-form 04-04-PLAN.md
+Last session: 2026-03-06T17:35:00.000Z
+Stopped at: Completed quick-2 2-PLAN.md
 Resume file: None
