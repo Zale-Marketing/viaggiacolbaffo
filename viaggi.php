@@ -6,16 +6,25 @@ $page_title = 'I Nostri Viaggi — Viaggia col Baffo';
 $hero_page  = true;
 
 // Data layer
-$all_trips     = array_values(array_filter(load_trips(), fn($t) => $t['published'] === true));
-$all_tags_raw  = load_tags();
+$all_trips    = array_values(array_filter(load_trips(), fn($t) => $t['published'] === true));
+$all_tags_raw = load_tags();
 
-$continent_slugs = ['america', 'asia', 'europa', 'africa', 'oceania', 'medio-oriente'];
-$continents      = array_values(array_filter($all_tags_raw, fn($t) => in_array($t['slug'], $continent_slugs)));
-$theme_tags      = array_values(array_filter($all_tags_raw, fn($t) => !in_array($t['slug'], $continent_slugs)));
+// Categorize tags into 4 filter groups
+$continent_slugs   = ['america', 'asia', 'europa', 'africa', 'oceania', 'medio-oriente'];
+$travel_type_slugs = ['road-trip', 'avventura', 'cultura', 'gastronomia', 'parchi-naturali', 'relax'];
+$period_slugs      = ['aprile', 'maggio', 'giugno', 'settembre', 'ottobre', 'primavera'];
+$group_type_slugs  = ['coppia', 'famiglia', 'gruppo'];
 
-// URL pre-apply (single tag only — PHP $_GET['tag'] returns last value for repeated keys)
+$continents   = array_values(array_filter($all_tags_raw, fn($t) => in_array($t['slug'], $continent_slugs)));
+$travel_types = array_values(array_filter($all_tags_raw, fn($t) => in_array($t['slug'], $travel_type_slugs)));
+$periods      = array_values(array_filter($all_tags_raw, fn($t) => in_array($t['slug'], $period_slugs)));
+$group_types  = array_values(array_filter($all_tags_raw, fn($t) => in_array($t['slug'], $group_type_slugs)));
+
+// URL pre-apply
 $init_continent = htmlspecialchars($_GET['continent'] ?? '');
-$init_tag       = htmlspecialchars($_GET['tag'] ?? '');
+$init_type      = htmlspecialchars($_GET['type']      ?? '');
+$init_period    = htmlspecialchars($_GET['period']    ?? '');
+$init_group     = htmlspecialchars($_GET['group']     ?? '');
 
 require_once ROOT . '/includes/header.php';
 ?>
@@ -34,34 +43,66 @@ require_once ROOT . '/includes/header.php';
   </div>
 
   <!-- ============================================================
-       FILTER BAR (sticky, dual-row)
+       FILTER BAR (sticky, single row of dropdowns)
        ============================================================ -->
   <div class="filter-bar" id="filter-bar">
+    <div class="filter-bar__dropdowns">
 
-    <!-- Row 1: Continents (single-select) -->
-    <div class="filter-bar__row">
-      <button class="filter-pill <?= $init_continent === '' ? 'filter-pill--active' : '' ?>"
-              data-filter-continent="">Tutti</button>
-      <?php foreach ($continents as $c): ?>
-        <button class="filter-pill <?= $init_continent === $c['slug'] ? 'filter-pill--active' : '' ?>"
-                data-filter-continent="<?= htmlspecialchars($c['slug']) ?>">
-          <?= htmlspecialchars($c['label']) ?>
-        </button>
-      <?php endforeach; ?>
+      <div class="filter-dropdown">
+        <label for="filter-continent">Destinazione</label>
+        <select id="filter-continent">
+          <option value="">Tutte le destinazioni</option>
+          <?php foreach ($continents as $c): ?>
+            <option value="<?= htmlspecialchars($c['slug']) ?>"
+              <?= $init_continent === $c['slug'] ? 'selected' : '' ?>>
+              <?= htmlspecialchars($c['label']) ?>
+            </option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+
+      <div class="filter-dropdown">
+        <label for="filter-type">Tipo di viaggio</label>
+        <select id="filter-type">
+          <option value="">Tutti i tipi</option>
+          <?php foreach ($travel_types as $t): ?>
+            <option value="<?= htmlspecialchars($t['slug']) ?>"
+              <?= $init_type === $t['slug'] ? 'selected' : '' ?>>
+              <?= htmlspecialchars($t['label']) ?>
+            </option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+
+      <div class="filter-dropdown">
+        <label for="filter-period">Periodo</label>
+        <select id="filter-period">
+          <option value="">Tutti i periodi</option>
+          <?php foreach ($periods as $p): ?>
+            <option value="<?= htmlspecialchars($p['slug']) ?>"
+              <?= $init_period === $p['slug'] ? 'selected' : '' ?>>
+              <?= htmlspecialchars($p['label']) ?>
+            </option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+
+      <div class="filter-dropdown">
+        <label for="filter-group">Per chi</label>
+        <select id="filter-group">
+          <option value="">Tutti</option>
+          <?php foreach ($group_types as $g): ?>
+            <option value="<?= htmlspecialchars($g['slug']) ?>"
+              <?= $init_group === $g['slug'] ? 'selected' : '' ?>>
+              <?= htmlspecialchars($g['label']) ?>
+            </option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+
+      <button class="filter-reset-btn" id="filter-reset" type="button">Azzera filtri</button>
+
     </div>
-
-    <!-- Row 2: Theme tags (multi-select AND logic) -->
-    <div class="filter-bar__row">
-      <button class="filter-pill <?= $init_tag === '' ? 'filter-pill--active' : '' ?>"
-              data-filter-tag="">Tutti</button>
-      <?php foreach ($theme_tags as $t): ?>
-        <button class="filter-pill <?= $init_tag === $t['slug'] ? 'filter-pill--active' : '' ?>"
-                data-filter-tag="<?= htmlspecialchars($t['slug']) ?>">
-          <?= htmlspecialchars($t['label']) ?>
-        </button>
-      <?php endforeach; ?>
-    </div>
-
   </div><!-- /.filter-bar -->
 
   <!-- ============================================================
@@ -137,9 +178,11 @@ require_once ROOT . '/includes/header.php';
 
 <script>
 (function() {
-  // State — initialized from PHP URL pre-apply
-  var activeContinent = '<?= $init_continent ?>';
-  var activeTags = <?= $init_tag ? json_encode([$init_tag]) : '[]' ?>;
+  var selContinent = document.getElementById('filter-continent');
+  var selType      = document.getElementById('filter-type');
+  var selPeriod    = document.getElementById('filter-period');
+  var selGroup     = document.getElementById('filter-group');
+  var resetBtn     = document.getElementById('filter-reset');
 
   var wrappers = Array.from(document.querySelectorAll('.trip-card-wrapper'));
   var countEl  = document.getElementById('trip-count');
@@ -147,15 +190,22 @@ require_once ROOT . '/includes/header.php';
   var emptyEl  = document.getElementById('empty-state');
 
   function applyFilters() {
+    var continent = selContinent.value;
+    var type      = selType.value;
+    var period    = selPeriod.value;
+    var group     = selGroup.value;
+
     var visible = 0;
     wrappers.forEach(function(w) {
-      var continent = w.dataset.continent;
-      var tags      = w.dataset.tags ? w.dataset.tags.split(' ') : [];
+      var wContinent = w.dataset.continent;
+      var wTags      = w.dataset.tags ? w.dataset.tags.split(' ') : [];
 
-      var continentMatch = !activeContinent || continent === activeContinent;
-      var tagsMatch      = activeTags.every(function(t) { return tags.indexOf(t) !== -1; });
+      var m1 = !continent || wContinent === continent;
+      var m2 = !type      || wTags.indexOf(type)   !== -1;
+      var m3 = !period    || wTags.indexOf(period)  !== -1;
+      var m4 = !group     || wTags.indexOf(group)   !== -1;
 
-      if (continentMatch && tagsMatch) {
+      if (m1 && m2 && m3 && m4) {
         w.style.display = '';
         visible++;
       } else {
@@ -170,67 +220,41 @@ require_once ROOT . '/includes/header.php';
       countEl.classList.remove('count-fade');
     }, 150);
 
-    // Swap grid / empty state
+    // Toggle grid / empty state
     var hasResults = visible > 0;
     gridEl.style.display  = hasResults ? '' : 'none';
-    emptyEl.style.display = hasResults ? 'none' : '';
+    emptyEl.style.display = hasResults ? 'none' : 'block';
 
-    // Sync URL params for deep-linking
+    // Highlight active dropdowns
+    [selContinent, selType, selPeriod, selGroup].forEach(function(sel) {
+      sel.classList.toggle('filter-active', sel.value !== '');
+    });
+
+    // Sync URL for deep-linking
     var params = new URLSearchParams();
-    if (activeContinent) params.set('continent', activeContinent);
-    activeTags.forEach(function(t) { params.append('tag', t); });
+    if (continent) params.set('continent', continent);
+    if (type)      params.set('type',      type);
+    if (period)    params.set('period',    period);
+    if (group)     params.set('group',     group);
     var newUrl = params.toString() ? '?' + params.toString() : window.location.pathname;
     history.replaceState(null, '', newUrl);
   }
 
-  // Continent pills (single-select — clicking active deselects)
-  document.querySelectorAll('[data-filter-continent]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var val = this.dataset.filterContinent;
-      activeContinent = (activeContinent === val) ? '' : val;
-      syncPillsContinent();
-      applyFilters();
-    });
+  // Bind dropdowns
+  [selContinent, selType, selPeriod, selGroup].forEach(function(sel) {
+    sel.addEventListener('change', applyFilters);
   });
 
-  // Tag pills (multi-select AND logic — empty string = clear all)
-  document.querySelectorAll('[data-filter-tag]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var val = this.dataset.filterTag;
-      if (val === '') {
-        activeTags = [];
-      } else {
-        var idx = activeTags.indexOf(val);
-        if (idx === -1) {
-          activeTags.push(val);
-        } else {
-          activeTags.splice(idx, 1);
-        }
-      }
-      syncPillsTags();
-      applyFilters();
-    });
+  // Reset button
+  resetBtn.addEventListener('click', function() {
+    selContinent.value = '';
+    selType.value      = '';
+    selPeriod.value    = '';
+    selGroup.value     = '';
+    applyFilters();
   });
 
-  function syncPillsContinent() {
-    document.querySelectorAll('[data-filter-continent]').forEach(function(btn) {
-      var isActive = btn.dataset.filterContinent === activeContinent && activeContinent !== '';
-      var isTutti  = btn.dataset.filterContinent === '' && activeContinent === '';
-      btn.classList.toggle('filter-pill--active', isActive || isTutti);
-    });
-  }
-
-  function syncPillsTags() {
-    document.querySelectorAll('[data-filter-tag]').forEach(function(btn) {
-      var val      = btn.dataset.filterTag;
-      var isActive = val === '' ? activeTags.length === 0 : activeTags.indexOf(val) !== -1;
-      btn.classList.toggle('filter-pill--active', isActive);
-    });
-  }
-
-  // Initialize — apply URL pre-filters immediately (no DOMContentLoaded needed; script is at page bottom)
-  syncPillsContinent();
-  syncPillsTags();
+  // Initialize — apply URL pre-filters immediately
   applyFilters();
 })();
 </script>

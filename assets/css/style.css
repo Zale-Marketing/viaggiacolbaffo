@@ -885,51 +885,104 @@ body.has-hero #site-header.scrolled nav a {
   z-index: 90;
   background: var(--dark-card);
   border-bottom: 1px solid rgba(255,255,255,0.08);
-  padding: 0.75rem 0;
+  padding: 0.875rem 0;
 }
 
-.filter-bar__row {
+/* --- 3. Filter dropdowns (single horizontal row) --- */
+
+.filter-bar__dropdowns {
   display: flex;
-  overflow-x: auto;
-  gap: 0.5rem;
-  padding: 0.375rem 1.5rem;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  flex-wrap: nowrap;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0 1.5rem;
+  align-items: flex-end;
 }
 
-.filter-bar__row::-webkit-scrollbar {
-  display: none;
+.filter-dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  flex: 1;
+  min-width: 130px;
+  max-width: 220px;
 }
 
-/* --- 3. Filter pills --- */
-/* Active filter: navy #000744 — NOT var(--gold) which is red urgency color */
-
-.filter-pill {
-  flex-shrink: 0;
-  display: inline-block;
-  padding: 6px 16px;
-  border-radius: 20px;
-  border: 1.5px solid rgba(255,255,255,0.5);
-  background: transparent;
-  color: var(--white);
-  font-size: 0.85rem;
-  font-weight: 500;
+.filter-dropdown label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--grey);
   font-family: var(--font-body);
+}
+
+.filter-dropdown select {
+  background-color: rgba(255,255,255,0.06);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888888' d='M6 8 1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  padding: 8px 30px 8px 12px;
   cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  width: 100%;
+}
+
+.filter-dropdown select:focus {
+  outline: none;
+  border-color: #000744;
+}
+
+.filter-dropdown select option {
+  background: var(--dark-card);
+  color: var(--white);
+}
+
+.filter-dropdown select.filter-active {
+  border-color: #000744;
+  background-color: rgba(0, 7, 68, 0.35);
+}
+
+.filter-reset-btn {
+  background: transparent;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  color: var(--grey);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  padding: 8px 14px;
+  cursor: pointer;
+  align-self: flex-end;
   transition: var(--transition);
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.filter-pill:hover {
-  border-color: var(--white);
-  background: rgba(255,255,255,0.1);
-}
-
-.filter-pill--active {
-  background: #000744;
-  border-color: #000744;
+.filter-reset-btn:hover {
+  border-color: rgba(255,255,255,0.5);
   color: var(--white);
+}
+
+@media (max-width: 600px) {
+  .filter-bar__dropdowns {
+    gap: 0.625rem;
+  }
+  .filter-dropdown {
+    min-width: calc(50% - 0.625rem);
+    max-width: none;
+  }
+  .filter-reset-btn {
+    width: 100%;
+    text-align: center;
+    margin-top: 0.25rem;
+  }
 }
 
 /* --- 4. Count display (between filter bar and grid) --- */
