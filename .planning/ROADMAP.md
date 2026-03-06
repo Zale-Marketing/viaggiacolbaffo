@@ -48,7 +48,12 @@ Plans:
   3. Scrolling down reveals the active trips grid (reading from trips.json), destination cards grid, why-Baffo blocks, Lorenzo's story section, testimonials, and B2B banner — all styled in the premium dark/gold palette
   4. Clicking "Scopri i viaggi" navigates to the catalog; clicking a destination card navigates to that destination page
   5. The footer is complete with nav links, WhatsApp link, IATA badge, and social icons
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Shared infrastructure: header.php $hero_page flag, all Phase 2 CSS (hero, carousel, dest cards, why-grid, testimonials, B2B banner, footer)
+- [ ] 02-02-PLAN.md — index.php top half: hero, urgency bar, active trips carousel, 6 destination cards
+- [ ] 02-03-PLAN.md — index.php bottom half: why-Baffo, founder story, testimonials, B2B banner + production footer.php replacement
 
 ### Phase 3: Trip Catalog
 **Goal**: Visitors can browse and filter all trips by continent and theme, and always see the right count and empty state
@@ -108,7 +113,7 @@ Note: Phase 5 depends on Phase 1 (not Phase 3/4), so it could run in parallel wi
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete   | 2026-03-06 |
-| 2. Homepage | 0/TBD | Not started | - |
+| 2. Homepage | 0/3 | Not started | - |
 | 3. Trip Catalog | 0/TBD | Not started | - |
 | 4. Trip Detail + Quote Form | 0/TBD | Not started | - |
 | 5. Destinations + B2B | 0/TBD | Not started | - |
