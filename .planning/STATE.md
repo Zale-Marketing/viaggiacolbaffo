@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 04-trip-detail-quote-form 04-02-PLAN.md
-last_updated: "2026-03-06T17:11:46.972Z"
+stopped_at: Completed 04-trip-detail-quote-form 04-03-PLAN.md
+last_updated: "2026-03-06T17:16:20.032Z"
 last_activity: 2026-03-06 — Roadmap created, 56 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 14
-  completed_plans: 11
+  completed_plans: 12
   percent: 0
 ---
 
@@ -61,6 +61,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 03-trip-catalog P02 | 30min | 1 tasks | 2 files |
 | Phase 04-trip-detail-quote-form P01 | 1min | 2 tasks | 2 files |
 | Phase 04-trip-detail-quote-form P02 | 1min | 1 tasks | 1 files |
+| Phase 04-trip-detail-quote-form P03 | 3min | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -100,6 +101,9 @@ Recent decisions affecting current work:
 - [Phase 04-trip-detail-quote-form]: fourth_bed_price added as forward-compatible field even though no 4-bed room_type exists yet
 - [Phase 04-trip-detail-quote-form]: PHP CLI not available in bash — viaggio.php syntax verified by grep content inspection (same constraint as Plan 01)
 - [Phase 04-trip-detail-quote-form]: fmt_date() helper defined inline in viaggio.php for Italian month abbreviation — page-specific utility, not added to shared functions.php
+- [Phase 04-trip-detail-quote-form]: agency-fields div carries inline style=display:none; JS controls visibility entirely — CSS load order independent
+- [Phase 04-trip-detail-quote-form]: updatePrice multiplies addon total by (adultCount + childCount) — optional services cover the full booking group
+- [Phase 04-trip-detail-quote-form]: validateAgencyCode falls back to showing fields on any non-empty code when agencyCodeHash is absent from form_config
 
 ### Pending Todos
 
@@ -117,6 +121,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T17:11:46.968Z
-Stopped at: Completed 04-trip-detail-quote-form 04-02-PLAN.md
+Last session: 2026-03-06T17:16:20.028Z
+Stopped at: Completed 04-trip-detail-quote-form 04-03-PLAN.md
 Resume file: None
