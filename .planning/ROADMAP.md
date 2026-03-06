@@ -117,8 +117,17 @@ Plans:
   2. The dashboard table lists all trips with title, continent, tags, status, and published state; toggling published updates instantly
   3. The full edit form saves all trip fields — basic info, dates, price, hero image URL with thumbnail preview, gallery URLs, short/full description, day-by-day itinerary (draggable rows), includes/excludes, and tag chips
   4. Saving a trip via "Pubblica" makes it immediately visible on the homepage trip grid, catalog, and its destination page without any manual cache clearing
-  5. config.php values (OpenAI key, webhook URL, WhatsApp number, Tally URLs) are editable through the admin interface
-**Plans**: TBD
+  5. Anthropic API key, webhook URLs, WhatsApp number, Tally URLs, urgency bar text, and company data are all editable through the admin settings interface
+**Plans**: 7 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — Foundation: config.php overlay refactor, functions.php additions (save_tags/load_destinations/save_destinations), destinations.json migration, tags.json category backfill, admin-config.json bootstrap, admin.css
+- [ ] 06-02-PLAN.md — Auth + Dashboard: admin/login.php session auth, admin/index.php trip table with stats/DnD/publish-toggle/soft-delete/trash
+- [ ] 06-03-PLAN.md — Edit Trip Form (core tabs): admin/edit-trip.php — Info Base, Media, Contenuto, Itinerario, Tags (ADMIN-03 to ADMIN-08)
+- [ ] 06-04-PLAN.md — Supporting pages: admin/settings.php (ADMIN-11), admin/tags.php, admin/destinations.php
+- [ ] 06-05-PLAN.md — Public site integration: viaggio.php gates, urgency bar, footer company data, Anthropic API migration, destinazione.php JSON migration (ADMIN-09 partial)
+- [ ] 06-06-PLAN.md — Edit Trip Form (Form Config tab): AI generator UI + save actions + preview token wiring (ADMIN-09, ADMIN-10)
+- [ ] 06-07-PLAN.md — Human verification: full admin panel browser checklist (all ADMIN-* requirements)
 
 ## Progress
 
@@ -134,4 +143,4 @@ Note: Phase 5 depends on Phase 1 (not Phase 3/4), so it could run in parallel wi
 | 3. Trip Catalog | 2/2 | Complete   | 2026-03-06 |
 | 4. Trip Detail + Quote Form | 4/5 | In Progress|  |
 | 5. Destinations + B2B | 4/4 | Complete   | 2026-03-06 |
-| 6. Admin Panel | 0/TBD | Not started | - |
+| 6. Admin Panel | 0/7 | Not started | - |
