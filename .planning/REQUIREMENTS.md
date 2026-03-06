@@ -51,7 +51,7 @@
 
 ### Single Trip Page
 
-- [ ] **TRIP-01**: PHP reads trip from trips.json by ?slug= parameter; 404 redirect if slug not found
+- [x] **TRIP-01**: PHP reads trip from trips.json by ?slug= parameter; 404 redirect if slug not found
 - [x] **TRIP-02**: Full-viewport hero: trip hero_image, dark gradient overlay, trip title in large Playfair, dates + duration + price, status pill
 - [x] **TRIP-03**: Sticky top bar (appears after scrolling past hero): trip name left, "Richiedi Preventivo" gold button right (scrolls to form section)
 - [x] **TRIP-04**: Highlights bar: 4 info boxes — Date, Durata, Da €X.XXX, Posti status
@@ -171,7 +171,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CATALOG-04 | Phase 3 — Trip Catalog | Complete |
 | CATALOG-05 | Phase 3 — Trip Catalog | Complete |
 | CATALOG-06 | Phase 3 — Trip Catalog | Complete |
-| TRIP-01 | Phase 4 — Trip Detail + Quote Form | Pending |
+| TRIP-01 | Phase 4 — Trip Detail + Quote Form | Complete |
 | TRIP-02 | Phase 4 — Trip Detail + Quote Form | Complete |
 | TRIP-03 | Phase 4 — Trip Detail + Quote Form | Complete |
 | TRIP-04 | Phase 4 — Trip Detail + Quote Form | Complete |
