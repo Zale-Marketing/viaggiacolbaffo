@@ -41,3 +41,33 @@ function load_tags(): array {
     if (!file_exists($file)) return [];
     return json_decode(file_get_contents($file), true) ?? [];
 }
+
+function save_tags(array $tags): bool {
+    $file = DATA_DIR . 'tags.json';
+    $json = json_encode(array_values($tags), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $fp = fopen($file, 'w');
+    if (!$fp) return false;
+    flock($fp, LOCK_EX);
+    fwrite($fp, $json);
+    flock($fp, LOCK_UN);
+    fclose($fp);
+    return true;
+}
+
+function load_destinations(): array {
+    $file = DATA_DIR . 'destinations.json';
+    if (!file_exists($file)) return [];
+    return json_decode(file_get_contents($file), true) ?? [];
+}
+
+function save_destinations(array $destinations): bool {
+    $file = DATA_DIR . 'destinations.json';
+    $json = json_encode($destinations, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $fp = fopen($file, 'w');
+    if (!$fp) return false;
+    flock($fp, LOCK_EX);
+    fwrite($fp, $json);
+    flock($fp, LOCK_UN);
+    fclose($fp);
+    return true;
+}
