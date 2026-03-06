@@ -1,9 +1,9 @@
 ---
-status: diagnosed
+status: resolved
 phase: 02-homepage
 source: [02-01-SUMMARY.md, 02-02-SUMMARY.md, 02-03-SUMMARY.md]
 started: 2026-03-06T13:30:00Z
-updated: 2026-03-06T13:45:00Z
+updated: 2026-03-06T14:30:00Z
 ---
 
 ## Current Test
@@ -65,7 +65,7 @@ skipped: 0
 ## Gaps
 
 - truth: "Trip cards on mobile: TOP badges (continent + status pill) stay top, BOTTOM content (title/dates/price/CTA) stays bottom separated by gradient overlay — no overlap between zones. Min card height 280px. Gradient covers ≥60% from bottom."
-  status: failed
+  status: resolved
   reason: "User reported: on mobile the trip title text overlaps with the status pill badge in the top-right corner. The card title 'West America Aprile 2026' rises too high and collides with the 'ULTIMI POSTI' orange pill."
   severity: major
   test: 4
