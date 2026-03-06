@@ -26,7 +26,7 @@ if (!($trip['published'] ?? false) && !$is_preview) {
 }
 
 // --- Page variables ---
-$page_title = htmlspecialchars($trip['title']) . ' — Viaggia col Baffo';
+$page_title = htmlspecialchars($trip['title'] ?? 'Viaggio') . ' — Viaggia col Baffo';
 $hero_page  = true;
 
 // Status display label
@@ -36,15 +36,19 @@ $status_labels = [
     'sold-out'     => 'Sold out',
     'programmata'  => 'In programmazione',
 ];
-$status_label = $status_labels[$trip['status']] ?? ucfirst($trip['status']);
+$trip_status  = $trip['status'] ?? 'programmata';
+$status_label = $status_labels[$trip_status] ?? ucfirst($trip_status);
 
 // Date formatting helpers
-function fmt_date(string $d): string {
+function fmt_date($d): string {
+    if (empty($d)) return 'Da definire';
     $months = ['', 'Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'];
-    [$y, $m, $day] = explode('-', $d);
+    $parts = explode('-', $d);
+    if (count($parts) < 3) return $d;
+    [$y, $m, $day] = $parts;
     return "$day {$months[(int)$m]} $y";
 }
-$date_display = fmt_date($trip['date_start']) . ' – ' . fmt_date($trip['date_end']);
+$date_display = fmt_date($trip['date_start'] ?? '') . ' – ' . fmt_date($trip['date_end'] ?? '');
 
 $form_config = $trip['form_config'] ?? [];
 $has_form    = !empty($form_config);
@@ -57,17 +61,17 @@ require_once ROOT . '/includes/header.php';
 <!-- ========================================================
      TRIP HERO
      ======================================================== -->
-<div class="trip-hero" style="background-image:url('<?php echo htmlspecialchars($trip['hero_image']); ?>')">
+<div class="trip-hero" style="background-image:url('<?php echo htmlspecialchars($trip['hero_image'] ?? ''); ?>')">
   <div class="trip-hero__overlay"></div>
   <div class="trip-hero__content container">
-    <div class="status-pill status-<?php echo htmlspecialchars($trip['status']); ?>" style="display:inline-block;margin-bottom:0.75rem;">
+    <div class="status-pill status-<?php echo htmlspecialchars($trip_status); ?>" style="display:inline-block;margin-bottom:0.75rem;">
       <?php echo htmlspecialchars($status_label); ?>
     </div>
-    <h1 class="trip-hero__title"><?php echo htmlspecialchars($trip['title']); ?></h1>
+    <h1 class="trip-hero__title"><?php echo htmlspecialchars($trip['title'] ?? ''); ?></h1>
     <div class="trip-hero__meta">
       <span><i class="fa-regular fa-calendar"></i> <?php echo htmlspecialchars($date_display); ?></span>
-      <span><i class="fa-regular fa-clock"></i> <?php echo htmlspecialchars($trip['duration']); ?></span>
-      <span><i class="fa-solid fa-tag"></i> Da €<?php echo number_format($trip['price_from'], 0, ',', '.'); ?> p.p.</span>
+      <span><i class="fa-regular fa-clock"></i> <?php echo htmlspecialchars($trip['duration'] ?? ''); ?></span>
+      <span><i class="fa-solid fa-tag"></i> Da €<?php echo number_format($trip['price_from'] ?? 0, 0, ',', '.'); ?> p.p.</span>
     </div>
     <?php if ($has_form): ?>
     <a href="#richiedi-preventivo" class="trip-hero__cta btn">Richiedi Preventivo</a>
@@ -79,7 +83,7 @@ require_once ROOT . '/includes/header.php';
      STICKY TOP BAR (appears after hero on scroll)
      ======================================================== -->
 <div class="trip-topbar" id="trip-topbar">
-  <span class="trip-topbar__name"><?php echo htmlspecialchars($trip['title']); ?></span>
+  <span class="trip-topbar__name"><?php echo htmlspecialchars($trip['title'] ?? ''); ?></span>
   <?php if ($has_form): ?>
   <a href="#richiedi-preventivo" class="trip-topbar__cta btn btn--gold">Richiedi Preventivo</a>
   <?php endif; ?>
@@ -96,11 +100,11 @@ require_once ROOT . '/includes/header.php';
     </div>
     <div class="trip-highlights__item">
       <div class="trip-highlights__label">Durata</div>
-      <div class="trip-highlights__value"><?php echo htmlspecialchars($trip['duration']); ?></div>
+      <div class="trip-highlights__value"><?php echo htmlspecialchars($trip['duration'] ?? ''); ?></div>
     </div>
     <div class="trip-highlights__item">
       <div class="trip-highlights__label">Prezzo da</div>
-      <div class="trip-highlights__value">€<?php echo number_format($trip['price_from'], 0, ',', '.'); ?></div>
+      <div class="trip-highlights__value">€<?php echo number_format($trip['price_from'] ?? 0, 0, ',', '.'); ?></div>
     </div>
     <div class="trip-highlights__item">
       <div class="trip-highlights__label">Disponibilità</div>
@@ -238,7 +242,7 @@ $volo           = $trip['volo'] ?? null;
       <h2 class="section-header__title">Itinerario</h2>
     </div>
     <div class="timeline">
-      <?php foreach ($trip['itinerary'] as $day): ?>
+      <?php foreach (($trip['itinerary'] ?? []) as $day): ?>
       <div class="timeline-item">
         <div class="timeline-dot"><?php echo str_pad((int)$day['day'], 2, '0', STR_PAD_LEFT); ?></div>
         <div class="timeline-card">
@@ -305,7 +309,7 @@ $volo           = $trip['volo'] ?? null;
       <div>
         <div class="includes-col__title"><i class="fa-solid fa-circle-check" style="color:#2ecc71;margin-right:0.5rem;"></i>Incluso nel prezzo</div>
         <ul class="includes-list">
-          <?php foreach ($trip['included'] as $item): ?>
+          <?php foreach (($trip['included'] ?? []) as $item): ?>
           <li><i class="fa-solid fa-check includes-list__icon--yes"></i><?php echo htmlspecialchars($item); ?></li>
           <?php endforeach; ?>
         </ul>
@@ -313,7 +317,7 @@ $volo           = $trip['volo'] ?? null;
       <div>
         <div class="includes-col__title"><i class="fa-solid fa-circle-xmark" style="color:#CC0031;margin-right:0.5rem;"></i>Non incluso</div>
         <ul class="includes-list">
-          <?php foreach ($trip['excluded'] as $item): ?>
+          <?php foreach (($trip['excluded'] ?? []) as $item): ?>
           <li><i class="fa-solid fa-xmark includes-list__icon--no"></i><?php echo htmlspecialchars($item); ?></li>
           <?php endforeach; ?>
         </ul>
@@ -385,9 +389,10 @@ $volo           = $trip['volo'] ?? null;
 <?php
 // Get up to 3 trips sharing the same continent (excluding current trip)
 $all_trips_raw = array_filter(load_trips(), fn($t) =>
-    $t['published'] === true &&
-    $t['slug'] !== $trip['slug'] &&
-    $t['continent'] === $trip['continent']
+    ($t['published'] ?? false) === true &&
+    ($t['deleted'] ?? false) === false &&
+    ($t['slug'] ?? '') !== ($trip['slug'] ?? '') &&
+    ($t['continent'] ?? '') === ($trip['continent'] ?? '')
 );
 $related = array_slice(array_values($all_trips_raw), 0, 3);
 $status_labels_rel = ['confermata'=>'Confermata','ultimi-posti'=>'Ultimi posti','sold-out'=>'Sold out','programmata'=>'In programmazione'];
@@ -401,15 +406,16 @@ $status_labels_rel = ['confermata'=>'Confermata','ultimi-posti'=>'Ultimi posti',
     <div class="related-grid">
       <?php foreach ($related as $rel): ?>
       <div class="trip-card">
-        <img class="trip-card__image" src="<?php echo htmlspecialchars($rel['hero_image']); ?>" alt="<?php echo htmlspecialchars($rel['title']); ?>">
+        <img class="trip-card__image" src="<?php echo htmlspecialchars($rel['hero_image'] ?? ''); ?>" alt="<?php echo htmlspecialchars($rel['title'] ?? ''); ?>">
         <div class="trip-card__overlay"></div>
-        <div class="trip-card__continent"><?php echo htmlspecialchars(ucfirst($rel['continent'])); ?></div>
-        <div class="trip-card__status status--<?php echo htmlspecialchars($rel['status']); ?>"><?php echo htmlspecialchars($status_labels_rel[$rel['status']] ?? ucfirst($rel['status'])); ?></div>
+        <div class="trip-card__continent"><?php echo htmlspecialchars(ucfirst($rel['continent'] ?? '')); ?></div>
+        <?php $rel_status = $rel['status'] ?? 'programmata'; ?>
+        <div class="trip-card__status status--<?php echo htmlspecialchars($rel_status); ?>"><?php echo htmlspecialchars($status_labels_rel[$rel_status] ?? ucfirst($rel_status)); ?></div>
         <div class="trip-card__content">
-          <h3 class="trip-card__title"><?php echo htmlspecialchars($rel['title']); ?></h3>
-          <div class="trip-card__dates"><?php echo htmlspecialchars(fmt_date($rel['date_start'])); ?></div>
-          <div class="trip-card__price">Da €<?php echo number_format($rel['price_from'], 0, ',', '.'); ?></div>
-          <a href="/viaggio/<?php echo htmlspecialchars($rel['slug']); ?>" class="btn btn--outline-white" style="margin-top:0.5rem;padding:8px 18px;font-size:0.85rem;">Scopri il viaggio</a>
+          <h3 class="trip-card__title"><?php echo htmlspecialchars($rel['title'] ?? ''); ?></h3>
+          <div class="trip-card__dates"><?php echo htmlspecialchars(fmt_date($rel['date_start'] ?? '')); ?></div>
+          <div class="trip-card__price">Da €<?php echo number_format($rel['price_from'] ?? 0, 0, ',', '.'); ?></div>
+          <a href="/viaggio/<?php echo htmlspecialchars($rel['slug'] ?? ''); ?>" class="btn btn--outline-white" style="margin-top:0.5rem;padding:8px 18px;font-size:0.85rem;">Scopri il viaggio</a>
         </div>
       </div>
       <?php endforeach; ?>
@@ -578,7 +584,7 @@ $status_labels_rel = ['confermata'=>'Confermata','ultimi-posti'=>'Ultimi posti',
     <!-- WhatsApp CTA -->
     <div class="whatsapp-cta">
       <p>Preferisci scrivere su WhatsApp?
-        <a href="https://wa.me/<?php echo str_replace([' ','+'], ['',''], WHATSAPP_NUMBER); ?>?text=<?php echo urlencode('Ciao Lorenzo! Sono interessato al viaggio ' . $trip['title']); ?>" target="_blank" rel="noopener">
+        <a href="https://wa.me/<?php echo str_replace([' ','+'], ['',''], WHATSAPP_NUMBER); ?>?text=<?php echo urlencode('Ciao Lorenzo! Sono interessato al viaggio ' . ($trip['title'] ?? '')); ?>" target="_blank" rel="noopener">
           <i class="fa-brands fa-whatsapp"></i> Scrivici ora
         </a>
       </p>
