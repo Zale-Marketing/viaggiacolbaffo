@@ -204,7 +204,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $all_trips[] = $trip_data;
         }
         save_trips($all_trips);
-        header('Location: /admin/edit-trip.php?slug=' . urlencode($new_slug) . '&saved=1');
+        $active_tab = preg_replace('/[^a-z]/', '', $_POST['active_tab'] ?? '');
+        header('Location: /admin/edit-trip.php?slug=' . urlencode($new_slug) . '&saved=1' . ($active_tab ? '&tab=' . $active_tab : ''));
         exit;
     }
     // If errors: re-populate $trip with submitted values so form retains input
@@ -757,6 +758,7 @@ $preview_token_val = $trip['preview_token'] ?? '';
     </div>
 
     <form method="post" id="edit-form" action="<?= $is_new ? '/admin/edit-trip.php?new=1' : '/admin/edit-trip.php?slug=' . urlencode($slug_param ?? $trip['slug']) ?>">
+    <input type="hidden" id="active_tab_field" name="active_tab" value="">
 
     <div class="edit-container">
 
@@ -1106,17 +1108,20 @@ function switchTab(tabId) {
     if (panel) panel.classList.add('active');
     document.querySelectorAll('.tab-btn[data-tab="' + tabId + '"]').forEach(b => b.classList.add('active'));
     try { localStorage.setItem('edit_trip_tab', tabId); } catch(e) {}
+    const f = document.getElementById('active_tab_field'); if (f) f.value = tabId;
 }
 
 document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => switchTab(btn.dataset.tab));
 });
 
-// Restore last active tab
+// Restore last active tab (URL param ?tab= takes priority over localStorage)
 (function() {
+    const validTabs = ['info', 'media', 'content', 'itinerario', 'formconfig'];
+    const urlTab = new URLSearchParams(window.location.search).get('tab');
     let last = 'info';
     try { last = localStorage.getItem('edit_trip_tab') || 'info'; } catch(e) {}
-    const validTabs = ['info', 'media', 'content', 'itinerario', 'formconfig'];
+    if (urlTab && validTabs.includes(urlTab)) last = urlTab;
     if (!validTabs.includes(last)) last = 'info';
     switchTab(last);
 })();
