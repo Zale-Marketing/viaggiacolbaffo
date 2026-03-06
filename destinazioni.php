@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/includes/config.php';
 require_once ROOT . '/includes/functions.php';
-require_once ROOT . '/includes/destinations-data.php';
+$destinations = load_destinations();
 
 $page_title      = 'Destinazioni — Viaggia Col Baffo';
 $meta_description = 'Scopri le destinazioni di Viaggia Col Baffo: America, Asia, Europa, Africa, Oceania e Medio Oriente. Viaggi di gruppo con Lorenzo.';

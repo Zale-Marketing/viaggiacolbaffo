@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/includes/config.php';
 require_once ROOT . '/includes/functions.php';
-require_once ROOT . '/includes/destinations-data.php';
+$destinations = load_destinations();
 
 $slug = $_GET['slug'] ?? '';
 $valid_slugs = ['america', 'asia', 'europa', 'africa', 'oceania', 'medio-oriente'];
