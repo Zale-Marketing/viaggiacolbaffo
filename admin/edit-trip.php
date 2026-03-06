@@ -75,6 +75,37 @@ $saved  = isset($_GET['saved']);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? 'draft';
 
+    // AJAX: action=save_form_config
+    if ($action === 'save_form_config') {
+        $slug = $_POST['slug'] ?? '';
+        $form_config_raw = $_POST['form_config'] ?? '{}';
+        $webhook_url = trim($_POST['webhook_url'] ?? '');
+        $form_config = json_decode($form_config_raw, true) ?? [];
+        $form_config['webhook_url'] = $webhook_url;
+        $trips = load_trips();
+        foreach ($trips as &$t) {
+            if ($t['slug'] === $slug) { $t['form_config'] = $form_config; break; }
+        }
+        unset($t);
+        save_trips($trips);
+        echo json_encode(['success' => true]);
+        exit;
+    }
+
+    // AJAX: action=regenerate_token
+    if ($action === 'regenerate_token') {
+        $slug = $_POST['slug'] ?? '';
+        $new_token = bin2hex(random_bytes(16));
+        $trips = load_trips();
+        foreach ($trips as &$t) {
+            if ($t['slug'] === $slug) { $t['preview_token'] = $new_token; break; }
+        }
+        unset($t);
+        save_trips($trips);
+        echo json_encode(['success' => true, 'token' => $new_token]);
+        exit;
+    }
+
     // Slug
     if ($slug_locked) {
         $new_slug = $trip['slug'];
@@ -203,6 +234,7 @@ $excluded_text = implode("\n", $trip['excluded'] ?? []);
 // Preview URL
 $preview_token = $trip['preview_token'] ?? '';
 $preview_url   = $preview_token !== '' ? '/viaggio/' . htmlspecialchars($trip['slug']) . '?preview=' . $preview_token : '';
+$preview_token_val = $trip['preview_token'] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="it">
@@ -823,7 +855,7 @@ $preview_url   = $preview_token !== '' ? '/viaggio/' . htmlspecialchars($trip['s
             <div class="form-group" style="margin-bottom:16px;">
                 <label>Token anteprima</label>
                 <div class="token-box">
-                    <code><?= substr($preview_token, 0, 16) ?>...<?= substr($preview_token, -8) ?></code>
+                    <code id="token-display"><?= substr($preview_token, 0, 16) ?>...</code>
                     <button type="button" class="btn-small" id="regen-token-btn" onclick="regenToken()">
                         <i class="fa-solid fa-rotate"></i> Rigenera
                     </button>
@@ -972,14 +1004,63 @@ $preview_url   = $preview_token !== '' ? '/viaggio/' . htmlspecialchars($trip['s
         </div><!-- /tab-itinerario -->
 
         <!-- ══════════════════════════════════════════════════ -->
-        <!-- TAB: Form Config (placeholder — Plan 06)           -->
+        <!-- TAB: Form Config                                   -->
         <!-- ══════════════════════════════════════════════════ -->
         <div class="tab-panel" id="tab-formconfig">
-            <div class="coming-soon-box">
-                <i class="fa-solid fa-robot"></i>
-                <h3>Form Config</h3>
-                <p>Questa sezione sarà disponibile nel prossimo aggiornamento.<br>Permette di configurare il form preventivo con l'AI generativa.</p>
+          <div class="card">
+            <h3>Configurazione Form Preventivo</h3>
+
+            <!-- Webhook URL (separate from AI-generated config) -->
+            <div class="form-group">
+              <label for="webhook_url">Webhook URL (per invio preventivi)</label>
+              <input type="text" id="webhook_url" name="webhook_url"
+                     value="<?= htmlspecialchars($trip['form_config']['webhook_url'] ?? '') ?>"
+                     placeholder="https://...">
+              <small>Lascia vuoto per usare il webhook predefinito dalle Impostazioni.</small>
             </div>
+
+            <hr>
+
+            <!-- AI Generator section -->
+            <h4>Generatore Form con AI</h4>
+            <div class="form-group">
+              <label for="ai_description">Descrivi il viaggio in italiano (prezzi, tipologia, servizi inclusi...)</label>
+              <textarea id="ai_description" rows="5"
+                placeholder="Es: Viaggio in Giappone 12 giorni da €4.200 a persona, camera doppia standard. Include voli, hotel 4 stelle Tokyo e Kyoto, guida italiana, trasferimenti..."></textarea>
+            </div>
+            <button type="button" id="btn-generate-ai" class="btn-primary" onclick="generateAI()">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Genera Form con AI
+            </button>
+            <span id="ai-loading" style="display:none; margin-left:12px;">
+              <i class="fa-solid fa-spinner fa-spin"></i> Generazione in corso...
+            </span>
+
+            <div id="ai-result" style="display:none; margin-top:20px;">
+              <h4>JSON Generato — modifica se necessario</h4>
+              <textarea id="form_config_json" rows="18" style="font-family:monospace;font-size:13px;"></textarea>
+              <div style="margin-top:12px; display:flex; gap:12px; align-items:center;">
+                <button type="button" class="btn-primary" onclick="saveFormConfig()">
+                  <i class="fa-solid fa-save"></i> Salva Form Config
+                </button>
+                <span id="save-fc-msg" style="display:none; color:var(--success);">
+                  <i class="fa-solid fa-check"></i> Salvato
+                </span>
+              </div>
+            </div>
+
+            <!-- Current form_config display (if exists) -->
+            <?php if (!empty($trip['form_config'])): ?>
+            <div style="margin-top:24px;">
+              <h4>Form Config attuale</h4>
+              <textarea rows="15" style="font-family:monospace;font-size:12px;background:#f8f8f8;width:100%;" readonly><?=
+                htmlspecialchars(json_encode($trip['form_config'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))
+              ?></textarea>
+              <button type="button" class="btn-secondary" style="margin-top:8px;" onclick="loadCurrentConfig()">
+                Carica nel editor per modificare
+              </button>
+            </div>
+            <?php endif; ?>
+          </div>
         </div><!-- /tab-formconfig -->
 
     </div><!-- /edit-container -->
@@ -990,15 +1071,9 @@ $preview_url   = $preview_token !== '' ? '/viaggio/' . htmlspecialchars($trip['s
             <?= $is_new ? '<em>Nuovo viaggio</em>' : htmlspecialchars($trip['title']) ?>
         </div>
         <div class="footer-actions">
-            <?php if (!$is_new && $preview_token !== '' && !empty($trip['slug'])): ?>
-            <button type="button" class="btn-preview" onclick="window.open('<?= htmlspecialchars($preview_url) ?>', '_blank')">
+                <button type="button" class="btn-preview" onclick="openPreview()" <?= $is_new ? 'disabled' : '' ?>>
                 <i class="fa-solid fa-eye"></i> Anteprima
             </button>
-            <?php else: ?>
-            <button type="button" class="btn-preview" disabled title="Salva prima il viaggio">
-                <i class="fa-solid fa-eye"></i> Anteprima
-            </button>
-            <?php endif; ?>
             <button type="submit" name="action" value="draft" class="btn-draft">
                 <i class="fa-regular fa-floppy-disk"></i> Salva Bozza
             </button>
@@ -1017,6 +1092,9 @@ $preview_url   = $preview_token !== '' ? '/viaggio/' . htmlspecialchars($trip['s
 // ─────────────────────────────────────────────────────────────────────────────
 const slugLocked = <?= json_encode($slug_locked) ?>;
 const isNew      = <?= json_encode($is_new) ?>;
+let previewToken = '<?= htmlspecialchars($preview_token_val) ?>';
+const tripSlug   = '<?= htmlspecialchars($trip['slug'] ?? '') ?>';
+const currentFormConfig = <?= json_encode($trip['form_config'] ?? (object)[], JSON_UNESCAPED_UNICODE) ?>;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Tab switching (with localStorage persistence)
@@ -1209,17 +1287,20 @@ function addCustomTag() {
 // Token regeneration
 // ─────────────────────────────────────────────────────────────────────────────
 function regenToken() {
-    if (!confirm('Rigenerare il token anteprima? I link di anteprima precedentemente condivisi smetteranno di funzionare.')) return;
-    // Simple AJAX POST
-    const slug = document.getElementById('slug').value;
-    fetch('/admin/ajax.php', {
+    regenerateToken();
+}
+
+function regenerateToken() {
+    if (!confirm('Rigenera token? I link di anteprima precedenti non funzioneranno più.')) return;
+    fetch(window.location.href, {
         method: 'POST',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: 'action=regenerate_token&slug=' + encodeURIComponent(slug)
+        body: new URLSearchParams({action: 'regenerate_token', slug: tripSlug})
     }).then(r => r.json()).then(data => {
-        if (data.ok) {
-            alert('Token rigenerato. La pagina verrà ricaricata.');
-            location.reload();
+        if (data.success) {
+            previewToken = data.token;
+            const display = document.getElementById('token-display');
+            if (display) display.textContent = data.token.substring(0, 16) + '...';
         } else {
             alert('Errore durante la rigenerazione del token.');
         }
@@ -1293,6 +1374,77 @@ function addItineraryRow() {
         </div>`;
     container.appendChild(div);
     initDrag(); // re-bind drag events to new row
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Preview URL opener
+// ─────────────────────────────────────────────────────────────────────────────
+function openPreview() {
+    if (!tripSlug || !previewToken) { alert('Salva il viaggio prima di visualizzare l\'anteprima.'); return; }
+    window.open('/viaggio/' + tripSlug + '?preview=' + previewToken, '_blank');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Form Config — AI generator
+// ─────────────────────────────────────────────────────────────────────────────
+function generateAI() {
+    const desc = document.getElementById('ai_description').value.trim();
+    if (!desc) { alert('Inserisci una descrizione del viaggio.'); return; }
+    document.getElementById('ai-loading').style.display = 'inline';
+    document.getElementById('btn-generate-ai').disabled = true;
+    fetch('/api/generate-form.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({description: desc})
+    })
+    .then(r => r.json())
+    .then(data => {
+        document.getElementById('ai-loading').style.display = 'none';
+        document.getElementById('btn-generate-ai').disabled = false;
+        if (data.form_config) {
+            // Remove webhook_url from preview (it's managed separately)
+            const cfg = {...data.form_config};
+            delete cfg.webhook_url;
+            document.getElementById('form_config_json').value =
+                JSON.stringify(cfg, null, 2);
+            document.getElementById('ai-result').style.display = 'block';
+        } else {
+            alert('Errore nella generazione. Riprova.');
+        }
+    })
+    .catch(() => {
+        document.getElementById('ai-loading').style.display = 'none';
+        document.getElementById('btn-generate-ai').disabled = false;
+        alert('Errore di connessione.');
+    });
+}
+
+function saveFormConfig() {
+    const jsonStr = document.getElementById('form_config_json').value.trim();
+    let cfg;
+    try { cfg = JSON.parse(jsonStr); } catch(e) { alert('JSON non valido: ' + e.message); return; }
+    const webhookUrl = document.getElementById('webhook_url').value.trim();
+    fetch(window.location.href, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: new URLSearchParams({action: 'save_form_config', slug: tripSlug,
+              form_config: JSON.stringify(cfg), webhook_url: webhookUrl})
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            const msg = document.getElementById('save-fc-msg');
+            msg.style.display = 'inline';
+            setTimeout(() => msg.style.display = 'none', 2000);
+        }
+    });
+}
+
+function loadCurrentConfig() {
+    const cfg = {...currentFormConfig};
+    delete cfg.webhook_url;
+    document.getElementById('form_config_json').value = JSON.stringify(cfg, null, 2);
+    document.getElementById('ai-result').style.display = 'block';
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
