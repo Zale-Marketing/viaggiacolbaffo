@@ -20,7 +20,7 @@
 
 <header id="site-header">
   <nav style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;max-width:1200px;margin:0 auto;">
-    <a href="/"><img src="https://viaggiacolbaffo.com/wp-content/uploads/2025/09/Progetto-senza-titolo-2025-09-30T075103.747-e1759212405873.png" alt="Viaggia col Baffo" style="max-height:50px;width:auto;display:block;"></a>
+    <a href="/" class="header-logo"><img src="https://viaggiacolbaffo.com/wp-content/uploads/2025/09/Progetto-senza-titolo-2025-09-30T075103.747-e1759212405873.png" alt="Viaggia col Baffo"></a>
     <ul style="list-style:none;display:flex;gap:2rem;margin:0;padding:0;">
       <li><a href="/viaggi">Viaggi</a></li>
       <li><a href="/agenzie">Agenzie</a></li>
@@ -31,7 +31,7 @@
   (function() {
     var header = document.getElementById('site-header');
     window.addEventListener('scroll', function() {
-      header.classList.toggle('scrolled', window.scrollY > 10);
+      header.classList.toggle('scrolled', window.scrollY > 80);
     }, { passive: true });
   })();
 </script>

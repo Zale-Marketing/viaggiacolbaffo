@@ -4,7 +4,7 @@
   <div class="container site-footer__grid">
 
     <div class="site-footer__col site-footer__col--brand">
-      <a href="/"><img src="https://viaggiacolbaffo.com/wp-content/uploads/2025/09/Progetto-senza-titolo-2025-09-30T075103.747-e1759212405873.png" alt="Viaggia col Baffo" class="site-footer__logo"></a>
+      <a href="/" class="footer-logo" style="display:block;margin-bottom:1rem;"><img src="https://viaggiacolbaffo.com/wp-content/uploads/2025/09/Progetto-senza-titolo-2025-09-30T075103.747-e1759212405873.png" alt="Viaggia col Baffo"></a>
       <p class="site-footer__tagline">Piccoli gruppi, grandi emozioni.<br>Lorenzo con te, ogni giorno.</p>
     </div>
 
