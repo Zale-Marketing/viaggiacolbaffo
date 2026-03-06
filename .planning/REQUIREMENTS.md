@@ -52,20 +52,20 @@
 ### Single Trip Page
 
 - [ ] **TRIP-01**: PHP reads trip from trips.json by ?slug= parameter; 404 redirect if slug not found
-- [ ] **TRIP-02**: Full-viewport hero: trip hero_image, dark gradient overlay, trip title in large Playfair, dates + duration + price, status pill
-- [ ] **TRIP-03**: Sticky top bar (appears after scrolling past hero): trip name left, "Richiedi Preventivo" gold button right (scrolls to form section)
-- [ ] **TRIP-04**: Highlights bar: 4 info boxes — Date, Durata, Da €X.XXX, Posti status
-- [ ] **TRIP-05**: Sticky tab navigation: Itinerario | Cosa Include | Galleria | Richiedi Preventivo — clicking scrolls smoothly to section
-- [ ] **TRIP-06**: Itinerario section: accordion — each day is a clickable row (Giorno N — Title), expanding shows description; timeline visual with gold dots on left
-- [ ] **TRIP-07**: Cosa Include section: two columns — green checkmarks for included items, red X for excluded items
-- [ ] **TRIP-08**: Galleria section: CSS masonry grid of gallery photos; click opens pure CSS/JS lightbox (no external library)
-- [ ] **TRIP-09**: Tags section: "Questo viaggio è perfetto per:" — all trip tags as gold pill links to viaggi.php?tag=
-- [ ] **TRIP-10**: Related trips section: 3 cards of trips sharing same continent or overlapping tags
+- [x] **TRIP-02**: Full-viewport hero: trip hero_image, dark gradient overlay, trip title in large Playfair, dates + duration + price, status pill
+- [x] **TRIP-03**: Sticky top bar (appears after scrolling past hero): trip name left, "Richiedi Preventivo" gold button right (scrolls to form section)
+- [x] **TRIP-04**: Highlights bar: 4 info boxes — Date, Durata, Da €X.XXX, Posti status
+- [x] **TRIP-05**: Sticky tab navigation: Itinerario | Cosa Include | Galleria | Richiedi Preventivo — clicking scrolls smoothly to section
+- [x] **TRIP-06**: Itinerario section: accordion — each day is a clickable row (Giorno N — Title), expanding shows description; timeline visual with gold dots on left
+- [x] **TRIP-07**: Cosa Include section: two columns — green checkmarks for included items, red X for excluded items
+- [x] **TRIP-08**: Galleria section: CSS masonry grid of gallery photos; click opens pure CSS/JS lightbox (no external library)
+- [x] **TRIP-09**: Tags section: "Questo viaggio è perfetto per:" — all trip tags as gold pill links to viaggi.php?tag=
+- [x] **TRIP-10**: Related trips section: 3 cards of trips sharing same continent or overlapping tags
 
 ### AI Quote Form
 
-- [ ] **FORM-01**: Form renderer reads form_config from trip's JSON and renders HTML form dynamically (PHP + JS)
-- [ ] **FORM-02**: JavaScript calculates live price total as user selects room type, optional add-ons, and participant count; displays "Preventivo stimato: €X.XXX" updating in real time
+- [x] **FORM-01**: Form renderer reads form_config from trip's JSON and renders HTML form dynamically (PHP + JS)
+- [x] **FORM-02**: JavaScript calculates live price total as user selects room type, optional add-ons, and participant count; displays "Preventivo stimato: €X.XXX" updating in real time
 - [ ] **FORM-03**: When tipo_cliente = "Agenzia" selected, additional fields appear: nome agenzia, P.IVA, commissione richiesta
 - [ ] **FORM-04**: Form submits via AJAX POST to /api/submit-form.php, which forwards JSON to trip's webhook_url via cURL; shows success/error message without page reload
 - [ ] **FORM-05**: Below form: WhatsApp button "Preferisci scrivere su WhatsApp?" linking to configured WhatsApp number
@@ -172,17 +172,17 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CATALOG-05 | Phase 3 — Trip Catalog | Complete |
 | CATALOG-06 | Phase 3 — Trip Catalog | Complete |
 | TRIP-01 | Phase 4 — Trip Detail + Quote Form | Pending |
-| TRIP-02 | Phase 4 — Trip Detail + Quote Form | Pending |
-| TRIP-03 | Phase 4 — Trip Detail + Quote Form | Pending |
-| TRIP-04 | Phase 4 — Trip Detail + Quote Form | Pending |
-| TRIP-05 | Phase 4 — Trip Detail + Quote Form | Pending |
-| TRIP-06 | Phase 4 — Trip Detail + Quote Form | Pending |
-| TRIP-07 | Phase 4 — Trip Detail + Quote Form | Pending |
-| TRIP-08 | Phase 4 — Trip Detail + Quote Form | Pending |
-| TRIP-09 | Phase 4 — Trip Detail + Quote Form | Pending |
-| TRIP-10 | Phase 4 — Trip Detail + Quote Form | Pending |
-| FORM-01 | Phase 4 — Trip Detail + Quote Form | Pending |
-| FORM-02 | Phase 4 — Trip Detail + Quote Form | Pending |
+| TRIP-02 | Phase 4 — Trip Detail + Quote Form | Complete |
+| TRIP-03 | Phase 4 — Trip Detail + Quote Form | Complete |
+| TRIP-04 | Phase 4 — Trip Detail + Quote Form | Complete |
+| TRIP-05 | Phase 4 — Trip Detail + Quote Form | Complete |
+| TRIP-06 | Phase 4 — Trip Detail + Quote Form | Complete |
+| TRIP-07 | Phase 4 — Trip Detail + Quote Form | Complete |
+| TRIP-08 | Phase 4 — Trip Detail + Quote Form | Complete |
+| TRIP-09 | Phase 4 — Trip Detail + Quote Form | Complete |
+| TRIP-10 | Phase 4 — Trip Detail + Quote Form | Complete |
+| FORM-01 | Phase 4 — Trip Detail + Quote Form | Complete |
+| FORM-02 | Phase 4 — Trip Detail + Quote Form | Complete |
 | FORM-03 | Phase 4 — Trip Detail + Quote Form | Pending |
 | FORM-04 | Phase 4 — Trip Detail + Quote Form | Pending |
 | FORM-05 | Phase 4 — Trip Detail + Quote Form | Pending |
