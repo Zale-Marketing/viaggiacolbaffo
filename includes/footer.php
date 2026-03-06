@@ -1,5 +1,14 @@
 </main>
 
+<?php
+$_acfg_path = DATA_DIR . 'admin-config.json';
+$_foot_cfg = file_exists($_acfg_path) ? (json_decode(file_get_contents($_acfg_path), true) ?? []) : [];
+$company_name    = $_foot_cfg['company_name']    ?? 'Y86 Travel';
+$company_vat     = $_foot_cfg['company_vat']     ?? '';
+$company_address = $_foot_cfg['company_address'] ?? '';
+unset($_acfg_path, $_foot_cfg);
+?>
+
 <footer class="site-footer">
   <div class="container site-footer__grid">
 
@@ -40,7 +49,11 @@
 
   <div class="site-footer__bottom">
     <div class="container">
-      <p>P.IVA placeholder &mdash; &copy; <?= date('Y') ?> Viaggia col Baffo - Y86 Travel. Tutti i diritti riservati.</p>
+      <p>
+        <?php if ($company_vat): ?>P.IVA: <?= htmlspecialchars($company_vat) ?> &mdash; <?php endif; ?>
+        &copy; <?= date('Y') ?> Viaggia col Baffo - <?= htmlspecialchars($company_name) ?>. Tutti i diritti riservati.
+        <?php if ($company_address): ?><br><?= htmlspecialchars($company_address) ?><?php endif; ?>
+      </p>
     </div>
   </div>
 </footer>

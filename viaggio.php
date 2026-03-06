@@ -9,6 +9,22 @@ if (!$slug) { header("Location: /404"); exit; }
 $trip = get_trip_by_slug($slug);
 if (!$trip) { header("Location: /404"); exit; }
 
+// --- Deleted gate: deleted trips are never publicly accessible ---
+if ($trip['deleted'] ?? false) {
+    header("Location: /404");
+    exit;
+}
+
+// --- Preview token: allows viewing unpublished trips with a valid token ---
+$preview_token = $_GET['preview'] ?? '';
+$is_preview = $preview_token !== '' && ($trip['preview_token'] ?? '') === $preview_token;
+
+// --- Published gate: unpublished trips return 404 unless preview token matches ---
+if (!($trip['published'] ?? false) && !$is_preview) {
+    header("Location: /404");
+    exit;
+}
+
 // --- Page variables ---
 $page_title = htmlspecialchars($trip['title']) . ' — Viaggia col Baffo';
 $hero_page  = true;

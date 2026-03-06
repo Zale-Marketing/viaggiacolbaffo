@@ -3,6 +3,12 @@ require_once __DIR__ . '/includes/config.php';
 require_once ROOT . '/includes/functions.php';
 $page_title = 'Viaggia col Baffo — Esperienze che cambiano la vita';
 $hero_page = true;
+
+$_acfg_path = DATA_DIR . 'admin-config.json';
+$_acfg_data = file_exists($_acfg_path) ? (json_decode(file_get_contents($_acfg_path), true) ?? []) : [];
+$urgency_text = $_acfg_data['urgency_bar_text'] ?? 'West America Aprile 2026 — Ultimi 5 posti disponibili';
+unset($_acfg_path, $_acfg_data);
+
 require_once ROOT . '/includes/header.php';
 ?>
 
@@ -23,8 +29,7 @@ require_once ROOT . '/includes/header.php';
 <!-- URGENCY BAR (HOME-02) -->
 <div class="urgency-bar">
   <span><i class="fa-solid fa-fire"></i></span>
-  <span class="urgency-bar__text">West America Aprile 2026</span>
-  <span class="urgency-bar__pill">Ultimi 5 posti disponibili</span>
+  <span class="urgency-bar__text"><?= htmlspecialchars($urgency_text) ?></span>
 </div>
 
 <!-- I NOSTRI VIAGGI ATTIVI (HOME-03) -->
