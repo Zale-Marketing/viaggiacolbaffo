@@ -98,17 +98,17 @@ If a trip has its own `webhook_url`, that is used instead of the default. This l
 
 ---
 
-## 4. OpenAI Key Setup (AI Form Generator)
+## 4. Anthropic Key Setup (AI Form Generator)
 
-The admin panel (Phase 4) includes an AI-powered form generator: paste a plain Italian trip description and GPT-4o-mini returns a `form_config` JSON that you can save directly to the trip.
+The admin panel includes an AI-powered form generator: paste a plain Italian trip description and the AI returns a `form_config` JSON that you can save directly to the trip.
 
-To enable it, add your OpenAI API key to `includes/config.php`:
+To enable it, set your Anthropic API key via the admin panel settings page, or add it to `data/admin-config.json`:
 
-```php
-define('OPENAI_API_KEY', 'sk-proj-...');
+```json
+{ "anthropic_api_key": "sk-ant-..." }
 ```
 
-Leave the value as an empty string `''` to disable the feature. The rest of the site works normally without an API key.
+Leave the value as an empty string `""` to disable the feature. The rest of the site works normally without an API key.
 
 ---
 
