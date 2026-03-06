@@ -125,36 +125,68 @@ $volo           = $trip['volo'] ?? null;
      ======================================================== -->
 <div class="volo-section">
   <div class="container">
-    <button class="volo-toggle" id="volo-toggle" type="button">
-      &#9992; Dettagli Volo <i class="fa-solid fa-chevron-down volo-toggle__chevron"></i>
+    <button class="volo-header-btn" id="volo-toggle" type="button">
+      &#9992; Dettagli Volo <i class="fa-solid fa-chevron-down" id="volo-chevron" style="transition:transform 0.3s ease;"></i>
     </button>
-    <div class="volo-details" id="volo-details">
+    <div id="volo-details" style="display:none;">
       <?php if (!($volo['incluso'] ?? false)): ?>
-      <div class="volo-non-incluso">Il volo non è incluso nel prezzo del viaggio.</div>
+      <div style="text-align:center;color:#aaa;padding:20px 0;">Il volo non è incluso nel prezzo del viaggio.</div>
       <?php else: ?>
-      <div class="volo-cards">
+      <div class="volo-cards-grid">
         <?php if (!empty($volo['andata'])): $a = $volo['andata']; ?>
         <div class="volo-card">
-          <div class="volo-card__label">Volo Andata</div>
-          <div class="volo-card__compagnia"><?php echo htmlspecialchars($a['compagnia'] ?? ''); ?> &middot; <?php echo htmlspecialchars($a['numero_volo'] ?? ''); ?></div>
-          <div class="volo-card__route"><?php echo htmlspecialchars($a['partenza_aeroporto'] ?? ''); ?> &rarr; <?php echo htmlspecialchars($a['arrivo_aeroporto'] ?? ''); ?></div>
-          <div class="volo-card__meta">
-            <?php echo htmlspecialchars($a['data'] ?? ''); ?><br>
-            Partenza <?php echo htmlspecialchars($a['orario_partenza'] ?? ''); ?> &mdash; Arrivo <?php echo htmlspecialchars($a['orario_arrivo'] ?? ''); ?><br>
-            <?php if (!empty($a['scalo'])): ?>Scalo: <?php echo htmlspecialchars($a['scalo']); ?><?php endif; ?>
+          <div class="volo-card-type">Volo Andata</div>
+          <div class="volo-airline">&#9992; <?php echo htmlspecialchars($a['compagnia'] ?? ''); ?> &middot; <?php echo htmlspecialchars($a['numero_volo'] ?? ''); ?></div>
+          <div class="volo-route">
+            <?php echo htmlspecialchars($a['partenza_aeroporto'] ?? ''); ?>
+            <i class="volo-route-arrow">&#8594;</i>
+            <?php echo htmlspecialchars($a['arrivo_aeroporto'] ?? ''); ?>
           </div>
+          <div class="volo-details-grid">
+            <div>
+              <div class="volo-detail-label">Data</div>
+              <div class="volo-detail-value"><?php echo htmlspecialchars($a['data'] ?? ''); ?></div>
+            </div>
+            <div>
+              <div class="volo-detail-label">Partenza</div>
+              <div class="volo-detail-value"><?php echo htmlspecialchars($a['orario_partenza'] ?? ''); ?></div>
+            </div>
+            <div>
+              <div class="volo-detail-label">Arrivo</div>
+              <div class="volo-detail-value"><?php echo htmlspecialchars($a['orario_arrivo'] ?? ''); ?></div>
+            </div>
+          </div>
+          <?php if (!empty($a['scalo'])): ?>
+          <div class="volo-scalo">&#128199; Scalo: <?php echo htmlspecialchars($a['scalo']); ?></div>
+          <?php endif; ?>
         </div>
         <?php endif; ?>
         <?php if (!empty($volo['ritorno'])): $r = $volo['ritorno']; ?>
         <div class="volo-card">
-          <div class="volo-card__label">Volo Ritorno</div>
-          <div class="volo-card__compagnia"><?php echo htmlspecialchars($r['compagnia'] ?? ''); ?> &middot; <?php echo htmlspecialchars($r['numero_volo'] ?? ''); ?></div>
-          <div class="volo-card__route"><?php echo htmlspecialchars($r['partenza_aeroporto'] ?? ''); ?> &rarr; <?php echo htmlspecialchars($r['arrivo_aeroporto'] ?? ''); ?></div>
-          <div class="volo-card__meta">
-            <?php echo htmlspecialchars($r['data'] ?? ''); ?><br>
-            Partenza <?php echo htmlspecialchars($r['orario_partenza'] ?? ''); ?> &mdash; Arrivo <?php echo htmlspecialchars($r['orario_arrivo'] ?? ''); ?><br>
-            <?php if (!empty($r['scalo'])): ?>Scalo: <?php echo htmlspecialchars($r['scalo']); ?><?php endif; ?>
+          <div class="volo-card-type">Volo Ritorno</div>
+          <div class="volo-airline">&#9992; <?php echo htmlspecialchars($r['compagnia'] ?? ''); ?> &middot; <?php echo htmlspecialchars($r['numero_volo'] ?? ''); ?></div>
+          <div class="volo-route">
+            <?php echo htmlspecialchars($r['partenza_aeroporto'] ?? ''); ?>
+            <i class="volo-route-arrow">&#8594;</i>
+            <?php echo htmlspecialchars($r['arrivo_aeroporto'] ?? ''); ?>
           </div>
+          <div class="volo-details-grid">
+            <div>
+              <div class="volo-detail-label">Data</div>
+              <div class="volo-detail-value"><?php echo htmlspecialchars($r['data'] ?? ''); ?></div>
+            </div>
+            <div>
+              <div class="volo-detail-label">Partenza</div>
+              <div class="volo-detail-value"><?php echo htmlspecialchars($r['orario_partenza'] ?? ''); ?></div>
+            </div>
+            <div>
+              <div class="volo-detail-label">Arrivo</div>
+              <div class="volo-detail-value"><?php echo htmlspecialchars($r['orario_arrivo'] ?? ''); ?></div>
+            </div>
+          </div>
+          <?php if (!empty($r['scalo'])): ?>
+          <div class="volo-scalo">&#128199; Scalo: <?php echo htmlspecialchars($r['scalo']); ?></div>
+          <?php endif; ?>
         </div>
         <?php endif; ?>
       </div>
@@ -170,6 +202,9 @@ $volo           = $trip['volo'] ?? null;
 <div class="trip-tabs" id="trip-tabs">
   <nav class="trip-tabs__nav">
     <button class="trip-tabs__btn active" data-target="itinerario">Itinerario</button>
+    <?php if (!empty($trip['hotel'])): ?>
+    <button class="trip-tabs__btn" data-target="alloggi">Alloggi</button>
+    <?php endif; ?>
     <button class="trip-tabs__btn" data-target="cosa-include">Cosa Include</button>
     <button class="trip-tabs__btn" data-target="galleria">Galleria</button>
     <?php if ($has_form): ?>
@@ -207,6 +242,40 @@ $volo           = $trip['volo'] ?? null;
     </div>
   </div>
 </section>
+
+<?php if (!empty($trip['hotel'])): ?>
+<!-- ========================================================
+     ALLOGGI SECTION
+     Hotel data editable from admin panel (Phase 6)
+     ======================================================== -->
+<section class="trip-section hotel-section" id="alloggi">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-header__title">Alloggi</h2>
+    </div>
+    <div class="hotel-grid">
+      <?php foreach ($trip['hotel'] as $hotel): ?>
+      <div class="hotel-card">
+        <img class="hotel-card-img" src="<?php echo htmlspecialchars($hotel['image_url'] ?? ''); ?>" alt="<?php echo htmlspecialchars($hotel['nome']); ?>" loading="lazy">
+        <span class="hotel-badge-city"><?php echo htmlspecialchars($hotel['citta']); ?></span>
+        <span class="hotel-badge-notti"><?php echo (int)$hotel['notti']; ?> notti</span>
+        <div class="hotel-card-body">
+          <div class="hotel-stars"><?php echo str_repeat('&#9733;', (int)($hotel['stelle'] ?? 0)); ?></div>
+          <div class="hotel-name"><?php echo htmlspecialchars($hotel['nome']); ?></div>
+          <p class="hotel-desc"><?php echo htmlspecialchars($hotel['descrizione'] ?? ''); ?></p>
+          <div class="hotel-address">&#128205; <?php echo htmlspecialchars($hotel['indirizzo'] ?? ''); ?></div>
+          <?php if ($hotel['inclusa_colazione'] ?? false): ?>
+          <span class="hotel-colazione-yes">&#10003; Colazione inclusa</span>
+          <?php else: ?>
+          <span class="hotel-colazione-no">Colazione non inclusa</span>
+          <?php endif; ?>
+        </div>
+      </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</section>
+<?php endif; ?>
 
 <!-- ========================================================
      COSA INCLUDE SECTION
@@ -536,11 +605,12 @@ $status_labels_rel = ['confermata'=>'Confermata','ultimi-posti'=>'Ultimi posti',
   // --- Volo toggle ---
   var voloToggle  = document.getElementById('volo-toggle');
   var voloDetails = document.getElementById('volo-details');
+  var voloChevron = document.getElementById('volo-chevron');
   if (voloToggle && voloDetails) {
     voloToggle.addEventListener('click', function () {
-      var isOpen = voloDetails.classList.contains('open');
-      voloDetails.classList.toggle('open', !isOpen);
-      voloToggle.classList.toggle('open', !isOpen);
+      var isOpen = voloDetails.style.display !== 'none';
+      voloDetails.style.display = isOpen ? 'none' : 'block';
+      if (voloChevron) voloChevron.style.transform = isOpen ? '' : 'rotate(180deg)';
     });
   }
 
