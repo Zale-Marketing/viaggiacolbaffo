@@ -94,12 +94,12 @@
 
 - [x] **ADMIN-01**: admin/login.php: minimal dark login form with logo, password field, submit; PHP session auth; password from config.php; all admin pages redirect to login if not authenticated
 - [x] **ADMIN-02**: admin/index.php dashboard: table of all trips (title, continent, tags, status, published); actions per trip: Edit, Preview (new tab), Delete, Toggle Published; stats bar (total/published/draft count); "Crea Nuovo Viaggio" gold button
-- [ ] **ADMIN-03**: admin/edit-trip.php: full trip form — basic info (title, slug auto-generated, continent select, status select, published toggle), dates + price (start date, end date, auto-calculated duration, price_from)
-- [ ] **ADMIN-04**: Admin edit form: media fields — hero image URL with live preview thumbnail, gallery images (textarea one URL per line with preview grid)
-- [ ] **ADMIN-05**: Admin edit form: content fields — short description (max 160 chars with counter), full description (rich textarea)
-- [ ] **ADMIN-06**: Admin edit form: itinerary builder — "Aggiungi Giorno" button adds rows; each row has auto day number, title text, description textarea, remove button; rows reorderable by drag (pure JS)
-- [ ] **ADMIN-07**: Admin edit form: includes/excludes — two textareas (one item per line each)
-- [ ] **ADMIN-08**: Admin edit form: tag chip input — predefined tags selectable as gold pills; typing adds custom tags; tags removable; saved as array
+- [x] **ADMIN-03**: admin/edit-trip.php: full trip form — basic info (title, slug auto-generated, continent select, status select, published toggle), dates + price (start date, end date, auto-calculated duration, price_from)
+- [x] **ADMIN-04**: Admin edit form: media fields — hero image URL with live preview thumbnail, gallery images (textarea one URL per line with preview grid)
+- [x] **ADMIN-05**: Admin edit form: content fields — short description (max 160 chars with counter), full description (rich textarea)
+- [x] **ADMIN-06**: Admin edit form: itinerary builder — "Aggiungi Giorno" button adds rows; each row has auto day number, title text, description textarea, remove button; rows reorderable by drag (pure JS)
+- [x] **ADMIN-07**: Admin edit form: includes/excludes — two textareas (one item per line each)
+- [x] **ADMIN-08**: Admin edit form: tag chip input — predefined tags selectable as gold pills; typing adds custom tags; tags removable; saved as array
 - [x] **ADMIN-09**: Admin edit form: AI form generator section — plain Italian description textarea, "Genera Form con AI" button, loading state, JSON preview of generated form_config, webhook_url editable field, save to trip
 - [ ] **ADMIN-10**: Admin edit form: save actions — "Salva Bozza" (unpublished), "Pubblica" (published=true), "Anteprima" (opens viaggio.php?slug= in new tab)
 - [x] **ADMIN-11**: admin/config.php stores: admin password, OpenAI API key (empty default), default webhook URL, WhatsApp number, Tally form URLs
@@ -202,12 +202,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | B2B-06 | Phase 5 — Destinations + B2B | Complete |
 | ADMIN-01 | Phase 6 — Admin Panel | Complete |
 | ADMIN-02 | Phase 6 — Admin Panel | Complete |
-| ADMIN-03 | Phase 6 — Admin Panel | Pending |
-| ADMIN-04 | Phase 6 — Admin Panel | Pending |
-| ADMIN-05 | Phase 6 — Admin Panel | Pending |
-| ADMIN-06 | Phase 6 — Admin Panel | Pending |
-| ADMIN-07 | Phase 6 — Admin Panel | Pending |
-| ADMIN-08 | Phase 6 — Admin Panel | Pending |
+| ADMIN-03 | Phase 6 — Admin Panel | Complete |
+| ADMIN-04 | Phase 6 — Admin Panel | Complete |
+| ADMIN-05 | Phase 6 — Admin Panel | Complete |
+| ADMIN-06 | Phase 6 — Admin Panel | Complete |
+| ADMIN-07 | Phase 6 — Admin Panel | Complete |
+| ADMIN-08 | Phase 6 — Admin Panel | Complete |
 | ADMIN-09 | Phase 6 — Admin Panel | Complete |
 | ADMIN-10 | Phase 6 — Admin Panel | Pending |
 | ADMIN-11 | Phase 6 — Admin Panel | Complete |

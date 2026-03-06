@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 06-admin-panel-04-PLAN.md
-last_updated: "2026-03-06T21:32:22.955Z"
+stopped_at: Completed 06-admin-panel-03-PLAN.md
+last_updated: "2026-03-06T21:32:29.530Z"
 last_activity: 2026-03-06 — Roadmap created, 56 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
@@ -138,6 +138,8 @@ Recent decisions affecting current work:
 - [Phase 06-admin-panel]: JSON-body detection for reorder AJAX: Content-Type application/json decoded from php://input before action switch
 - [Phase 06-admin-panel]: settings.php reads existing admin-config.json first and merges POST fields to preserve unknown keys
 - [Phase 06-admin-panel]: tags.php cascade delete: save_tags() then save_trips() in same PHP request
+- [Phase 06-admin-panel]: slug_locked computed from trip published flag at PHP render time; passed to JS via json_encode — slug becomes readonly and stays locked even if re-saved as draft
+- [Phase 06-admin-panel]: form_config preserved from existing trip data during POST save — not overwritten by edit-trip.php form fields (Form Config tab is Plan 06)
 
 ### Pending Todos
 
@@ -158,6 +160,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T21:32:17.697Z
-Stopped at: Completed 06-admin-panel-04-PLAN.md
+Last session: 2026-03-06T21:32:29.527Z
+Stopped at: Completed 06-admin-panel-03-PLAN.md
 Resume file: None
