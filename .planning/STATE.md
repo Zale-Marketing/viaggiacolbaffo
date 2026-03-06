@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Phase 5 context gathered
-last_updated: "2026-03-06T19:14:39.513Z"
+stopped_at: Completed 05-destinations-b2b-01-PLAN.md
+last_updated: "2026-03-06T19:39:46.161Z"
 last_activity: 2026-03-06 — Roadmap created, 56 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 3
-  total_plans: 14
-  completed_plans: 13
+  total_plans: 18
+  completed_plans: 14
   percent: 0
 ---
 
@@ -63,6 +63,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 04-trip-detail-quote-form P02 | 1min | 1 tasks | 1 files |
 | Phase 04-trip-detail-quote-form P03 | 3min | 2 tasks | 1 files |
 | Phase 04-trip-detail-quote-form P04 | 5min | 2 tasks | 2 files |
+| Phase 05-destinations-b2b P01 | 4min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -111,6 +112,8 @@ Recent decisions affecting current work:
 - [Quick-3-timeline-volo-hotel]: .volo-details-grid class used instead of .volo-details to avoid collision with id="volo-details" JS-controlled element
 - [Quick-3-timeline-volo-hotel]: Volo toggle JS uses style.display check instead of classList.contains('open') — new HTML default is inline style=display:none
 - [Quick-3-timeline-volo-hotel]: hotel key appended after volo key in trips.json; hotel-section placed between itinerary and cosa-include in viaggio.php
+- [Phase 05-destinations-b2b]: TALLY_B2B_URL was already defined in config.php — only added WAITLIST_WEBHOOK_URL and WHATSAPP_B2B_FALLBACK to avoid duplicate define() errors
+- [Phase 05-destinations-b2b]: All Phase 5 CSS uses unique dest-* and b2b-* prefixes — no collision with existing trip-card, section, btn--gold rules
 
 ### Pending Todos
 
@@ -130,6 +133,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T19:14:39.509Z
-Stopped at: Phase 5 context gathered
-Resume file: .planning/phases/05-destinations-b2b/05-CONTEXT.md
+Last session: 2026-03-06T19:39:46.158Z
+Stopped at: Completed 05-destinations-b2b-01-PLAN.md
+Resume file: None

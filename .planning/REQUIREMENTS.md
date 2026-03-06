@@ -73,22 +73,22 @@
 
 ### Destination Pages
 
-- [ ] **DEST-01**: destinazione.php reads ?slug= (america/asia/europa/africa/oceania/medio-oriente); 404 if invalid slug
-- [ ] **DEST-02**: Full-viewport hero with stunning Unsplash photo and destination name overlay; breadcrumb: Home > Destinazioni > [Name]
-- [ ] **DEST-03**: Intro section: 3 paragraphs of inspiring editorial text (hardcoded in destinations-data.php per destination)
-- [ ] **DEST-04**: Practical info boxes: currency, language, best season, timezone, visa requirements (hardcoded per destination)
-- [ ] **DEST-05**: "Cosa Vedere" section: 3-4 sub-destination cards (e.g. America: New York, Grand Canyon, California, Las Vegas) — each with Unsplash photo, name, 2-line description; Boscolo-style layout
-- [ ] **DEST-06**: "Curiosità" section: 3 interesting facts with icon, title, text, gold left accent border
-- [ ] **DEST-07**: Trips section: IF trips exist for this continent (published=true) → show trip cards grid; IF no trips → show "sold out, join waitlist" dark box with name+email form that POSTs to webhook URL configured in config.php
+- [x] **DEST-01**: destinazione.php reads ?slug= (america/asia/europa/africa/oceania/medio-oriente); 404 if invalid slug
+- [x] **DEST-02**: Full-viewport hero with stunning Unsplash photo and destination name overlay; breadcrumb: Home > Destinazioni > [Name]
+- [x] **DEST-03**: Intro section: 3 paragraphs of inspiring editorial text (hardcoded in destinations-data.php per destination)
+- [x] **DEST-04**: Practical info boxes: currency, language, best season, timezone, visa requirements (hardcoded per destination)
+- [x] **DEST-05**: "Cosa Vedere" section: 3-4 sub-destination cards (e.g. America: New York, Grand Canyon, California, Las Vegas) — each with Unsplash photo, name, 2-line description; Boscolo-style layout
+- [x] **DEST-06**: "Curiosità" section: 3 interesting facts with icon, title, text, gold left accent border
+- [x] **DEST-07**: Trips section: IF trips exist for this continent (published=true) → show trip cards grid; IF no trips → show "sold out, join waitlist" dark box with name+email form that POSTs to webhook URL configured in config.php
 
 ### B2B Agencies Page
 
-- [ ] **B2B-01**: Dark hero: "Diventa Agenzia Partner" headline + subline
-- [ ] **B2B-02**: Trust bar: "Garanzia scritta • Commissioni competitive • Supporto dedicato • Materiali marketing inclusi"
-- [ ] **B2B-03**: 3 value prop cards: "I tuoi clienti restano TUOI" (written guarantee), "Commissioni fino al 12%", "Catalogo pronto da vendere"
-- [ ] **B2B-04**: How it works: 3 steps — Registrati → Ricevi il catalogo → Inizia a guadagnare
-- [ ] **B2B-05**: Embedded Tally form for agency registration (URL from config.php)
-- [ ] **B2B-06**: Agency partner testimonial (placeholder)
+- [x] **B2B-01**: Dark hero: "Diventa Agenzia Partner" headline + subline
+- [x] **B2B-02**: Trust bar: "Garanzia scritta • Commissioni competitive • Supporto dedicato • Materiali marketing inclusi"
+- [x] **B2B-03**: 3 value prop cards: "I tuoi clienti restano TUOI" (written guarantee), "Commissioni fino al 12%", "Catalogo pronto da vendere"
+- [x] **B2B-04**: How it works: 3 steps — Registrati → Ricevi il catalogo → Inizia a guadagnare
+- [x] **B2B-05**: Embedded Tally form for agency registration (URL from config.php)
+- [x] **B2B-06**: Agency partner testimonial (placeholder)
 
 ### Admin Panel
 
@@ -187,19 +187,19 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FORM-04 | Phase 4 — Trip Detail + Quote Form | Complete |
 | FORM-05 | Phase 4 — Trip Detail + Quote Form | Complete |
 | FORM-06 | Phase 4 — Trip Detail + Quote Form | Complete |
-| DEST-01 | Phase 5 — Destinations + B2B | Pending |
-| DEST-02 | Phase 5 — Destinations + B2B | Pending |
-| DEST-03 | Phase 5 — Destinations + B2B | Pending |
-| DEST-04 | Phase 5 — Destinations + B2B | Pending |
-| DEST-05 | Phase 5 — Destinations + B2B | Pending |
-| DEST-06 | Phase 5 — Destinations + B2B | Pending |
-| DEST-07 | Phase 5 — Destinations + B2B | Pending |
-| B2B-01 | Phase 5 — Destinations + B2B | Pending |
-| B2B-02 | Phase 5 — Destinations + B2B | Pending |
-| B2B-03 | Phase 5 — Destinations + B2B | Pending |
-| B2B-04 | Phase 5 — Destinations + B2B | Pending |
-| B2B-05 | Phase 5 — Destinations + B2B | Pending |
-| B2B-06 | Phase 5 — Destinations + B2B | Pending |
+| DEST-01 | Phase 5 — Destinations + B2B | Complete |
+| DEST-02 | Phase 5 — Destinations + B2B | Complete |
+| DEST-03 | Phase 5 — Destinations + B2B | Complete |
+| DEST-04 | Phase 5 — Destinations + B2B | Complete |
+| DEST-05 | Phase 5 — Destinations + B2B | Complete |
+| DEST-06 | Phase 5 — Destinations + B2B | Complete |
+| DEST-07 | Phase 5 — Destinations + B2B | Complete |
+| B2B-01 | Phase 5 — Destinations + B2B | Complete |
+| B2B-02 | Phase 5 — Destinations + B2B | Complete |
+| B2B-03 | Phase 5 — Destinations + B2B | Complete |
+| B2B-04 | Phase 5 — Destinations + B2B | Complete |
+| B2B-05 | Phase 5 — Destinations + B2B | Complete |
+| B2B-06 | Phase 5 — Destinations + B2B | Complete |
 | ADMIN-01 | Phase 6 — Admin Panel | Pending |
 | ADMIN-02 | Phase 6 — Admin Panel | Pending |
 | ADMIN-03 | Phase 6 — Admin Panel | Pending |
