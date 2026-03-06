@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 04-trip-detail-quote-form 04-03-PLAN.md
-last_updated: "2026-03-06T17:16:20.032Z"
+stopped_at: Completed 04-trip-detail-quote-form 04-04-PLAN.md
+last_updated: "2026-03-06T17:19:18.291Z"
 last_activity: 2026-03-06 — Roadmap created, 56 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 14
-  completed_plans: 12
+  completed_plans: 13
   percent: 0
 ---
 
@@ -62,6 +62,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 04-trip-detail-quote-form P01 | 1min | 2 tasks | 2 files |
 | Phase 04-trip-detail-quote-form P02 | 1min | 1 tasks | 1 files |
 | Phase 04-trip-detail-quote-form P03 | 3min | 2 tasks | 1 files |
+| Phase 04-trip-detail-quote-form P04 | 5min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -104,6 +105,9 @@ Recent decisions affecting current work:
 - [Phase 04-trip-detail-quote-form]: agency-fields div carries inline style=display:none; JS controls visibility entirely — CSS load order independent
 - [Phase 04-trip-detail-quote-form]: updatePrice multiplies addon total by (adultCount + childCount) — optional services cover the full booking group
 - [Phase 04-trip-detail-quote-form]: validateAgencyCode falls back to showing fields on any non-empty code when agencyCodeHash is absent from form_config
+- [Phase 04-trip-detail-quote-form]: PHP CLI not available in bash — api/submit-form.php and api/generate-form.php verified by content inspection
+- [Phase 04-trip-detail-quote-form]: generate-form.php falls back to default_form_config on cURL error or non-200 HTTP — caller always receives valid form_config
+- [Phase 04-trip-detail-quote-form]: source field in generate-form.php response distinguishes default/default_fallback/default_parse_fallback/ai for operator diagnostics
 
 ### Pending Todos
 
@@ -121,6 +125,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T17:16:20.028Z
-Stopped at: Completed 04-trip-detail-quote-form 04-03-PLAN.md
+Last session: 2026-03-06T17:19:18.287Z
+Stopped at: Completed 04-trip-detail-quote-form 04-04-PLAN.md
 Resume file: None

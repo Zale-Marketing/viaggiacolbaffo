@@ -67,9 +67,9 @@
 - [x] **FORM-01**: Form renderer reads form_config from trip's JSON and renders HTML form dynamically (PHP + JS)
 - [x] **FORM-02**: JavaScript calculates live price total as user selects room type, optional add-ons, and participant count; displays "Preventivo stimato: €X.XXX" updating in real time
 - [x] **FORM-03**: When tipo_cliente = "Agenzia" selected, additional fields appear: nome agenzia, P.IVA, commissione richiesta
-- [ ] **FORM-04**: Form submits via AJAX POST to /api/submit-form.php, which forwards JSON to trip's webhook_url via cURL; shows success/error message without page reload
+- [x] **FORM-04**: Form submits via AJAX POST to /api/submit-form.php, which forwards JSON to trip's webhook_url via cURL; shows success/error message without page reload
 - [x] **FORM-05**: Below form: WhatsApp button "Preferisci scrivere su WhatsApp?" linking to configured WhatsApp number
-- [ ] **FORM-06**: Admin AI form generator: textarea for Lorenzo to describe trip in plain Italian; "Genera Form con AI" button calls GPT-4o-mini API; returns form_config JSON; admin previews generated form; edits webhook_url; saves to trips.json
+- [x] **FORM-06**: Admin AI form generator: textarea for Lorenzo to describe trip in plain Italian; "Genera Form con AI" button calls GPT-4o-mini API; returns form_config JSON; admin previews generated form; edits webhook_url; saves to trips.json
 
 ### Destination Pages
 
@@ -184,9 +184,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FORM-01 | Phase 4 — Trip Detail + Quote Form | Complete |
 | FORM-02 | Phase 4 — Trip Detail + Quote Form | Complete |
 | FORM-03 | Phase 4 — Trip Detail + Quote Form | Complete |
-| FORM-04 | Phase 4 — Trip Detail + Quote Form | Pending |
+| FORM-04 | Phase 4 — Trip Detail + Quote Form | Complete |
 | FORM-05 | Phase 4 — Trip Detail + Quote Form | Complete |
-| FORM-06 | Phase 4 — Trip Detail + Quote Form | Pending |
+| FORM-06 | Phase 4 — Trip Detail + Quote Form | Complete |
 | DEST-01 | Phase 5 — Destinations + B2B | Pending |
 | DEST-02 | Phase 5 — Destinations + B2B | Pending |
 | DEST-03 | Phase 5 — Destinations + B2B | Pending |
