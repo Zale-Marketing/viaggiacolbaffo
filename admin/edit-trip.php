@@ -233,7 +233,7 @@ $excluded_text = implode("\n", $trip['excluded'] ?? []);
 
 // Preview URL
 $preview_token = $trip['preview_token'] ?? '';
-$preview_url   = $preview_token !== '' ? '/viaggio/' . htmlspecialchars($trip['slug']) . '?preview=' . $preview_token : '';
+$preview_url   = $preview_token !== '' ? '/viaggio.php?slug=' . htmlspecialchars($trip['slug']) . '&preview=' . $preview_token : '';
 $preview_token_val = $trip['preview_token'] ?? '';
 ?>
 <!DOCTYPE html>
@@ -1381,7 +1381,7 @@ function addItineraryRow() {
 // ─────────────────────────────────────────────────────────────────────────────
 function openPreview() {
     if (!tripSlug || !previewToken) { alert('Salva il viaggio prima di visualizzare l\'anteprima.'); return; }
-    window.open('/viaggio/' + tripSlug + '?preview=' + previewToken, '_blank');
+    window.open('/viaggio.php?slug=' + tripSlug + '&preview=' + previewToken, '_blank');
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
