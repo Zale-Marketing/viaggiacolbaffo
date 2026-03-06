@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 06-admin-panel-01-PLAN.md
-last_updated: "2026-03-06T21:27:02.461Z"
+stopped_at: Completed 06-admin-panel-05-PLAN.md
+last_updated: "2026-03-06T21:31:02.664Z"
 last_activity: 2026-03-06 — Roadmap created, 56 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 25
-  completed_plans: 18
+  completed_plans: 19
   percent: 0
 ---
 
@@ -69,6 +69,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 05-destinations-b2b P04 | 1min | 1 tasks | 0 files |
 | Phase 05-destinations-b2b P04 | 1min | 1 tasks | 0 files |
 | Phase 06-admin-panel P01 | 8min | 2 tasks | 7 files |
+| Phase 06-admin-panel P05 | 2min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -128,6 +129,9 @@ Recent decisions affecting current work:
 - [Phase 06-admin-panel]: config.php loads admin-config.json BEFORE any define() call — JSON overlay pattern, unset $_acfg at bottom to avoid global scope pollution
 - [Phase 06-admin-panel]: ANTHROPIC_API_KEY replaces OPENAI_API_KEY throughout — rename reflects actual AI provider
 - [Phase 06-admin-panel]: save_destinations() does NOT wrap array_values() — destinations is a keyed object accessed by slug, not a 0-indexed array
+- [Phase 06-admin-panel]: viaggio.php 404 gates use header('Location: /404') redirect — 404.php does not exist on disk; consistent with existing null-trip guard
+- [Phase 06-admin-panel]: generate-form.php fully migrated to Anthropic claude-sonnet-4-6; OPENAI_API_KEY removed; response parsed via content[0].text
+- [Phase 06-admin-panel]: destinazione.php and destinazioni.php migrated from static destinations-data.php require to load_destinations() live JSON source
 
 ### Pending Todos
 
@@ -148,6 +152,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T21:27:02.457Z
-Stopped at: Completed 06-admin-panel-01-PLAN.md
+Last session: 2026-03-06T21:30:55.508Z
+Stopped at: Completed 06-admin-panel-05-PLAN.md
 Resume file: None
