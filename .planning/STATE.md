@@ -4,8 +4,8 @@ milestone: v1.0
 milestone_name: milestone
 status: planning
 stopped_at: Completed 02-homepage-02-03-PLAN.md
-last_updated: "2026-03-06T13:15:38.473Z"
-last_activity: 2026-03-06 — Roadmap created, 56 v1 requirements mapped to 6 phases
+last_updated: "2026-03-06T14:10:00.000Z"
+last_activity: 2026-03-06 — Quick fix 1: logo visibility on dark backgrounds
 progress:
   total_phases: 6
   completed_phases: 2
@@ -83,6 +83,8 @@ Recent decisions affecting current work:
 - [Phase 02-homepage]: destinazione.php?slug= used for destination card hrefs (direct PHP URL per CONTEXT.md locked decision)
 - [Phase 02-homepage]: Footer WHATSAPP_NUMBER uses str_replace to build wa.me URL; date('Y') for auto-updating copyright
 - [Phase 02-homepage]: index.php written as single atomic file write — no append operations — eliminates partial-write risk
+- [Quick-1-logo]: White pill background on .header-logo img and .footer-logo img — logo asset untouched, legible on any surface
+- [Quick-1-logo]: Scroll threshold 80px on hero pages — keeps header transparent while user reads above-fold content
 
 ### Pending Todos
 
@@ -94,6 +96,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T13:11:46.536Z
-Stopped at: Completed 02-homepage-02-03-PLAN.md
+Last session: 2026-03-06T14:10:00.000Z
+Stopped at: Completed quick-1-fix-logo-visibility-on-dark-backgrounds-/1-PLAN.md
 Resume file: None
