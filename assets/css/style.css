@@ -1,16 +1,17 @@
 /* === VARIABLES === */
 
 :root {
-  --black: #0D0D0D;
-  --gold: #C9A84C;
-  --gold-light: #e8c76a;
+  --primary: #000744;
+  --accent: #CC0031;
+  --black: #000744;
+  --gold: #CC0031;
   --white: #FFFFFF;
   --dark: #1a1a1a;
   --dark-card: #222222;
   --grey: #888888;
   --status-green: #2ecc71;
   --status-orange: #e67e22;
-  --status-red: #e74c3c;
+  --status-red: #CC0031;
   --font-heading: 'Playfair Display', serif;
   --font-body: 'Inter', sans-serif;
   --radius: 12px;
@@ -96,12 +97,12 @@ h1, h2, h3, h4 {
 }
 
 .btn--gold {
-  background: var(--gold);
-  color: var(--black);
+  background: var(--primary);
+  color: var(--white);
 }
 
 .btn--gold:hover {
-  background: var(--gold-light);
+  background: #001080;
 }
 
 .btn--outline-white {

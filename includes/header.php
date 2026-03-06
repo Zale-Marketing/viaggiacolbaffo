@@ -20,7 +20,7 @@
 
 <header>
   <nav style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;max-width:1200px;margin:0 auto;">
-    <a href="/" style="font-family:var(--font-heading);font-size:1.4rem;font-weight:700;color:var(--gold);">Viaggia col Baffo</a>
+    <a href="/"><img src="https://viaggiacolbaffo.com/wp-content/uploads/2025/09/Progetto-senza-titolo-2025-09-30T075103.747-e1759212405873.png" alt="Viaggia col Baffo" style="height:48px;width:auto;display:block;"></a>
     <ul style="list-style:none;display:flex;gap:2rem;margin:0;padding:0;">
       <li><a href="/viaggi">Viaggi</a></li>
       <li><a href="/agenzie">Agenzie</a></li>
