@@ -142,22 +142,81 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INFRA-01 to INFRA-05 | Phase 1 | Pending |
-| DESIGN-01 to DESIGN-05 | Phase 1 | Pending |
-| DATA-01 to DATA-04 | Phase 1 | Pending |
-| HOME-01 to HOME-09 | Phase 2 | Pending |
-| CATALOG-01 to CATALOG-06 | Phase 3 | Pending |
-| TRIP-01 to TRIP-10 | Phase 4 | Pending |
-| FORM-01 to FORM-06 | Phase 4 | Pending |
-| DEST-01 to DEST-07 | Phase 5 | Pending |
-| B2B-01 to B2B-06 | Phase 5 | Pending |
-| ADMIN-01 to ADMIN-11 | Phase 6 | Pending |
+| INFRA-01 | Phase 1 — Foundation | Pending |
+| INFRA-02 | Phase 1 — Foundation | Pending |
+| INFRA-03 | Phase 1 — Foundation | Pending |
+| INFRA-04 | Phase 1 — Foundation | Pending |
+| INFRA-05 | Phase 1 — Foundation | Pending |
+| DESIGN-01 | Phase 1 — Foundation | Pending |
+| DESIGN-02 | Phase 1 — Foundation | Pending |
+| DESIGN-03 | Phase 1 — Foundation | Pending |
+| DESIGN-04 | Phase 1 — Foundation | Pending |
+| DESIGN-05 | Phase 1 — Foundation | Pending |
+| DATA-01 | Phase 1 — Foundation | Pending |
+| DATA-02 | Phase 1 — Foundation | Pending |
+| DATA-03 | Phase 1 — Foundation | Pending |
+| DATA-04 | Phase 1 — Foundation | Pending |
+| HOME-01 | Phase 2 — Homepage | Pending |
+| HOME-02 | Phase 2 — Homepage | Pending |
+| HOME-03 | Phase 2 — Homepage | Pending |
+| HOME-04 | Phase 2 — Homepage | Pending |
+| HOME-05 | Phase 2 — Homepage | Pending |
+| HOME-06 | Phase 2 — Homepage | Pending |
+| HOME-07 | Phase 2 — Homepage | Pending |
+| HOME-08 | Phase 2 — Homepage | Pending |
+| HOME-09 | Phase 2 — Homepage | Pending |
+| CATALOG-01 | Phase 3 — Trip Catalog | Pending |
+| CATALOG-02 | Phase 3 — Trip Catalog | Pending |
+| CATALOG-03 | Phase 3 — Trip Catalog | Pending |
+| CATALOG-04 | Phase 3 — Trip Catalog | Pending |
+| CATALOG-05 | Phase 3 — Trip Catalog | Pending |
+| CATALOG-06 | Phase 3 — Trip Catalog | Pending |
+| TRIP-01 | Phase 4 — Trip Detail + Quote Form | Pending |
+| TRIP-02 | Phase 4 — Trip Detail + Quote Form | Pending |
+| TRIP-03 | Phase 4 — Trip Detail + Quote Form | Pending |
+| TRIP-04 | Phase 4 — Trip Detail + Quote Form | Pending |
+| TRIP-05 | Phase 4 — Trip Detail + Quote Form | Pending |
+| TRIP-06 | Phase 4 — Trip Detail + Quote Form | Pending |
+| TRIP-07 | Phase 4 — Trip Detail + Quote Form | Pending |
+| TRIP-08 | Phase 4 — Trip Detail + Quote Form | Pending |
+| TRIP-09 | Phase 4 — Trip Detail + Quote Form | Pending |
+| TRIP-10 | Phase 4 — Trip Detail + Quote Form | Pending |
+| FORM-01 | Phase 4 — Trip Detail + Quote Form | Pending |
+| FORM-02 | Phase 4 — Trip Detail + Quote Form | Pending |
+| FORM-03 | Phase 4 — Trip Detail + Quote Form | Pending |
+| FORM-04 | Phase 4 — Trip Detail + Quote Form | Pending |
+| FORM-05 | Phase 4 — Trip Detail + Quote Form | Pending |
+| FORM-06 | Phase 4 — Trip Detail + Quote Form | Pending |
+| DEST-01 | Phase 5 — Destinations + B2B | Pending |
+| DEST-02 | Phase 5 — Destinations + B2B | Pending |
+| DEST-03 | Phase 5 — Destinations + B2B | Pending |
+| DEST-04 | Phase 5 — Destinations + B2B | Pending |
+| DEST-05 | Phase 5 — Destinations + B2B | Pending |
+| DEST-06 | Phase 5 — Destinations + B2B | Pending |
+| DEST-07 | Phase 5 — Destinations + B2B | Pending |
+| B2B-01 | Phase 5 — Destinations + B2B | Pending |
+| B2B-02 | Phase 5 — Destinations + B2B | Pending |
+| B2B-03 | Phase 5 — Destinations + B2B | Pending |
+| B2B-04 | Phase 5 — Destinations + B2B | Pending |
+| B2B-05 | Phase 5 — Destinations + B2B | Pending |
+| B2B-06 | Phase 5 — Destinations + B2B | Pending |
+| ADMIN-01 | Phase 6 — Admin Panel | Pending |
+| ADMIN-02 | Phase 6 — Admin Panel | Pending |
+| ADMIN-03 | Phase 6 — Admin Panel | Pending |
+| ADMIN-04 | Phase 6 — Admin Panel | Pending |
+| ADMIN-05 | Phase 6 — Admin Panel | Pending |
+| ADMIN-06 | Phase 6 — Admin Panel | Pending |
+| ADMIN-07 | Phase 6 — Admin Panel | Pending |
+| ADMIN-08 | Phase 6 — Admin Panel | Pending |
+| ADMIN-09 | Phase 6 — Admin Panel | Pending |
+| ADMIN-10 | Phase 6 — Admin Panel | Pending |
+| ADMIN-11 | Phase 6 — Admin Panel | Pending |
 
 **Coverage:**
 - v1 requirements: 56 total
 - Mapped to phases: 56
-- Unmapped: 0 ✓
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-06*
-*Last updated: 2026-03-06 after initial definition*
+*Last updated: 2026-03-06 — traceability finalized after roadmap creation*
