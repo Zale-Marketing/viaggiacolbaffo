@@ -312,3 +312,504 @@ header nav a {
 header nav a:hover {
   color: #CC0031;
 }
+
+/* === PHASE 2: HOMEPAGE === */
+
+/* --- 1. Has-hero header state --- */
+
+/* Hero page: transparent header */
+body.has-hero #site-header {
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: none;
+}
+body.has-hero #site-header nav a {
+  color: var(--white);
+}
+/* When scrolled — .scrolled overrides transparent state. MUST come AFTER the transparent rules */
+body.has-hero #site-header.scrolled {
+  background: var(--white);
+  border-bottom: 1px solid rgba(0, 7, 68, 0.12);
+}
+body.has-hero #site-header.scrolled nav a {
+  color: #000744;
+}
+
+/* --- 2. Hero section --- */
+
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  background-image: url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 60%, rgba(0,0,0,0.6) 100%);
+}
+
+.hero__content {
+  position: relative;
+  z-index: 2;
+  padding: 0 1.5rem;
+  max-width: 800px;
+}
+
+.hero__tagline {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  color: var(--white);
+  margin: 0 0 0.5rem;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+}
+
+.hero__subline {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: clamp(1.25rem, 3vw, 1.8rem);
+  color: rgba(255,255,255,0.9);
+  margin: 0 0 0.5rem;
+}
+
+.hero__sub {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.75);
+  margin: 0 0 2rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero__ctas {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* --- 3. Urgency bar --- */
+
+.urgency-bar {
+  background: var(--accent);
+  color: var(--white);
+  text-align: center;
+  padding: 0.85rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.urgency-bar__pill {
+  background: rgba(255,255,255,0.2);
+  border-radius: 20px;
+  padding: 2px 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* --- 4. Trips carousel (snap-scroll mobile, grid desktop) --- */
+
+.trips-carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 1rem;
+  padding: 0 1.5rem 1rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.trips-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.trips-carousel__item {
+  flex: 0 0 85%;
+  scroll-snap-align: start;
+}
+
+@media (min-width: 768px) {
+  .trips-carousel {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    overflow-x: visible;
+    padding: 0;
+    scroll-snap-type: none;
+  }
+  .trips-carousel__item {
+    flex: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .trips-carousel {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* --- 5. Destination cards grid --- */
+
+.dest-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 600px) {
+  .dest-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .dest-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.dest-card {
+  position: relative;
+  display: block;
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.25s ease;
+  text-decoration: none;
+}
+
+.dest-card:hover {
+  border-color: var(--white);
+}
+
+.dest-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+  will-change: transform;
+}
+
+.dest-card:hover .dest-card__img {
+  transform: scale(1.05);
+}
+
+.dest-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.65) 100%);
+  transition: background 0.25s ease;
+}
+
+.dest-card:hover .dest-card__overlay {
+  background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.5) 100%);
+}
+
+.dest-card__content {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 1.25rem;
+  right: 1.25rem;
+  z-index: 2;
+}
+
+.dest-card__name {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  color: var(--white);
+  margin: 0 0 0.25rem;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.7);
+}
+
+.dest-card__tagline {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.85);
+  margin: 0;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+}
+
+/* --- 6. Why-Baffo grid --- */
+
+.why-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 600px) {
+  .why-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .why-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.why-block {
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.why-block__icon {
+  color: var(--gold);
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.why-block__title {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem;
+}
+
+.why-block__text {
+  color: var(--grey);
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* --- 7. Founder / Chi è il Baffo --- */
+
+.founder-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .founder-grid {
+    grid-template-columns: 1fr 1.5fr;
+  }
+}
+
+.founder-portrait {
+  width: 100%;
+  border-radius: var(--radius);
+  object-fit: cover;
+  aspect-ratio: 3/4;
+}
+
+.founder-stats {
+  display: flex;
+  gap: 2rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.founder-stat__number {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  color: var(--gold);
+  display: block;
+  line-height: 1;
+}
+
+.founder-stat__label {
+  font-size: 0.8rem;
+  color: var(--grey);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* --- 8. Testimonial cards --- */
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .testimonials-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.testimonial-card {
+  background: var(--dark-card);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.testimonial-card__stars {
+  color: var(--gold);
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.testimonial-card__text {
+  font-style: italic;
+  color: rgba(255,255,255,0.85);
+  margin: 0 0 1.25rem;
+  line-height: 1.7;
+}
+
+.testimonial-card__author strong {
+  display: block;
+  font-weight: 600;
+}
+
+.testimonial-card__author span {
+  font-size: 0.8rem;
+  color: var(--grey);
+}
+
+/* --- 9. B2B banner --- */
+
+.b2b-banner {
+  margin: 0 1.5rem;
+}
+
+.b2b-banner__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 3rem 1.5rem;
+  flex-wrap: wrap;
+  background: var(--dark-card);
+  border: 1px solid rgba(204, 0, 49, 0.4);
+  border-radius: var(--radius);
+}
+
+.b2b-banner__title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin: 0 0 0.5rem;
+}
+
+.b2b-banner__sub {
+  color: var(--grey);
+  margin: 0;
+  max-width: 500px;
+}
+
+/* --- 10. Production footer --- */
+
+.site-footer {
+  background: var(--dark);
+  color: rgba(255,255,255,0.75);
+  padding-top: 4rem;
+  font-size: 0.9rem;
+}
+
+.site-footer__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  padding-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+  .site-footer__grid {
+    grid-template-columns: 1.5fr 1fr 1fr;
+  }
+}
+
+.site-footer__logo {
+  max-height: 45px;
+  width: auto;
+  margin-bottom: 1rem;
+}
+
+.site-footer__tagline {
+  color: var(--grey);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.site-footer__heading {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  color: var(--white);
+  margin: 0 0 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.site-footer__links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.site-footer__links li {
+  margin-bottom: 0.5rem;
+}
+
+.site-footer__links a,
+.site-footer__col a {
+  color: rgba(255,255,255,0.65);
+  transition: color 0.2s ease;
+}
+
+.site-footer__links a:hover,
+.site-footer__col a:hover {
+  color: var(--white);
+}
+
+.site-footer__col p {
+  margin: 0 0 0.6rem;
+}
+
+.site-footer__col i {
+  margin-right: 0.4rem;
+  color: var(--gold);
+  width: 16px;
+  text-align: center;
+}
+
+.site-footer__social {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+  font-size: 1.3rem;
+}
+
+.site-footer__social a {
+  color: rgba(255,255,255,0.65);
+  transition: color 0.2s ease;
+}
+
+.site-footer__social a:hover {
+  color: var(--white);
+}
+
+.site-footer__iata {
+  font-size: 0.8rem;
+  color: var(--grey);
+  margin: 0;
+}
+
+.site-footer__bottom {
+  background: var(--primary);
+  padding: 1rem 0;
+  text-align: center;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.site-footer__bottom p {
+  margin: 0;
+}
