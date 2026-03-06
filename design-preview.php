@@ -18,18 +18,13 @@ require_once ROOT . '/includes/header.php';
   <div style="display:flex;flex-wrap:wrap;gap:1.5rem;justify-content:center;">
 
     <div style="text-align:center;">
-      <div style="width:80px;height:80px;background:#0D0D0D;border-radius:8px;"></div>
-      <p style="margin:0.5rem 0 0;font-size:0.75rem;">--black<br>#0D0D0D</p>
+      <div style="width:80px;height:80px;background:#000744;border-radius:8px;"></div>
+      <p style="margin:0.5rem 0 0;font-size:0.75rem;">--primary / --black<br>#000744</p>
     </div>
 
     <div style="text-align:center;">
-      <div style="width:80px;height:80px;background:#C9A84C;border-radius:8px;"></div>
-      <p style="margin:0.5rem 0 0;font-size:0.75rem;">--gold<br>#C9A84C</p>
-    </div>
-
-    <div style="text-align:center;">
-      <div style="width:80px;height:80px;background:#e8c76a;border-radius:8px;"></div>
-      <p style="margin:0.5rem 0 0;font-size:0.75rem;">--gold-light<br>#e8c76a</p>
+      <div style="width:80px;height:80px;background:#CC0031;border-radius:8px;"></div>
+      <p style="margin:0.5rem 0 0;font-size:0.75rem;">--accent / --gold<br>#CC0031</p>
     </div>
 
     <div style="text-align:center;">
@@ -38,13 +33,13 @@ require_once ROOT . '/includes/header.php';
     </div>
 
     <div style="text-align:center;">
-      <div style="width:80px;height:80px;background:#1a1a1a;border-radius:8px;"></div>
-      <p style="margin:0.5rem 0 0;font-size:0.75rem;">--dark<br>#1a1a1a</p>
+      <div style="width:80px;height:80px;background:#111827;border-radius:8px;"></div>
+      <p style="margin:0.5rem 0 0;font-size:0.75rem;">--dark<br>#111827</p>
     </div>
 
     <div style="text-align:center;">
-      <div style="width:80px;height:80px;background:#222222;border-radius:8px;"></div>
-      <p style="margin:0.5rem 0 0;font-size:0.75rem;">--dark-card<br>#222222</p>
+      <div style="width:80px;height:80px;background:#1a1f3e;border-radius:8px;"></div>
+      <p style="margin:0.5rem 0 0;font-size:0.75rem;">--dark-card<br>#1a1f3e</p>
     </div>
 
     <div style="text-align:center;">
@@ -63,8 +58,8 @@ require_once ROOT . '/includes/header.php';
     </div>
 
     <div style="text-align:center;">
-      <div style="width:80px;height:80px;background:#e74c3c;border-radius:8px;"></div>
-      <p style="margin:0.5rem 0 0;font-size:0.75rem;">--status-red<br>#e74c3c</p>
+      <div style="width:80px;height:80px;background:#CC0031;border-radius:8px;"></div>
+      <p style="margin:0.5rem 0 0;font-size:0.75rem;">--status-red<br>#CC0031</p>
     </div>
 
   </div>
@@ -109,12 +104,33 @@ require_once ROOT . '/includes/header.php';
   <div class="container" style="text-align:center;">
     <div class="section-header">
       <h2 class="section-header__title">Buttons</h2>
-      <p class="section-header__subtitle">Primary and secondary button variants</p>
+      <p class="section-header__subtitle">All button variants — never use red as a primary action</p>
     </div>
-    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-      <a href="#" class="btn btn--gold">Scopri il viaggio</a>
+    <p style="font-size:0.75rem;color:var(--grey);margin-bottom:1rem;">On dark background:</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:2rem;">
+      <a href="#" class="btn btn-primary">Scopri il viaggio</a>
       <a href="#" class="btn btn--outline-white">Richiedi info</a>
+      <a href="#" class="btn btn-accent">⚠ Ultimi posti</a>
     </div>
+    <p style="font-size:0.75rem;color:var(--grey);margin-bottom:1rem;">On white background:</p>
+    <div style="background:#fff;padding:1.5rem;border-radius:8px;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <a href="#" class="btn btn-primary">Scopri il viaggio</a>
+      <a href="#" class="btn btn-secondary">Richiedi info</a>
+    </div>
+  </div>
+</section>
+
+<!-- 4b. STATUS PILLS -->
+<section class="section container">
+  <div class="section-header">
+    <h2 class="section-header__title">Status Pills</h2>
+    <p class="section-header__subtitle">Trip availability badges — sold-out is grey, not red</p>
+  </div>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+    <span class="trip-card__status status--confermata">Confermata</span>
+    <span class="trip-card__status status--ultimi-posti">Ultimi Posti</span>
+    <span class="trip-card__status status--sold-out">Sold Out</span>
+    <span class="trip-card__status status--programmata">Programmata</span>
   </div>
 </section>
 

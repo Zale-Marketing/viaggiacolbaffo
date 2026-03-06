@@ -6,8 +6,8 @@
   --black: #000744;
   --gold: #CC0031;
   --white: #FFFFFF;
-  --dark: #1a1a1a;
-  --dark-card: #222222;
+  --dark: #111827;
+  --dark-card: #1a1f3e;
   --grey: #888888;
   --status-green: #2ecc71;
   --status-orange: #e67e22;
@@ -86,25 +86,54 @@ h1, h2, h3, h4 {
 
 .btn {
   display: inline-block;
-  padding: 0.75rem 1.75rem;
-  border-radius: var(--radius);
+  padding: 12px 28px;
+  border-radius: 6px;
   font-weight: 600;
-  transition: var(--transition);
+  font-size: 0.9rem;
+  transition: all 0.25s ease;
   cursor: pointer;
   border: none;
   font-family: var(--font-body);
-  font-size: 1rem;
+  text-align: center;
 }
 
-.btn--gold {
-  background: var(--primary);
-  color: var(--white);
+/* Primary — navy, white text. Used for all main CTAs. */
+.btn--gold,
+.btn-primary {
+  background: #000744;
+  color: #FFFFFF;
+  border: none;
 }
 
-.btn--gold:hover {
-  background: #001080;
+.btn--gold:hover,
+.btn-primary:hover {
+  background: #001199;
 }
 
+/* Secondary — outline navy, on white backgrounds */
+.btn-secondary {
+  background: transparent;
+  color: #000744;
+  border: 2px solid #000744;
+}
+
+.btn-secondary:hover {
+  background: #000744;
+  color: #FFFFFF;
+}
+
+/* Accent — red, use sparingly (urgency banners only) */
+.btn-accent {
+  background: #CC0031;
+  color: #FFFFFF;
+  border: none;
+}
+
+.btn-accent:hover {
+  background: #a80028;
+}
+
+/* Outline white — on dark/photo backgrounds */
 .btn--outline-white {
   border: 2px solid var(--white);
   color: var(--white);
@@ -140,65 +169,74 @@ h1, h2, h3, h4 {
 
 .trip-card__overlay {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 60%;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.85) 100%);
+  z-index: 1;
+  border-radius: inherit;
 }
 
 .trip-card__continent {
   position: absolute;
   top: 1rem;
   left: 1rem;
-  background: var(--gold);
-  color: var(--black);
-  border-radius: 999px;
-  padding: 0.25rem 0.75rem;
+  background: rgba(0, 7, 68, 0.85);
+  color: #FFFFFF;
+  border-radius: 4px;
+  padding: 3px 10px;
   font-size: 0.75rem;
   font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  z-index: 2;
 }
 
 .trip-card__status {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  border-radius: 999px;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
-  font-weight: 600;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  z-index: 2;
 }
 
-.status--confermata  { background: var(--status-green); color: var(--white); }
-.status--ultimi-posti { background: var(--status-orange); color: var(--white); }
-.status--sold-out    { background: var(--status-red); color: var(--white); }
-.status--programmata { background: var(--grey); color: var(--white); }
+.status--confermata   { background: #2ecc71; color: #FFFFFF; }
+.status--ultimi-posti { background: #e67e22; color: #FFFFFF; }
+.status--sold-out     { background: #555555; color: #FFFFFF; }
+.status--programmata  { background: #000744; color: #FFFFFF; }
 
 .trip-card__content {
   position: absolute;
   bottom: 0;
   padding: 1.25rem;
   width: 100%;
+  z-index: 2;
 }
 
 .trip-card__title {
   font-family: var(--font-heading);
   font-size: 1.15rem;
   margin-bottom: 0.25rem;
-  color: var(--white);
+  color: #FFFFFF;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
 .trip-card__dates {
   font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.8);
   margin-bottom: 0.25rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
 .trip-card__price {
   font-size: 1rem;
   font-weight: 700;
-  color: var(--gold);
+  color: #FFFFFF;
   margin-bottom: 0.75rem;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
 }
 
 /* === GRID LAYOUT === */
@@ -235,4 +273,27 @@ h1, h2, h3, h4 {
 
 .section--dark {
   background: var(--dark);
+}
+
+/* === HEADER === */
+
+header {
+  background: #FFFFFF;
+  border-bottom: 1px solid rgba(0, 7, 68, 0.12);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+header.scrolled {
+  box-shadow: 0 2px 12px rgba(0, 7, 68, 0.15);
+}
+
+header nav a {
+  color: #000744;
+  transition: color 0.25s ease;
+}
+
+header nav a:hover {
+  color: #CC0031;
 }
