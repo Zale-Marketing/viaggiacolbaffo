@@ -177,6 +177,12 @@ require_once ROOT . '/includes/header.php';
       </div>
     </div>
 
+    <!-- Reset button (end of filter bar) -->
+    <button class="filter-reset-btn<?= ($init_search || $init_continent || $init_tipo || $init_mese || $init_per) ? ' is-visible' : '' ?>"
+            id="filter-reset" type="button">
+      Reset
+    </button>
+
   </div><!-- /.filter-bar -->
 
   <!-- ============================================================
@@ -194,6 +200,9 @@ require_once ROOT . '/includes/header.php';
             data-sort="price-desc" type="button">Prezzo ↓</button>
     <button class="sort-pill<?= $init_sort === 'newest'     ? ' sort-pill--active' : '' ?>"
             data-sort="newest"     type="button">Novità</button>
+    <span class="filter-count">
+      Mostrando <span id="trip-count" class="count-number"><?= count($all_trips) ?></span> viaggi
+    </span>
   </div>
 
   <!-- ============================================================
@@ -201,17 +210,6 @@ require_once ROOT . '/includes/header.php';
        ============================================================ -->
   <section class="section">
     <div class="container">
-
-      <!-- Results bar -->
-      <div class="results-bar">
-        <p class="results-bar__count">
-          Mostrando <span id="trip-count" class="count-number"><?= count($all_trips) ?></span> viaggi
-        </p>
-        <button class="filter-reset-btn<?= ($init_search || $init_continent || $init_tipo || $init_mese || $init_per) ? ' is-visible' : '' ?>"
-                id="filter-reset" type="button">
-          Reset filtri
-        </button>
-      </div>
 
       <!-- Trip grid -->
       <div id="trips-grid" class="trip-grid">

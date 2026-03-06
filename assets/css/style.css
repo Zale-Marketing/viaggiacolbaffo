@@ -883,18 +883,19 @@ body.has-hero #site-header.scrolled nav a {
   z-index: 100;
   background: #111827;
   border-bottom: 1px solid rgba(255,255,255,0.1);
-  padding: 12px 24px;
+  padding: 14px 32px;
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Search input */
 .filter-search {
   position: relative;
-  flex-grow: 1;
-  max-width: 280px;
+  flex: 1;
+  min-width: 160px;
 }
 
 .filter-search input {
@@ -945,19 +946,26 @@ body.has-hero #site-header.scrolled nav a {
 }
 
 .filter-dropdown__toggle {
-  background: rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.2);
   border-radius: 6px;
   color: var(--white);
   font-family: var(--font-body);
   font-size: 0.875rem;
-  padding: 8px 28px 8px 14px;
+  padding: 9px 28px 9px 14px;
   cursor: pointer;
   display: flex;
   align-items: center;
+  gap: 6px;
   white-space: nowrap;
   transition: border-color 0.2s, background-color 0.2s;
   position: relative;
+  width: 100%;
+}
+
+.filter-dropdown__toggle:hover {
+  background: #000744;
+  border-color: #000744;
 }
 
 .filter-dropdown__toggle::after {
@@ -1045,11 +1053,24 @@ body.has-hero #site-header.scrolled nav a {
 .sort-bar {
   background: #0d1117;
   border-bottom: 1px solid rgba(255,255,255,0.07);
-  padding: 8px 24px;
+  padding: 8px 32px;
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+}
+
+.sort-bar .filter-count {
+  margin-left: auto;
+  color: var(--grey);
+  font-size: 0.8rem;
+  white-space: nowrap;
+  font-family: var(--font-body);
+}
+
+.sort-bar .filter-count .count-number {
+  color: var(--white);
+  font-weight: 600;
 }
 
 .sort-bar__label {
@@ -1132,23 +1153,34 @@ body.has-hero #site-header.scrolled nav a {
 /* Mobile */
 @media (max-width: 768px) {
   .filter-bar {
+    flex-wrap: wrap;
     padding: 10px 16px;
     gap: 8px;
   }
   .filter-search {
-    max-width: 100%;
-    width: 100%;
-    flex-basis: 100%;
+    flex: 1 1 100%;
     order: -1;
+  }
+  .filter-dropdown {
+    flex: 1 1 calc(50% - 8px);
   }
   .filter-dropdown__toggle {
     font-size: 0.8rem;
-    padding: 7px 24px 7px 10px;
+    padding: 8px 24px 8px 10px;
+    justify-content: space-between;
+    width: 100%;
   }
-  .sort-bar,
-  .results-bar {
-    padding-left: 16px;
-    padding-right: 16px;
+  .filter-reset-btn {
+    flex: 1 1 100%;
+    text-align: center;
+  }
+  .sort-bar {
+    padding: 8px 16px;
+    flex-wrap: wrap;
+  }
+  .sort-bar .filter-count {
+    margin-left: 0;
+    flex-basis: 100%;
   }
 }
 
