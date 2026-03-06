@@ -234,7 +234,39 @@
         "orario_arrivo": "12:10 +1",
         "scalo": "Frankfurt (FRA) — 1h 45min layover"
       }
-    }
+    },
+    "hotel": [
+      {
+        "citta": "Los Angeles",
+        "nome": "Hotel Santa Monica Beach",
+        "stelle": 4,
+        "notti": 3,
+        "descrizione": "Hotel moderno a pochi passi dalla spiaggia di Santa Monica.",
+        "image_url": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800",
+        "indirizzo": "Santa Monica, CA",
+        "inclusa_colazione": true
+      },
+      {
+        "citta": "Las Vegas",
+        "nome": "The LINQ Hotel",
+        "stelle": 4,
+        "notti": 3,
+        "descrizione": "Sul famoso Strip di Las Vegas, posizione centrale.",
+        "image_url": "https://images.unsplash.com/photo-1605649487212-47bdab064df7?w=800",
+        "indirizzo": "Las Vegas Strip, NV",
+        "inclusa_colazione": false
+      },
+      {
+        "citta": "San Francisco",
+        "nome": "Union Square Boutique Hotel",
+        "stelle": 4,
+        "notti": 4,
+        "descrizione": "Nel cuore di San Francisco, vicino ai principali attrazioni.",
+        "image_url": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800",
+        "indirizzo": "Union Square, San Francisco, CA",
+        "inclusa_colazione": true
+      }
+    ]
   },
   {
     "slug": "giappone-classico-2025",
