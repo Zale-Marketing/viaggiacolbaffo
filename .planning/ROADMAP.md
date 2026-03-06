@@ -82,7 +82,14 @@ Plans:
   4. The quote form renders dynamically from form_config, calculates a live price estimate as room type and participant count change, and shows extra agency fields when "Agenzia" is selected
   5. Submitting the form sends the data to the configured webhook via AJAX and shows a success message without a page reload
   6. The AI form generator in admin accepts a plain Italian trip description, calls GPT-4o-mini, and returns a form_config JSON preview that can be saved to the trip
-**Plans**: TBD
+**Plans**: 5 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — CSS + data: Phase 4 CSS block appended to style.css, West America form_config updated with pricing constants
+- [ ] 04-02-PLAN.md — viaggio.php top half: routing, hero, sticky top bar, highlights, tab nav, accordion, includes/excludes (TRIP-01 to TRIP-07)
+- [ ] 04-03-PLAN.md — viaggio.php bottom half: gallery + lightbox, tags, related trips, quote form with live pricing + B2B toggle + AJAX submit (TRIP-08 to TRIP-10, FORM-01 to FORM-03, FORM-05)
+- [ ] 04-04-PLAN.md — API endpoints: submit-form.php webhook proxy + generate-form.php AI generator (FORM-04, FORM-06)
+- [ ] 04-05-PLAN.md — Human verification: 16-item browser checklist for all TRIP-* and FORM-* requirements
 
 ### Phase 5: Destinations + B2B
 **Goal**: The site looks as established as Boscolo — destination pages exist with rich editorial content regardless of trip availability, and agencies can register as partners
@@ -119,6 +126,6 @@ Note: Phase 5 depends on Phase 1 (not Phase 3/4), so it could run in parallel wi
 | 1. Foundation | 3/3 | Complete   | 2026-03-06 |
 | 2. Homepage | 3/3 | Complete   | 2026-03-06 |
 | 3. Trip Catalog | 2/2 | Complete   | 2026-03-06 |
-| 4. Trip Detail + Quote Form | 0/TBD | Not started | - |
+| 4. Trip Detail + Quote Form | 0/5 | Not started | - |
 | 5. Destinations + B2B | 0/TBD | Not started | - |
 | 6. Admin Panel | 0/TBD | Not started | - |
