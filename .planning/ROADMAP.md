@@ -107,7 +107,7 @@ Note: Phase 5 depends on Phase 1 (not Phase 3/4), so it could run in parallel wi
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/TBD | Not started | - |
+| 1. Foundation | 1/3 | In Progress|  |
 | 2. Homepage | 0/TBD | Not started | - |
 | 3. Trip Catalog | 0/TBD | Not started | - |
 | 4. Trip Detail + Quote Form | 0/TBD | Not started | - |

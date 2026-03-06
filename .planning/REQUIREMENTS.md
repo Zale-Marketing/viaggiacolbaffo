@@ -7,11 +7,11 @@
 
 ### Infrastructure
 
-- [ ] **INFRA-01**: Project deploys to SiteGround via GitHub Actions FTP on push to main branch
-- [ ] **INFRA-02**: .htaccess provides clean URLs (viaggio/slug, destinazione/slug), forces HTTPS, protects /data/ from direct access, enables gzip and browser caching
-- [ ] **INFRA-03**: /data/ directory contains trips.json and tags.json, writable by PHP, not directly accessible via HTTP
-- [ ] **INFRA-04**: /assets/img/ directory exists (with .gitkeep) as placeholder for future uploaded images
-- [ ] **INFRA-05**: README.md documents setup, trip management, webhook config, and OpenAI key setup
+- [x] **INFRA-01**: Project deploys to SiteGround via GitHub Actions FTP on push to main branch
+- [x] **INFRA-02**: .htaccess provides clean URLs (viaggio/slug, destinazione/slug), forces HTTPS, protects /data/ from direct access, enables gzip and browser caching
+- [x] **INFRA-03**: /data/ directory contains trips.json and tags.json, writable by PHP, not directly accessible via HTTP
+- [x] **INFRA-04**: /assets/img/ directory exists (with .gitkeep) as placeholder for future uploaded images
+- [x] **INFRA-05**: README.md documents setup, trip management, webhook config, and OpenAI key setup
 
 ### Design System
 
@@ -142,11 +142,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INFRA-01 | Phase 1 — Foundation | Pending |
-| INFRA-02 | Phase 1 — Foundation | Pending |
-| INFRA-03 | Phase 1 — Foundation | Pending |
-| INFRA-04 | Phase 1 — Foundation | Pending |
-| INFRA-05 | Phase 1 — Foundation | Pending |
+| INFRA-01 | Phase 1 — Foundation | Complete |
+| INFRA-02 | Phase 1 — Foundation | Complete |
+| INFRA-03 | Phase 1 — Foundation | Complete |
+| INFRA-04 | Phase 1 — Foundation | Complete |
+| INFRA-05 | Phase 1 — Foundation | Complete |
 | DESIGN-01 | Phase 1 — Foundation | Pending |
 | DESIGN-02 | Phase 1 — Foundation | Pending |
 | DESIGN-03 | Phase 1 — Foundation | Pending |

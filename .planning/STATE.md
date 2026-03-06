@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Phase 1 context gathered
-last_updated: "2026-03-06T10:44:43.841Z"
+stopped_at: Completed 01-foundation-01-01-PLAN.md
+last_updated: "2026-03-06T11:08:19.896Z"
 last_activity: 2026-03-06 — Roadmap created, 56 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  total_plans: 3
+  completed_plans: 1
   percent: 0
 ---
 
@@ -50,6 +50,7 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: -
 
 *Updated after each plan completion*
+| Phase 01-foundation P01 | 2 | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -63,6 +64,10 @@ Recent decisions affecting current work:
 - Unsplash direct URLs for images — no upload infrastructure needed in v1
 - AI form generator via GPT-4o-mini — optional feature, key empty by default in config.php
 - Editorial destination pages always exist — makes site look like Boscolo even with only 2 trips
+- [Phase 01-foundation]: FTP exclude list must include **/.git* and **/.git*/** — without these, FTP-Deploy-Action wipes defaults and uploads git state files
+- [Phase 01-foundation]: data/.htaccess uses Apache 2.4 Require all denied (not Apache 2.2 Order deny,allow) — SiteGround runs Apache 2.4
+- [Phase 01-foundation]: ROOT constant uses __DIR__ . '/..' from includes/ — portable across any server, never hard-coded path
+- [Phase 01-foundation]: OPENAI_API_KEY left empty by default — AI form generator is opt-in, site works without it
 
 ### Pending Todos
 
@@ -74,6 +79,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T10:44:43.835Z
-Stopped at: Phase 1 context gathered
-Resume file: .planning/phases/01-foundation/01-CONTEXT.md
+Last session: 2026-03-06T11:08:19.892Z
+Stopped at: Completed 01-foundation-01-01-PLAN.md
+Resume file: None
