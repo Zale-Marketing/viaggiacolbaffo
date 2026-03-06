@@ -298,6 +298,7 @@ header {
   position: sticky;
   top: 0;
   z-index: 100;
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 header.scrolled {
@@ -313,13 +314,32 @@ header nav a:hover {
   color: #CC0031;
 }
 
+/* Logo pill — white background so navy+red logo reads on any surface */
+.header-logo img {
+  background: #FFFFFF;
+  padding: 6px 10px;
+  border-radius: 8px;
+  max-height: 50px;
+  width: auto;
+  display: block;
+}
+
+.footer-logo img {
+  background: #FFFFFF;
+  padding: 8px 12px;
+  border-radius: 8px;
+  max-height: 55px;
+  width: auto;
+  display: block;
+}
+
 /* === PHASE 2: HOMEPAGE === */
 
 /* --- 1. Has-hero header state --- */
 
 /* Hero page: transparent header */
 body.has-hero #site-header {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.35);
   border-bottom: none;
 }
 body.has-hero #site-header nav a {
@@ -327,7 +347,7 @@ body.has-hero #site-header nav a {
 }
 /* When scrolled — .scrolled overrides transparent state. MUST come AFTER the transparent rules */
 body.has-hero #site-header.scrolled {
-  background: var(--white);
+  background: #FFFFFF;
   border-bottom: 1px solid rgba(0, 7, 68, 0.12);
 }
 body.has-hero #site-header.scrolled nav a {
@@ -727,11 +747,6 @@ body.has-hero #site-header.scrolled nav a {
   }
 }
 
-.site-footer__logo {
-  max-height: 45px;
-  width: auto;
-  margin-bottom: 1rem;
-}
 
 .site-footer__tagline {
   color: var(--grey);
