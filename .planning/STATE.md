@@ -108,6 +108,9 @@ Recent decisions affecting current work:
 - [Phase 04-trip-detail-quote-form]: PHP CLI not available in bash — api/submit-form.php and api/generate-form.php verified by content inspection
 - [Phase 04-trip-detail-quote-form]: generate-form.php falls back to default_form_config on cURL error or non-200 HTTP — caller always receives valid form_config
 - [Phase 04-trip-detail-quote-form]: source field in generate-form.php response distinguishes default/default_fallback/default_parse_fallback/ai for operator diagnostics
+- [Quick-3-timeline-volo-hotel]: .volo-details-grid class used instead of .volo-details to avoid collision with id="volo-details" JS-controlled element
+- [Quick-3-timeline-volo-hotel]: Volo toggle JS uses style.display check instead of classList.contains('open') — new HTML default is inline style=display:none
+- [Quick-3-timeline-volo-hotel]: hotel key appended after volo key in trips.json; hotel-section placed between itinerary and cosa-include in viaggio.php
 
 ### Pending Todos
 
@@ -123,9 +126,10 @@ None yet.
 |---|-------------|------|--------|-----------|
 | 1 | Fix logo visibility on dark backgrounds — white pill behind logo image in header and footer | 2026-03-06 | 00c034e | [1-fix-logo-visibility-on-dark-backgrounds-](./quick/1-fix-logo-visibility-on-dark-backgrounds-/) |
 | 2 | Timeline itinerary, accompagnatore section, Dettagli Volo, tag pills on viaggio.php | 2026-03-06 | 1ccd33d | [2-timeline-itinerary-accompagnatore-sectio](./quick/2-timeline-itinerary-accompagnatore-sectio/) |
+| 3 | Fix timeline visuals (red gradient line + red dots), redesign volo section (two-column card grid), add Alloggi tab with 3 hotel cards | 2026-03-06 | b961c05 | [3-fix-timeline-visuals-redesign-volo-secti](./quick/3-fix-timeline-visuals-redesign-volo-secti/) |
 
 ## Session Continuity
 
-Last session: 2026-03-06T17:35:00.000Z
-Stopped at: Completed quick-2 2-PLAN.md
+Last session: 2026-03-06T18:00:00.000Z
+Stopped at: Completed quick-3 3-PLAN.md
 Resume file: None
