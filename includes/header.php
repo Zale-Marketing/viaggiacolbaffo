@@ -16,7 +16,7 @@
   <!-- Site stylesheet -->
   <link rel="stylesheet" href="/assets/css/style.css">
 </head>
-<body>
+<body<?php if (!empty($hero_page)) echo ' class="has-hero"'; ?>>
 
 <header id="site-header">
   <nav style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;max-width:1200px;margin:0 auto;">
