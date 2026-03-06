@@ -22,37 +22,122 @@
       {
         "day": 1,
         "title": "Arrivo a Los Angeles",
-        "description": "Atterraggio a LAX e transfer in hotel nel cuore di Santa Monica. Serata libera per una prima passeggiata sul lungomare di Venice Beach e cena in un ristorante consigliato da Lorenzo."
+        "location": "Los Angeles, California",
+        "date": "",
+        "description": "Atterraggio a LAX e transfer in hotel nel cuore di Santa Monica. Serata libera per una prima passeggiata sul lungomare di Venice Beach e cena in un ristorante consigliato da Lorenzo.",
+        "image_url": "https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800"
       },
       {
         "day": 2,
         "title": "Pacific Coast Highway e Malibu",
-        "description": "Guidiamo lungo la PCH verso nord tra oceano Pacifico e scogliere a picco sull'acqua, con sosta a Malibu per il pranzo. Nel pomeriggio visita a Point Dume e rientro al tramonto con vista spettacolare sulle Malibu Hills."
+        "location": "Malibu — Pacific Coast Highway",
+        "date": "",
+        "description": "Guidiamo lungo la PCH verso nord tra oceano Pacifico e scogliere a picco sull'acqua, con sosta a Malibu per il pranzo. Nel pomeriggio visita a Point Dume e rientro al tramonto con vista spettacolare sulle Malibu Hills.",
+        "image_url": "https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=800"
       },
       {
         "day": 3,
         "title": "Arrivo a Las Vegas",
-        "description": "Mattinata a Los Angeles per visitare il Getty Center e il quartiere di Venice. Nel pomeriggio partenza in van verso Las Vegas: arrivo alla Strip all'imbrunire, quando le luci della città iniziano ad accendersi."
+        "location": "Los Angeles → Las Vegas, Nevada",
+        "date": "",
+        "description": "Mattinata a Los Angeles per visitare il Getty Center e il quartiere di Venice. Nel pomeriggio partenza in van verso Las Vegas: arrivo alla Strip all'imbrunire, quando le luci della città iniziano ad accendersi.",
+        "image_url": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800"
       },
       {
         "day": 4,
         "title": "Tour di Las Vegas",
-        "description": "Giornata libera per esplorare i grandi hotel-casinò della Strip — Bellagio, Caesars Palace, The Venetian — con Lorenzo disponibile per consigli su show ed esperienze locali. Serata con spettacolo a scelta."
+        "location": "Las Vegas, Nevada",
+        "date": "",
+        "description": "Giornata libera per esplorare i grandi hotel-casinò della Strip — Bellagio, Caesars Palace, The Venetian — con Lorenzo disponibile per consigli su show ed esperienze locali. Serata con spettacolo a scelta.",
+        "image_url": ""
       },
       {
         "day": 5,
         "title": "Grand Canyon South Rim",
-        "description": "Partenza mattutina verso il Grand Canyon: arrivo al South Rim per l'ora di pranzo e pomeriggio interamente dedicato a uno dei luoghi più straordinari della Terra. Lorenzo illustra la geologia del canyon e i migliori belvedere per fotografie memorabili."
+        "location": "Grand Canyon, Arizona",
+        "date": "",
+        "description": "Partenza mattutina verso il Grand Canyon: arrivo al South Rim per l'ora di pranzo e pomeriggio interamente dedicato a uno dei luoghi più straordinari della Terra. Lorenzo illustra la geologia del canyon e i migliori belvedere per fotografie memorabili.",
+        "image_url": ""
       },
       {
         "day": 6,
         "title": "Zion e Bryce Canyon",
-        "description": "Escursione nello Zion National Park seguendo il celebre Angels Landing Trail (percorso alternativo incluso per chi preferisce una camminata meno impegnativa). Nel tardo pomeriggio spostamento a Bryce Canyon per assistere al tramonto sulle formazioni di hoodoo arancioni."
+        "location": "Zion / Bryce Canyon, Utah",
+        "date": "",
+        "description": "Escursione nello Zion National Park seguendo il celebre Angels Landing Trail (percorso alternativo incluso per chi preferisce una camminata meno impegnativa). Nel tardo pomeriggio spostamento a Bryce Canyon per assistere al tramonto sulle formazioni di hoodoo arancioni.",
+        "image_url": ""
       },
       {
         "day": 7,
-        "title": "Monument Valley e Antelope Canyon, rientro a Los Angeles",
-        "description": "Alba iconica a Monument Valley con le Mittens illuminate dalla luce del mattino. Visita guidata all'Antelope Canyon in compagnia di una guida Navajo, poi rientro verso Los Angeles per il volo di rientro il giorno seguente."
+        "title": "Monument Valley e Antelope Canyon",
+        "location": "Monument Valley / Page, Arizona",
+        "date": "",
+        "description": "Alba iconica a Monument Valley con le Mittens illuminate dalla luce del mattino. Visita guidata all'Antelope Canyon in compagnia di una guida Navajo, poi rientro verso Los Angeles per il volo di rientro il giorno seguente.",
+        "image_url": ""
+      },
+      {
+        "day": 8,
+        "title": "Page e Lake Powell",
+        "location": "Page, Arizona",
+        "date": "",
+        "description": "Esplorazione di Horseshoe Bend e Lake Powell. Lorenzo conduce un'escursione in kayak sul lago.",
+        "image_url": ""
+      },
+      {
+        "day": 9,
+        "title": "Sedona — Rocce Rosse",
+        "location": "Sedona, Arizona",
+        "date": "",
+        "description": "Giornata a Sedona tra le formazioni rocciose rossastre. Trekking a Cathedral Rock al tramonto.",
+        "image_url": ""
+      },
+      {
+        "day": 10,
+        "title": "Phoenix e Desert Botanical Garden",
+        "location": "Phoenix, Arizona",
+        "date": "",
+        "description": "Visita al Desert Botanical Garden e passeggiata nel quartiere artistico di Roosevelt Row.",
+        "image_url": ""
+      },
+      {
+        "day": 11,
+        "title": "Joshua Tree National Park",
+        "location": "Joshua Tree, California",
+        "date": "",
+        "description": "Esplorazione del parco tra i caratteristici alberi di Joshua e formazioni granitiche mozzafiato.",
+        "image_url": ""
+      },
+      {
+        "day": 12,
+        "title": "San Diego",
+        "location": "San Diego, California",
+        "date": "",
+        "description": "Visita al Balboa Park e al quartiere storico del Gaslamp Quarter. Cena di pesce fresco sul lungomare.",
+        "image_url": ""
+      },
+      {
+        "day": 13,
+        "title": "Big Sur e Monterey",
+        "location": "Big Sur — Monterey, California",
+        "date": "",
+        "description": "Guida lungo la leggendaria Highway 1 attraverso Big Sur, con sosta a McWay Falls. Pernottamento a Monterey.",
+        "image_url": ""
+      },
+      {
+        "day": 14,
+        "title": "San Francisco",
+        "location": "San Francisco, California",
+        "date": "",
+        "description": "Arrivo a San Francisco: Golden Gate Bridge, Fisherman's Wharf e giro in cable car. Cena d'addio con Lorenzo.",
+        "image_url": ""
+      },
+      {
+        "day": 15,
+        "title": "Rientro da San Francisco",
+        "location": "San Francisco (SFO), California",
+        "date": "",
+        "description": "Mattinata libera per gli ultimi acquisti. Transfer all'aeroporto SFO per il volo di rientro su Milano Malpensa.",
+        "image_url": ""
       }
     ],
     "included": [
@@ -118,7 +203,38 @@
       "competitor_benchmark": 4200,
       "agency_code_hash": "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"
     },
-    "webhook_url": ""
+    "webhook_url": "",
+    "accompagnatore": {
+      "nome": "Lorenzo D'Alessandro",
+      "titolo": "Il Baffo — Fondatore e Accompagnatore",
+      "foto": "https://placehold.co/120x120/000744/ffffff?text=Lorenzo",
+      "bio": "Partirà personalmente con questo gruppo. 48 stati americani visitati, oltre 40 anni di esperienza. Con Lorenzo non sei mai solo.",
+      "instagram": "",
+      "whatsapp": ""
+    },
+    "volo": {
+      "incluso": true,
+      "andata": {
+        "data": "17 Aprile 2026",
+        "partenza_aeroporto": "Milano Malpensa (MXP)",
+        "arrivo_aeroporto": "Los Angeles (LAX)",
+        "compagnia": "Lufthansa",
+        "numero_volo": "LH 234",
+        "orario_partenza": "10:30",
+        "orario_arrivo": "14:45",
+        "scalo": "Frankfurt (FRA) — 2h layover"
+      },
+      "ritorno": {
+        "data": "1 Maggio 2026",
+        "partenza_aeroporto": "San Francisco (SFO)",
+        "arrivo_aeroporto": "Milano Malpensa (MXP)",
+        "compagnia": "Lufthansa",
+        "numero_volo": "LH 456",
+        "orario_partenza": "16:20",
+        "orario_arrivo": "12:10 +1",
+        "scalo": "Frankfurt (FRA) — 1h 45min layover"
+      }
+    }
   },
   {
     "slug": "giappone-classico-2025",
