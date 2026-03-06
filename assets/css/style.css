@@ -1265,3 +1265,750 @@ body.has-hero #site-header.scrolled nav a {
   border-radius: var(--radius);
   margin-top: 1.5rem;
 }
+
+/* ============================================================
+   PHASE 4: TRIP DETAIL + QUOTE FORM
+   ============================================================ */
+
+/* --- 1. Trip detail hero --- */
+
+.trip-hero {
+  position: relative;
+  height: 100vh;
+  min-height: 560px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+}
+
+.trip-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.85) 100%);
+}
+
+.trip-hero__content {
+  position: relative;
+  z-index: 2;
+  padding: 3rem 1.5rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.trip-hero__title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: var(--white);
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+}
+
+.trip-hero__meta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 1.25rem;
+}
+
+.trip-hero__cta {
+  display: inline-block;
+  background: #000744;
+  color: #FFFFFF;
+  padding: 12px 28px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  border: none;
+  font-family: var(--font-body);
+  text-align: center;
+  text-decoration: none;
+}
+
+.trip-hero__cta:hover {
+  background: #001199;
+}
+
+/* --- 2. Sticky top bar --- */
+
+.trip-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  background: var(--white);
+  border-bottom: 1px solid rgba(0,7,68,0.12);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+}
+
+.trip-topbar.visible {
+  transform: translateY(0);
+}
+
+.trip-topbar__name {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: #000744;
+  font-size: 1rem;
+}
+
+.trip-topbar__cta {
+  display: inline-block;
+  background: #000744;
+  color: #FFFFFF;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  border: none;
+  font-family: var(--font-body);
+  text-align: center;
+  text-decoration: none;
+}
+
+.trip-topbar__cta:hover {
+  background: #001199;
+}
+
+/* --- 3. Highlights bar --- */
+
+.trip-highlights {
+  background: var(--dark-card);
+  padding: 1.5rem 0;
+}
+
+.trip-highlights__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .trip-highlights__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.trip-highlights__item {
+  text-align: center;
+  padding: 1rem;
+}
+
+.trip-highlights__label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--grey);
+  margin-bottom: 0.4rem;
+}
+
+.trip-highlights__value {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  color: var(--white);
+  font-weight: 700;
+}
+
+/* --- 4. Sticky tab navigation --- */
+
+.trip-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 150;
+  background: var(--white);
+  border-bottom: 2px solid rgba(0,7,68,0.1);
+}
+
+.trip-tabs__nav {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.trip-tabs__nav::-webkit-scrollbar {
+  display: none;
+}
+
+.trip-tabs__btn {
+  display: inline-block;
+  padding: 1rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #444;
+  border-bottom: 3px solid transparent;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  cursor: pointer;
+  white-space: nowrap;
+  background: none;
+  transition: var(--transition);
+  font-family: var(--font-body);
+}
+
+.trip-tabs__btn:hover {
+  color: #000744;
+}
+
+.trip-tabs__btn.active {
+  color: #000744;
+  border-bottom-color: #000744;
+}
+
+/* --- 5. Content sections --- */
+
+.trip-section {
+  padding: 4rem 0;
+}
+
+.trip-section + .trip-section {
+  border-top: 1px solid rgba(255,255,255,0.07);
+}
+
+.trip-section--dark {
+  background: var(--dark);
+}
+
+/* --- 6. Itinerary accordion --- */
+
+.itinerary__item {
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.itinerary__header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.itinerary__day-num {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #000744;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.itinerary__title {
+  flex: 1;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  color: var(--white);
+}
+
+.itinerary__chevron {
+  color: var(--grey);
+  transition: transform 0.3s ease;
+}
+
+.itinerary__item.open .itinerary__chevron {
+  transform: rotate(90deg);
+}
+
+.itinerary__body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+
+.itinerary__item.open .itinerary__body {
+  max-height: 500px;
+}
+
+.itinerary__desc {
+  padding: 0 0 1.25rem 3.5rem;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+/* --- 7. Includes / Excludes --- */
+
+.includes-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .includes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.includes-col__title {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.includes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.includes-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.85);
+}
+
+.includes-list__icon--yes {
+  color: #2ecc71;
+}
+
+.includes-list__icon--no {
+  color: #CC0031;
+}
+
+/* --- 8. Gallery masonry --- */
+
+.gallery-grid {
+  columns: 1;
+  column-gap: 0.75rem;
+}
+
+@media (min-width: 600px) {
+  .gallery-grid {
+    columns: 2;
+  }
+}
+
+@media (min-width: 900px) {
+  .gallery-grid {
+    columns: 3;
+  }
+}
+
+.gallery-item {
+  break-inside: avoid;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.gallery-item img {
+  width: 100%;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.03);
+}
+
+/* --- 9. Lightbox --- */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.lightbox.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.lightbox__img {
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+.lightbox__close {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 2rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.lightbox__counter {
+  position: absolute;
+  top: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,0.7);
+  font-size: 0.9rem;
+}
+
+.lightbox__prev,
+.lightbox__next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--white);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: var(--transition);
+}
+
+.lightbox__prev {
+  left: 1rem;
+}
+
+.lightbox__next {
+  right: 1rem;
+}
+
+.lightbox__prev:hover,
+.lightbox__next:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+/* --- 10. Tags section --- */
+
+.trip-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.trip-tag {
+  display: inline-block;
+  background: rgba(0,7,68,0.5);
+  border: 1px solid rgba(0,7,68,0.8);
+  color: rgba(255,255,255,0.85);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.trip-tag:hover {
+  background: #000744;
+  color: var(--white);
+}
+
+/* --- 11. Related trips --- */
+
+.related-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .related-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* --- 12. Quote form section --- */
+
+.quote-form-section {
+  background: var(--dark-card);
+  padding: 4rem 1.5rem;
+}
+
+.quote-form-inner {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.quote-form-inner h2 {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  color: var(--white);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* --- 13. B2B toggle --- */
+
+.client-toggle {
+  display: flex;
+  background: rgba(255,255,255,0.08);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.client-toggle__btn {
+  flex: 1;
+  padding: 0.75rem;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.6);
+  transition: var(--transition);
+  font-family: var(--font-body);
+}
+
+.client-toggle__btn.active {
+  background: #000744;
+  color: var(--white);
+}
+
+/* --- 14. Form fields --- */
+
+.form-row {
+  margin-bottom: 1.25rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  border-color: #000744;
+}
+
+.form-select option {
+  background: #1a1f3e;
+  color: var(--white);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* --- 15. Counter inputs --- */
+
+.counter-input {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.counter-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--white);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.counter-btn:hover {
+  background: #000744;
+}
+
+.counter-val {
+  font-size: 1.1rem;
+  font-weight: 700;
+  min-width: 2rem;
+  text-align: center;
+}
+
+/* --- 16. Child age inputs --- */
+
+.child-ages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.child-age-input {
+  width: 70px;
+  text-align: center;
+}
+
+/* --- 17. Add-ons checkboxes --- */
+
+.addon-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.addon-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #000744;
+  cursor: pointer;
+}
+
+.addon-item__label {
+  flex: 1;
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.85);
+}
+
+.addon-item__price {
+  color: var(--grey);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+/* --- 18. Price estimate box --- */
+
+.price-estimate {
+  background: rgba(0,7,68,0.3);
+  border: 2px solid #000744;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.price-estimate__total {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  color: var(--white);
+  margin-bottom: 0.25rem;
+}
+
+.price-estimate__breakdown {
+  font-size: 0.85rem;
+  color: var(--grey);
+  margin-bottom: 0.5rem;
+}
+
+.price-estimate__savings {
+  font-size: 0.85rem;
+  color: #2ecc71;
+  font-weight: 600;
+}
+
+/* --- 19. Agency fields --- */
+
+.agency-fields {
+  display: none;
+}
+
+/* --- 20. Agency code row --- */
+
+.agency-code-row {
+  /* no special styles — uses standard .form-row */
+}
+
+.agency-code-feedback {
+  font-size: 0.8rem;
+  margin-top: 0.35rem;
+}
+
+/* --- 21. Form messages --- */
+
+.form-success {
+  background: rgba(46,204,113,0.15);
+  border: 1px solid #2ecc71;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--white);
+}
+
+.form-error {
+  background: rgba(204,0,49,0.15);
+  border: 1px solid #CC0031;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: var(--white);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+/* --- 22. WhatsApp CTA --- */
+
+.whatsapp-cta {
+  text-align: center;
+  padding: 1.5rem 0 0;
+}
+
+.whatsapp-cta a {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.9rem;
+}
+
+.whatsapp-cta a:hover {
+  color: var(--white);
+}
+
+.whatsapp-cta i {
+  color: #25D366;
+}
