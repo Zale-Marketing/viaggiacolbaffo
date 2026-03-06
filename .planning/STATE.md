@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 05-destinations-b2b-03-PLAN.md
-last_updated: "2026-03-06T19:43:48.983Z"
+stopped_at: "Checkpoint: 05-destinations-b2b-04 awaiting human browser verification"
+last_updated: "2026-03-06T19:45:26.605Z"
 last_activity: 2026-03-06 — Roadmap created, 56 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 18
-  completed_plans: 16
+  completed_plans: 17
   percent: 0
 ---
 
@@ -66,6 +66,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 05-destinations-b2b P01 | 4min | 2 tasks | 3 files |
 | Phase 05-destinations-b2b P02 | 4min | 2 tasks | 2 files |
 | Phase 05-destinations-b2b P03 | 3min | 2 tasks | 2 files |
+| Phase 05-destinations-b2b P04 | 1min | 1 tasks | 0 files |
 
 ## Accumulated Context
 
@@ -120,6 +121,7 @@ Recent decisions affecting current work:
 - [Phase 05-destinations-b2b]: api/submit-waitlist.php returns success+note when WAITLIST_WEBHOOK_URL is empty — graceful degradation
 - [Phase 05-destinations-b2b]: Commission language locked to 'commissioni competitive' only — no specific percentage ever written in agenzie.php
 - [Phase 05-destinations-b2b]: destinazioni.php uses dest-cosa-card classes with 16/9 aspect-ratio override — no new CSS needed for listing cards
+- [Phase 05-destinations-b2b]: Phase 5 verification is a blocking human-verify checkpoint — all 11 checklist items must pass before Phase 6 begins
 
 ### Pending Todos
 
@@ -139,6 +141,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T19:43:48.980Z
-Stopped at: Completed 05-destinations-b2b-03-PLAN.md
+Last session: 2026-03-06T19:45:26.601Z
+Stopped at: Checkpoint: 05-destinations-b2b-04 awaiting human browser verification
 Resume file: None
