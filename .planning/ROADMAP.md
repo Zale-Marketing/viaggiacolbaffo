@@ -100,7 +100,13 @@ Plans:
   2. A destination with active trips shows those trip cards; a destination with no active trips shows the sold-out waitlist form instead
   3. The B2B page loads the full value props, how-it-works steps, and the embedded Tally agency registration form
   4. An invalid destination slug returns a 404 page
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Data + CSS + config: destinations-data.php (6 destinations, full editorial content), Phase 5 CSS block, 3 new config constants
+- [ ] 05-02-PLAN.md — destinazione.php template + api/submit-waitlist.php endpoint (all DEST-* requirements)
+- [ ] 05-03-PLAN.md — agenzie.php B2B page + destinazioni.php listing (all B2B-* requirements)
+- [ ] 05-04-PLAN.md — Human verification: browser checklist for all 6 slugs, B2B page, waitlist form, no regressions
 
 ### Phase 6: Admin Panel
 **Goal**: Lorenzo can log in, create a trip, publish it, and see it live on the site — all without touching code or the server
@@ -127,5 +133,5 @@ Note: Phase 5 depends on Phase 1 (not Phase 3/4), so it could run in parallel wi
 | 2. Homepage | 3/3 | Complete   | 2026-03-06 |
 | 3. Trip Catalog | 2/2 | Complete   | 2026-03-06 |
 | 4. Trip Detail + Quote Form | 4/5 | In Progress|  |
-| 5. Destinations + B2B | 0/TBD | Not started | - |
+| 5. Destinations + B2B | 0/4 | Not started | - |
 | 6. Admin Panel | 0/TBD | Not started | - |
