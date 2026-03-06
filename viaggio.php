@@ -93,6 +93,77 @@ require_once ROOT . '/includes/header.php';
   </div>
 </div>
 
+<?php
+$accompagnatore = $trip['accompagnatore'] ?? null;
+$volo           = $trip['volo'] ?? null;
+?>
+
+<?php if (!empty($accompagnatore['nome'])): ?>
+<!-- ========================================================
+     ACCOMPAGNATORE SECTION
+     ======================================================== -->
+<div class="accompagnatore-section">
+  <div class="container">
+    <div class="accompagnatore-card">
+      <img class="accompagnatore-card__photo"
+           src="<?php echo htmlspecialchars($accompagnatore['foto'] ?? ''); ?>"
+           alt="<?php echo htmlspecialchars($accompagnatore['nome']); ?>">
+      <div class="accompagnatore-card__info">
+        <div class="accompagnatore-card__badge">&#9679; Accompagna questo viaggio</div>
+        <div class="accompagnatore-card__name"><?php echo htmlspecialchars($accompagnatore['nome']); ?></div>
+        <div class="accompagnatore-card__titolo"><?php echo htmlspecialchars($accompagnatore['titolo'] ?? ''); ?></div>
+        <p class="accompagnatore-card__bio"><?php echo htmlspecialchars($accompagnatore['bio'] ?? ''); ?></p>
+      </div>
+    </div>
+  </div>
+</div>
+<?php endif; ?>
+
+<?php if (!is_null($volo)): ?>
+<!-- ========================================================
+     DETTAGLI VOLO SECTION
+     ======================================================== -->
+<div class="volo-section">
+  <div class="container">
+    <button class="volo-toggle" id="volo-toggle" type="button">
+      &#9992; Dettagli Volo <i class="fa-solid fa-chevron-down volo-toggle__chevron"></i>
+    </button>
+    <div class="volo-details" id="volo-details">
+      <?php if (!($volo['incluso'] ?? false)): ?>
+      <div class="volo-non-incluso">Il volo non è incluso nel prezzo del viaggio.</div>
+      <?php else: ?>
+      <div class="volo-cards">
+        <?php if (!empty($volo['andata'])): $a = $volo['andata']; ?>
+        <div class="volo-card">
+          <div class="volo-card__label">Volo Andata</div>
+          <div class="volo-card__compagnia"><?php echo htmlspecialchars($a['compagnia'] ?? ''); ?> &middot; <?php echo htmlspecialchars($a['numero_volo'] ?? ''); ?></div>
+          <div class="volo-card__route"><?php echo htmlspecialchars($a['partenza_aeroporto'] ?? ''); ?> &rarr; <?php echo htmlspecialchars($a['arrivo_aeroporto'] ?? ''); ?></div>
+          <div class="volo-card__meta">
+            <?php echo htmlspecialchars($a['data'] ?? ''); ?><br>
+            Partenza <?php echo htmlspecialchars($a['orario_partenza'] ?? ''); ?> &mdash; Arrivo <?php echo htmlspecialchars($a['orario_arrivo'] ?? ''); ?><br>
+            <?php if (!empty($a['scalo'])): ?>Scalo: <?php echo htmlspecialchars($a['scalo']); ?><?php endif; ?>
+          </div>
+        </div>
+        <?php endif; ?>
+        <?php if (!empty($volo['ritorno'])): $r = $volo['ritorno']; ?>
+        <div class="volo-card">
+          <div class="volo-card__label">Volo Ritorno</div>
+          <div class="volo-card__compagnia"><?php echo htmlspecialchars($r['compagnia'] ?? ''); ?> &middot; <?php echo htmlspecialchars($r['numero_volo'] ?? ''); ?></div>
+          <div class="volo-card__route"><?php echo htmlspecialchars($r['partenza_aeroporto'] ?? ''); ?> &rarr; <?php echo htmlspecialchars($r['arrivo_aeroporto'] ?? ''); ?></div>
+          <div class="volo-card__meta">
+            <?php echo htmlspecialchars($r['data'] ?? ''); ?><br>
+            Partenza <?php echo htmlspecialchars($r['orario_partenza'] ?? ''); ?> &mdash; Arrivo <?php echo htmlspecialchars($r['orario_arrivo'] ?? ''); ?><br>
+            <?php if (!empty($r['scalo'])): ?>Scalo: <?php echo htmlspecialchars($r['scalo']); ?><?php endif; ?>
+          </div>
+        </div>
+        <?php endif; ?>
+      </div>
+      <?php endif; ?>
+    </div>
+  </div>
+</div>
+<?php endif; ?>
+
 <!-- ========================================================
      STICKY TAB NAVIGATION
      ======================================================== -->
@@ -108,23 +179,28 @@ require_once ROOT . '/includes/header.php';
 </div>
 
 <!-- ========================================================
-     ITINERARY SECTION
+     ITINERARY SECTION — TIMELINE
      ======================================================== -->
 <section class="trip-section" id="itinerario">
   <div class="container">
     <div class="section-header">
       <h2 class="section-header__title">Itinerario</h2>
     </div>
-    <div class="itinerary">
-      <?php foreach ($trip['itinerary'] as $i => $day): ?>
-      <div class="itinerary__item <?php echo $i === 0 ? 'open' : ''; ?>">
-        <div class="itinerary__header">
-          <div class="itinerary__day-num"><?php echo str_pad($day['day'], 2, '0', STR_PAD_LEFT); ?></div>
-          <div class="itinerary__title"><?php echo htmlspecialchars($day['title']); ?></div>
-          <i class="fa-solid fa-chevron-right itinerary__chevron"></i>
-        </div>
-        <div class="itinerary__body">
-          <p class="itinerary__desc"><?php echo htmlspecialchars($day['description']); ?></p>
+    <div class="timeline">
+      <?php foreach ($trip['itinerary'] as $day): ?>
+      <div class="timeline-item">
+        <div class="timeline-dot"><?php echo str_pad((int)$day['day'], 2, '0', STR_PAD_LEFT); ?></div>
+        <div class="timeline-card">
+          <?php if (!empty($day['image_url'])): ?>
+          <img class="timeline-card__photo" src="<?php echo htmlspecialchars($day['image_url']); ?>" alt="<?php echo htmlspecialchars($day['title']); ?>" loading="lazy">
+          <?php endif; ?>
+          <div class="timeline-card__body">
+            <?php if (!empty($day['location'])): ?>
+            <div class="timeline-card__location"><?php echo htmlspecialchars($day['location']); ?></div>
+            <?php endif; ?>
+            <div class="timeline-card__title"><?php echo htmlspecialchars($day['title']); ?></div>
+            <p class="timeline-card__desc"><?php echo htmlspecialchars($day['description']); ?></p>
+          </div>
         </div>
       </div>
       <?php endforeach; ?>
@@ -196,15 +272,13 @@ require_once ROOT . '/includes/header.php';
      TAGS SECTION
      ======================================================== -->
 <?php if (!empty($trip['tags'])): ?>
-<section class="trip-section" id="tags">
+<section class="trip-section tags-section" id="tags">
   <div class="container">
-    <div class="section-header">
-      <h2 class="section-header__title">Questo viaggio è perfetto per:</h2>
-    </div>
+    <h2 class="section-header__title">Questo viaggio è perfetto per:</h2>
     <?php
     $continent_slugs = ['america','asia','europa','africa','oceania','medio-oriente'];
     ?>
-    <div class="trip-tags">
+    <div class="tags-cloud">
       <?php foreach ($trip['tags'] as $tag): ?>
         <?php
         if (in_array($tag, $continent_slugs)) {
@@ -213,7 +287,7 @@ require_once ROOT . '/includes/header.php';
             $href = '/viaggi?tipo=' . urlencode($tag);
         }
         ?>
-        <a href="<?php echo $href; ?>" class="trip-tag"><?php echo htmlspecialchars($tag); ?></a>
+        <a href="<?php echo $href; ?>" class="tag-pill"><?php echo htmlspecialchars($tag); ?></a>
       <?php endforeach; ?>
     </div>
   </div>
@@ -459,32 +533,16 @@ $status_labels_rel = ['confermata'=>'Confermata','ultimi-posti'=>'Ultimi posti',
     });
   });
 
-  // --- Itinerary accordion (single-open) ---
-  // Day 1 body: set initial max-height so it's visible (matches .itinerary__item.open CSS)
-  document.querySelectorAll('.itinerary__item.open .itinerary__body').forEach(function (body) {
-    body.style.maxHeight = body.scrollHeight + 'px';
-  });
-
-  document.querySelectorAll('.itinerary__header').forEach(function (header) {
-    header.addEventListener('click', function () {
-      var item     = header.parentElement;
-      var isOpen   = item.classList.contains('open');
-      var allItems = document.querySelectorAll('.itinerary__item');
-
-      // Close all
-      allItems.forEach(function (it) {
-        it.classList.remove('open');
-        it.querySelector('.itinerary__body').style.maxHeight = '0';
-      });
-
-      // Open clicked (if it was closed)
-      if (!isOpen) {
-        item.classList.add('open');
-        item.querySelector('.itinerary__body').style.maxHeight =
-          item.querySelector('.itinerary__body').scrollHeight + 'px';
-      }
+  // --- Volo toggle ---
+  var voloToggle  = document.getElementById('volo-toggle');
+  var voloDetails = document.getElementById('volo-details');
+  if (voloToggle && voloDetails) {
+    voloToggle.addEventListener('click', function () {
+      var isOpen = voloDetails.classList.contains('open');
+      voloDetails.classList.toggle('open', !isOpen);
+      voloToggle.classList.toggle('open', !isOpen);
     });
-  });
+  }
 
   // ----------------------------------------------------------------
   // GALLERY LIGHTBOX
