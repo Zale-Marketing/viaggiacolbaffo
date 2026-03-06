@@ -138,9 +138,10 @@ None yet.
 | 1 | Fix logo visibility on dark backgrounds — white pill behind logo image in header and footer | 2026-03-06 | 00c034e | [1-fix-logo-visibility-on-dark-backgrounds-](./quick/1-fix-logo-visibility-on-dark-backgrounds-/) |
 | 2 | Timeline itinerary, accompagnatore section, Dettagli Volo, tag pills on viaggio.php | 2026-03-06 | 1ccd33d | [2-timeline-itinerary-accompagnatore-sectio](./quick/2-timeline-itinerary-accompagnatore-sectio/) |
 | 3 | Fix timeline visuals (red gradient line + red dots), redesign volo section (two-column card grid), add Alloggi tab with 3 hotel cards | 2026-03-06 | b961c05 | [3-fix-timeline-visuals-redesign-volo-secti](./quick/3-fix-timeline-visuals-redesign-volo-secti/) |
+| 4 | destinazione.php text alignment, waitlist form redesign, agenzie B2B inline form, 404 for unknown slugs | 2026-03-06 | 35a698f | [4-fix-destinazione-php-text-alignment-wait](./quick/4-fix-destinazione-php-text-alignment-wait/) |
 
 ## Session Continuity
 
 Last session: 2026-03-06T19:45:26.601Z
-Stopped at: Checkpoint: 05-destinations-b2b-04 awaiting human browser verification
+Stopped at: Quick task 4 complete — destinazione.php + agenzie.php fixes
 Resume file: None
