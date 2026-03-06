@@ -2039,9 +2039,10 @@ body.has-hero #site-header.scrolled nav a {
   left: 50%;
   top: 0;
   bottom: 0;
-  width: 2px;
-  background: #000744;
+  width: 3px;
+  background: linear-gradient(to bottom, transparent, #CC0031 10%, #CC0031 90%, transparent);
   transform: translateX(-50%);
+  opacity: 0.8;
 }
 
 .timeline-item {
@@ -2065,8 +2066,9 @@ body.has-hero #site-header.scrolled nav a {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #000744;
-  border: 3px solid rgba(255,255,255,0.2);
+  background: #CC0031;
+  border: 3px solid #FFFFFF;
+  box-shadow: 0 0 0 3px #CC0031, 0 4px 12px rgba(204,0,49,0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2078,12 +2080,21 @@ body.has-hero #site-header.scrolled nav a {
 }
 
 .timeline-card {
-  background: #1a1f3e;
+  background: #0d1332;
   border-radius: 12px;
   overflow: hidden;
   max-width: 420px;
   width: 100%;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-left: 3px solid #CC0031;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+.timeline-card:hover {
+  border-left-color: #000744;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  transition: all 0.3s ease;
 }
 
 .timeline-card__photo {
@@ -2214,97 +2225,56 @@ body.has-hero #site-header.scrolled nav a {
    DETTAGLI VOLO SECTION
    ================================================================ */
 
-.volo-section {
-  background: var(--dark-bg, #0a0d1e);
-  padding: 1.5rem 0 2.5rem;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+.volo-section { padding: 60px 24px; background: #080d24; }
+.volo-header-btn {
+  display: flex; align-items: center; gap: 12px;
+  background: #000744; color: #fff;
+  border: none; border-radius: 10px;
+  padding: 14px 28px; font-size: 1rem; font-weight: 600;
+  cursor: pointer; margin: 0 auto 32px;
+  transition: all 0.3s ease;
 }
-
-.volo-toggle {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  background: none;
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 8px;
-  color: rgba(255,255,255,0.85);
-  font-size: 0.95rem;
-  padding: 0.6rem 1.25rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin: 0 auto;
-  display: flex;
+.volo-header-btn:hover { background: #001199; }
+.volo-cards-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+  max-width: 900px; margin: 0 auto;
 }
-
-.volo-toggle:hover {
-  background: rgba(255,255,255,0.05);
-  border-color: rgba(255,255,255,0.35);
-}
-
-.volo-toggle__chevron {
-  transition: transform 0.3s ease;
-  font-size: 0.7rem;
-}
-
-.volo-toggle.open .volo-toggle__chevron { transform: rotate(180deg); }
-
-.volo-details {
-  display: none;
-  margin-top: 1.5rem;
-}
-
-.volo-details.open { display: block; }
-
-.volo-non-incluso {
-  text-align: center;
-  color: rgba(255,255,255,0.5);
-  font-size: 0.9rem;
-  padding: 1rem 0;
-}
-
-.volo-cards {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.25rem;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
 .volo-card {
-  background: #1a1f3e;
-  border-radius: 10px;
-  border-left: 3px solid #000744;
-  padding: 1.25rem 1.5rem;
+  background: linear-gradient(135deg, #0a1040 0%, #000744 100%);
+  border-radius: 16px; padding: 28px;
+  border: 1px solid rgba(255,255,255,0.1);
+  position: relative; overflow: hidden;
 }
+.volo-card::before {
+  content: '\2708';
+  position: absolute; right: 20px; top: 20px;
+  font-size: 4rem; opacity: 0.06; color: #fff;
+}
+.volo-card-type { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #CC0031; margin-bottom: 12px; }
+.volo-route { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: #fff; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+.volo-route-arrow { color: #CC0031; font-style: normal; }
+.volo-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.volo-detail-label { font-size: 0.7rem; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 3px; }
+.volo-detail-value { font-size: 0.95rem; color: #fff; font-weight: 500; }
+.volo-airline { display: inline-flex; align-items: center; gap: 6px; background: rgba(204,0,49,0.15); border: 1px solid rgba(204,0,49,0.3); color: #CC0031; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; margin-bottom: 20px; }
+.volo-scalo { margin-top: 16px; padding: 10px 14px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.8rem; color: #aaa; }
+@media (max-width: 768px) { .volo-cards-grid { grid-template-columns: 1fr; } }
 
-.volo-card__label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.45);
-  margin-bottom: 0.6rem;
-}
-
-.volo-card__compagnia {
-  color: #CC0031;
-  font-weight: 700;
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-}
-
-.volo-card__route {
-  font-family: var(--font-heading);
-  font-size: 1rem;
-  color: #fff;
-  margin-bottom: 0.5rem;
-}
-
-.volo-card__meta {
-  font-size: 0.82rem;
-  color: rgba(255,255,255,0.65);
-  line-height: 1.7;
-}
-
-@media (max-width: 600px) {
-  .volo-cards { grid-template-columns: 1fr; }
-}
+/* ========================================================
+   HOTEL / ALLOGGI SECTION
+   ======================================================== */
+.hotel-section { padding: 60px 24px; background: #060b20; }
+.hotel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; max-width: 1100px; margin: 0 auto; }
+.hotel-card { background: #1a1f3e; border-radius: 12px; overflow: hidden; position: relative; }
+.hotel-card-img { width: 100%; height: 200px; object-fit: cover; }
+.hotel-card-body { padding: 20px; }
+.hotel-badge-city { position: absolute; top: 12px; left: 12px; background: #000744; color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+.hotel-badge-notti { position: absolute; top: 12px; right: 12px; background: #CC0031; color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+.hotel-stars { color: #e6b800; font-size: 1rem; margin-bottom: 6px; }
+.hotel-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #fff; font-weight: 700; margin-bottom: 8px; }
+.hotel-desc { color: #aaa; font-size: 0.85rem; line-height: 1.6; margin-bottom: 12px; }
+.hotel-address { font-size: 0.8rem; color: #777; margin-bottom: 12px; }
+.hotel-colazione-yes { display: inline-block; background: rgba(39,174,96,0.15); border: 1px solid rgba(39,174,96,0.3); color: #27ae60; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+.hotel-colazione-no { display: inline-block; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #888; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; }
+@media (max-width: 900px) { .hotel-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 600px) { .hotel-grid { grid-template-columns: 1fr; } }
