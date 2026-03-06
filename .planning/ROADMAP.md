@@ -103,7 +103,7 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — Data + CSS + config: destinations-data.php (6 destinations, full editorial content), Phase 5 CSS block, 3 new config constants
+- [x] 05-01-PLAN.md — Data + CSS + config: destinations-data.php (6 destinations, full editorial content), Phase 5 CSS block, 3 new config constants (completed 2026-03-06)
 - [ ] 05-02-PLAN.md — destinazione.php template + api/submit-waitlist.php endpoint (all DEST-* requirements)
 - [ ] 05-03-PLAN.md — agenzie.php B2B page + destinazioni.php listing (all B2B-* requirements)
 - [ ] 05-04-PLAN.md — Human verification: browser checklist for all 6 slugs, B2B page, waitlist form, no regressions
