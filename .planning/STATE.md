@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Phase 2 context gathered
-last_updated: "2026-03-06T12:29:13.856Z"
+stopped_at: Completed 02-homepage-02-01-PLAN.md
+last_updated: "2026-03-06T13:05:24.670Z"
 last_activity: 2026-03-06 — Roadmap created, 56 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
+  total_plans: 6
+  completed_plans: 4
   percent: 0
 ---
 
@@ -53,6 +53,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 01-foundation P01 | 2 | 2 tasks | 8 files |
 | Phase 01-foundation P02 | 2 | 2 tasks | 3 files |
 | Phase 01-foundation P03 | 2 | 2 tasks | 5 files |
+| Phase 02-homepage P01 | 2 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -75,6 +76,7 @@ Recent decisions affecting current work:
 - [Phase 01-foundation]: save_trips wraps array_values() — ensures 0-indexed JSON array after deletions in Phase 6 admin
 - [Phase 01-foundation]: Trip card class names are PERMANENT from Plan 03 — phases 2-4 consume them directly without modification
 - [Phase 01-foundation]: crossorigin attribute required on fonts.gstatic.com preconnect — without it the preconnect is silently ignored for CORS font requests
+- [Phase 02-homepage]: No overflow:hidden on .hero (sticky header anti-pattern), body.has-hero scrolled rules after transparent rules (cascade order), will-change:transform on dest-card__img (Safari fix), hero flag pattern: set $hero_page=true before header include
 
 ### Pending Todos
 
@@ -86,6 +88,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T12:29:13.853Z
-Stopped at: Phase 2 context gathered
-Resume file: .planning/phases/02-homepage/02-CONTEXT.md
+Last session: 2026-03-06T13:05:24.666Z
+Stopped at: Completed 02-homepage-02-01-PLAN.md
+Resume file: None

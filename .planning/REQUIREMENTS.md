@@ -30,10 +30,10 @@
 
 ### Homepage
 
-- [ ] **HOME-01**: Full-viewport hero section: tagline "Viaggia col Baffo — E non cambi mai più", subline, two CTAs ("Scopri i viaggi" gold + "Sei un'agenzia?" outline white), cinematic dark background Unsplash photo. No logo inside the hero — the sticky header logo is sufficient.
+- [x] **HOME-01**: Full-viewport hero section: tagline "Viaggia col Baffo — E non cambi mai più", subline, two CTAs ("Scopri i viaggi" gold + "Sei un'agenzia?" outline white), cinematic dark background Unsplash photo. No logo inside the hero — the sticky header logo is sufficient.
 - [ ] **HOME-02**: Urgency bar below hero: "West America Aprile 2026 — Ultimi 5 posti disponibili" (hardcoded, updatable)
-- [ ] **HOME-03**: "I Nostri Viaggi Attivi" section: reads published=true trips from trips.json, renders trip cards in horizontal-scroll mobile / grid desktop layout
-- [ ] **HOME-04**: "Esplora le Destinazioni" section: 6 cards grid (3x2 desktop), America / Asia / Europa / Africa / Oceania / Medio Oriente, each with Unsplash photo, dark overlay, centered name in Playfair, hover zoom + white border effect, links to destinazione.php?slug=
+- [x] **HOME-03**: "I Nostri Viaggi Attivi" section: reads published=true trips from trips.json, renders trip cards in horizontal-scroll mobile / grid desktop layout
+- [x] **HOME-04**: "Esplora le Destinazioni" section: 6 cards grid (3x2 desktop), America / Asia / Europa / Africa / Oceania / Medio Oriente, each with Unsplash photo, dark overlay, centered name in Playfair, hover zoom + white border effect, links to destinazione.php?slug=
 - [ ] **HOME-05**: "Perché viaggiare col Baffo" section: 4 icon blocks — Lorenzo sempre con te, 40 anni di esperienza, Pacchetto tutto incluso, Assistenza H24
 - [ ] **HOME-06**: "Chi è il Baffo" section: two-column layout — left placeholder portrait, right Lorenzo's story (48 US states, Y86 Travel since 1986, personal accompaniment, IATA badge)
 - [ ] **HOME-07**: "Cosa dicono di noi" section: 3 testimonial cards with stars, name, trip name, review text
@@ -156,10 +156,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DATA-02 | Phase 1 — Foundation | Complete |
 | DATA-03 | Phase 1 — Foundation | Complete |
 | DATA-04 | Phase 1 — Foundation | Complete |
-| HOME-01 | Phase 2 — Homepage | Pending |
+| HOME-01 | Phase 2 — Homepage | Complete |
 | HOME-02 | Phase 2 — Homepage | Pending |
-| HOME-03 | Phase 2 — Homepage | Pending |
-| HOME-04 | Phase 2 — Homepage | Pending |
+| HOME-03 | Phase 2 — Homepage | Complete |
+| HOME-04 | Phase 2 — Homepage | Complete |
 | HOME-05 | Phase 2 — Homepage | Pending |
 | HOME-06 | Phase 2 — Homepage | Pending |
 | HOME-07 | Phase 2 — Homepage | Pending |
