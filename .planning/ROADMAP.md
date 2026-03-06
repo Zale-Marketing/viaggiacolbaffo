@@ -31,7 +31,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. A test PHP file reading trips.json correctly returns the "West America Aprile 2026" trip with all fields populated
   4. A design preview page shows the full token set: --gold, --black, Playfair Display headings, Inter body, correct card layout with status pill and continent badge
   5. The CSS grid system renders 1-column on mobile, 2-column on tablet, and 3-column on desktop
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Infrastructure: deploy pipeline, .htaccess, directory scaffold, config.php, README
+- [ ] 01-02-PLAN.md — Data layer: trips.json (2 trips, full schema), tags.json, functions.php
+- [ ] 01-03-PLAN.md — Design system: style.css, header.php, footer.php, main.js, design-preview.php
 
 ### Phase 2: Homepage
 **Goal**: Visitors landing on the homepage feel the premium, cinematic experience and can immediately see active trips and contact Lorenzo
