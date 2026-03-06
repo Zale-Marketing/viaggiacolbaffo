@@ -94,8 +94,14 @@ None yet.
 
 None yet.
 
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 1 | Fix logo visibility on dark backgrounds — white pill behind logo image in header and footer | 2026-03-06 | 00c034e | [1-fix-logo-visibility-on-dark-backgrounds-](./quick/1-fix-logo-visibility-on-dark-backgrounds-/) |
+
 ## Session Continuity
 
-Last session: 2026-03-06T14:10:00.000Z
-Stopped at: Completed quick-1-fix-logo-visibility-on-dark-backgrounds-/1-PLAN.md
+Last session: 2026-03-06
+Stopped at: Completed quick task 1: Fix logo visibility on dark backgrounds — white pill behind logo image in header and footer
 Resume file: None
