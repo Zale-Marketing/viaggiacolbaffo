@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 02-homepage-02-03-PLAN.md
-last_updated: "2026-03-06T14:10:00.000Z"
-last_activity: 2026-03-06 — Quick fix 1: logo visibility on dark backgrounds
+stopped_at: Completed 02-homepage-02-04-PLAN.md
+last_updated: "2026-03-06T14:09:58.838Z"
+last_activity: 2026-03-06 — Roadmap created, 56 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 2
-  total_plans: 6
-  completed_plans: 6
+  total_plans: 7
+  completed_plans: 7
   percent: 0
 ---
 
@@ -56,6 +56,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 02-homepage P01 | 2 | 2 tasks | 2 files |
 | Phase 02-homepage P02 | 1min | 2 tasks | 0 files |
 | Phase 02-homepage P03 | 2min | 2 tasks | 2 files |
+| Phase 02-homepage P04 | 2min | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -85,6 +86,7 @@ Recent decisions affecting current work:
 - [Phase 02-homepage]: index.php written as single atomic file write — no append operations — eliminates partial-write risk
 - [Quick-1-logo]: White pill background on .header-logo img and .footer-logo img — logo asset untouched, legible on any surface
 - [Quick-1-logo]: Scroll threshold 80px on hero pages — keeps header transparent while user reads above-fold content
+- [Phase 02-homepage]: min-height 280px on .trip-card prevents mobile card collapse, 3.5rem top padding on .trip-card__content clears badge zone, 4-stop gradient keeps top 30% transparent for badge legibility
 
 ### Pending Todos
 
@@ -102,6 +104,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06
-Stopped at: Completed quick task 1: Fix logo visibility on dark backgrounds — white pill behind logo image in header and footer
+Last session: 2026-03-06T14:09:58.833Z
+Stopped at: Completed 02-homepage-02-04-PLAN.md
 Resume file: None
