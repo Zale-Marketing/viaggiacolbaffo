@@ -110,7 +110,13 @@
         "numero_partecipanti",
         "room_type",
         "note"
-      ]
+      ],
+      "price_per_person": 3490,
+      "single_supplement": 650,
+      "third_bed_price": -200,
+      "fourth_bed_price": -200,
+      "competitor_benchmark": 4200,
+      "agency_code_hash": "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"
     },
     "webhook_url": ""
   },
