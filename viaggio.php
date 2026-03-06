@@ -51,7 +51,7 @@ function fmt_date($d): string {
 $date_display = fmt_date($trip['date_start'] ?? '') . ' – ' . fmt_date($trip['date_end'] ?? '');
 
 $form_config = $trip['form_config'] ?? [];
-$has_form    = !empty($form_config);
+$has_form    = isset($form_config['prezzo_adulto']) && (int)($form_config['prezzo_adulto']) > 0;
 
 require_once ROOT . '/includes/header.php';
 ?>
@@ -425,6 +425,17 @@ $status_labels_rel = ['confermata'=>'Confermata','ultimi-posti'=>'Ultimi posti',
 <?php endif; ?>
 
 <?php if ($has_form): ?>
+<script>
+const PREZZO_ADULTO = <?= (int)($form_config['prezzo_adulto'] ?? 4350) ?>;
+const SUPPLEMENTO_SINGOLA = <?= (int)($form_config['supplemento_singola'] ?? 1600) ?>;
+const PREZZO_TERZO_QUARTO_LETTO = <?= (int)($form_config['prezzo_terzo_letto'] ?? 3000) ?>;
+const PERCENTUALE_ASSICURAZIONE = <?= ($form_config['percentuale_assicurazione'] ?? 5) / 100 ?>;
+const PREZZO_MEDIO_CONCORRENZA_PER_PERSONA = <?= (int)($form_config['prezzo_concorrenza_per_persona'] ?? 7000) ?>;
+const PREZZO_TERZO_QUARTO_LETTO_CONCORRENZA = <?= (int)($form_config['prezzo_terzo_quarto_concorrenza'] ?? 5000) ?>;
+const VALID_AGENCY_HASH = '<?= htmlspecialchars($form_config['agency_code_hash'] ?? 'af97d1baebca1eaae1ce418c082402e60c2529ef719983ad7c8dda6ea1f8e8ee') ?>';
+const WEBHOOK_URL = '<?= htmlspecialchars($form_config['webhook_url'] ?? '') ?>';
+const TRIP_TITLE = '<?= htmlspecialchars($trip['title'] ?? '') ?>';
+</script>
 <!-- ========================================================
      QUOTE FORM SECTION
      ======================================================== -->
@@ -437,14 +448,14 @@ $status_labels_rel = ['confermata'=>'Confermata','ultimi-posti'=>'Ultimi posti',
 
     <div id="quote-form-wrap">
 
-      <!-- B2B/B2C toggle -->
+      <!-- B2B/B2C toggle — default: Agenzia -->
       <div class="client-toggle" id="client-toggle" style="margin-bottom:1.5rem;">
-        <button class="client-toggle__btn active" data-type="privato" type="button">Privato</button>
-        <button class="client-toggle__btn" data-type="agenzia" type="button">Agenzia</button>
+        <button class="client-toggle__btn" data-type="privato" type="button">Privato</button>
+        <button class="client-toggle__btn active" data-type="agenzia" type="button">Agenzia</button>
       </div>
 
-      <!-- Agency code entry — visible only when Agenzia tab is active -->
-      <div class="form-row" id="agency-code-row" style="display:none;">
+      <!-- Agency code entry — visible in Agenzia mode by default -->
+      <div class="form-row" id="agency-code-row">
         <label class="form-label" for="f-agency-code">Codice Agenzia *</label>
         <input class="form-input" type="password" id="f-agency-code" name="agency_code"
                placeholder="Inserisci il codice" autocomplete="off">
@@ -455,10 +466,9 @@ $status_labels_rel = ['confermata'=>'Confermata','ultimi-posti'=>'Ultimi posti',
 
       <form id="quote-form" novalidate>
 
-        <!-- Hidden fields -->
         <input type="hidden" name="trip_slug" value="<?php echo htmlspecialchars($trip['slug']); ?>">
         <input type="hidden" name="trip_title" value="<?php echo htmlspecialchars($trip['title']); ?>">
-        <input type="hidden" name="tipo_cliente" id="tipo-cliente-hidden" value="privato">
+        <input type="hidden" name="tipo_cliente" id="tipo-cliente-hidden" value="agenzia">
 
         <!-- Nome + Cognome -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
@@ -484,23 +494,7 @@ $status_labels_rel = ['confermata'=>'Confermata','ultimi-posti'=>'Ultimi posti',
           </div>
         </div>
 
-        <!-- Room type -->
-        <?php if (!empty($form_config['room_types'])): ?>
-        <div class="form-row">
-          <label class="form-label" for="f-room-type">Tipo di camera</label>
-          <select class="form-select" id="f-room-type" name="room_type">
-            <?php foreach ($form_config['room_types'] as $rt): ?>
-            <option value="<?php echo htmlspecialchars($rt['slug']); ?>" data-delta="<?php echo (int)$rt['price_delta']; ?>">
-              <?php echo htmlspecialchars($rt['label']); ?>
-              <?php if ($rt['price_delta'] > 0): ?>(+€<?php echo number_format($rt['price_delta'], 0, ',', '.'); ?>)<?php endif; ?>
-              <?php if ($rt['price_delta'] < 0): ?>(<?php echo number_format($rt['price_delta'], 0, ',', '.'); ?>€)<?php endif; ?>
-            </option>
-            <?php endforeach; ?>
-          </select>
-        </div>
-        <?php endif; ?>
-
-        <!-- Partecipanti: adulti -->
+        <!-- Adulti counter -->
         <div class="form-row">
           <label class="form-label">Adulti *</label>
           <div class="counter-input">
@@ -511,9 +505,9 @@ $status_labels_rel = ['confermata'=>'Confermata','ultimi-posti'=>'Ultimi posti',
           <input type="hidden" name="adulti" id="adulti-hidden" value="2">
         </div>
 
-        <!-- Bambini -->
+        <!-- Bambini counter -->
         <div class="form-row">
-          <label class="form-label">Bambini</label>
+          <label class="form-label">Bambini <span style="font-size:0.8em;color:var(--grey)">(max 4 in totale)</span></label>
           <div class="counter-input">
             <button class="counter-btn" type="button" data-counter="bambini" data-action="dec">−</button>
             <span class="counter-val" id="bambini-val">0</span>
@@ -523,31 +517,27 @@ $status_labels_rel = ['confermata'=>'Confermata','ultimi-posti'=>'Ultimi posti',
           <div class="child-ages" id="child-ages"></div>
         </div>
 
-        <!-- Add-ons -->
-        <?php if (!empty($form_config['addons'])): ?>
-        <div class="form-row">
-          <label class="form-label">Optional</label>
-          <?php foreach ($form_config['addons'] as $addon): ?>
-          <div class="addon-item">
-            <input type="checkbox" id="addon-<?php echo htmlspecialchars($addon['slug']); ?>" name="addons[]" value="<?php echo htmlspecialchars($addon['slug']); ?>" data-price="<?php echo (int)$addon['price']; ?>">
-            <label class="addon-item__label" for="addon-<?php echo htmlspecialchars($addon['slug']); ?>"><?php echo htmlspecialchars($addon['label']); ?></label>
-            <span class="addon-item__price">+€<?php echo number_format($addon['price'], 0, ',', '.'); ?></span>
-          </div>
-          <?php endforeach; ?>
+        <!-- Insurance checkbox -->
+        <div class="form-row addon-item" style="margin-top:0.5rem;">
+          <input type="checkbox" id="cb-assicurazione" name="assicurazione" value="1">
+          <label class="addon-item__label" for="cb-assicurazione">Aggiungi assicurazione viaggio</label>
+          <span class="addon-item__price" id="assicurazione-price-label"></span>
         </div>
-        <?php endif; ?>
 
         <!-- Price estimate box -->
         <div class="price-estimate" id="price-estimate">
           <div class="price-estimate__total" id="pe-total">€0</div>
           <div class="price-estimate__breakdown" id="pe-breakdown"></div>
-          <?php if (!empty($form_config['competitor_benchmark'])): ?>
-          <div class="price-estimate__savings" id="pe-savings"></div>
-          <?php endif; ?>
+          <div class="price-estimate__savings" id="pe-savings" style="display:none;"></div>
         </div>
 
-        <!-- Agency fields (hidden by default; revealed only after valid code) -->
+        <!-- Agency fields — unlocked by valid code -->
         <div class="agency-fields" id="agency-fields" style="display:none;">
+          <div class="form-row">
+            <div style="background:#f0f8f0;border:1px solid #2ecc71;border-radius:6px;padding:0.75rem 1rem;margin-bottom:1rem;font-size:0.85rem;color:#1a7a40;">
+              <i class="fa-solid fa-shield-halved"></i> Preventivo riservato agenzie — prezzi netto B2B garantiti.
+            </div>
+          </div>
           <div class="form-row">
             <label class="form-label" for="f-nome-agenzia">Nome Agenzia *</label>
             <input class="form-input" type="text" id="f-nome-agenzia" name="nome_agenzia">
@@ -565,6 +555,11 @@ $status_labels_rel = ['confermata'=>'Confermata','ultimi-posti'=>'Ultimi posti',
           <div class="form-row">
             <label class="form-label" for="f-commissione">Commissione richiesta (%)</label>
             <input class="form-input" type="number" id="f-commissione" name="commissione" min="0" max="30" step="0.5">
+          </div>
+          <!-- Send quote to client too -->
+          <div class="form-row addon-item">
+            <input type="checkbox" id="cb-send-cliente" name="invia_al_cliente" value="1">
+            <label class="addon-item__label" for="cb-send-cliente">Invia preventivo anche al cliente</label>
           </div>
         </div>
 
@@ -686,16 +681,11 @@ $status_labels_rel = ['confermata'=>'Confermata','ultimi-posti'=>'Ultimi posti',
   });
 
   // ----------------------------------------------------------------
-  // QUOTE FORM — Live price calculation + B2B toggle + agency code
-  //              validation (SHA-256) + submission
+  // QUOTE FORM — parameter-based pricing, B2B default, SHA-256 agency code
   // ----------------------------------------------------------------
   <?php if ($has_form): ?>
-  var formConfig = <?php echo json_encode($form_config, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
-  var pricePerPerson      = formConfig.price_per_person    || <?php echo (int)($trip['price_from'] ?? 0); ?>;
-  var competitorBenchmark = formConfig.competitor_benchmark || 0;
-  var agencyCodeHash      = formConfig.agency_code_hash    || '';   // expected SHA-256 hex (lowercase)
-  var adultCount  = 2;
-  var childCount  = 0;
+  var adultCount = 2;
+  var childCount = 0;
 
   // -- Child age inputs --
   function rebuildChildAges() {
@@ -706,24 +696,106 @@ $status_labels_rel = ['confermata'=>'Confermata','ultimi-posti'=>'Ultimi posti',
       inp.type        = 'number';
       inp.name        = 'eta_bambini[]';
       inp.className   = 'form-input child-age-input';
-      inp.placeholder = 'Età ' + (i + 1);
+      inp.placeholder = 'Età bambino ' + (i + 1);
       inp.min         = 0;
       inp.max         = 17;
       container.appendChild(inp);
     }
   }
 
-  // -- Counter buttons --
+  // -- Base price (without insurance) --
+  function calcBase() {
+    var totalPersons  = adultCount + childCount;
+    // Special rule: 1 adult + 1 child → child pays adult price (treated as 2 adults)
+    var effectiveTotal = (adultCount === 1 && childCount === 1) ? 2 : totalPersons;
+    var total = 0;
+
+    if (adultCount === 1 && childCount === 0) {
+      total = PREZZO_ADULTO + SUPPLEMENTO_SINGOLA;
+    } else {
+      total = PREZZO_ADULTO * 2;
+      if (effectiveTotal >= 3) total += PREZZO_TERZO_QUARTO_LETTO;
+      if (effectiveTotal >= 4) total += PREZZO_TERZO_QUARTO_LETTO;
+    }
+    return total;
+  }
+
+  // -- Competitor total for savings comparison --
+  function calcCompetitor() {
+    var totalPersons   = adultCount + childCount;
+    var effectiveTotal = (adultCount === 1 && childCount === 1) ? 2 : totalPersons;
+    if (effectiveTotal <= 1) return PREZZO_MEDIO_CONCORRENZA_PER_PERSONA;
+    var ct = PREZZO_MEDIO_CONCORRENZA_PER_PERSONA * 2;
+    if (effectiveTotal >= 3) ct += PREZZO_TERZO_QUARTO_LETTO_CONCORRENZA;
+    if (effectiveTotal >= 4) ct += PREZZO_TERZO_QUARTO_LETTO_CONCORRENZA;
+    return ct;
+  }
+
+  // -- Update price display --
+  function updatePrice() {
+    var base       = calcBase();
+    var insChecked = document.getElementById('cb-assicurazione') && document.getElementById('cb-assicurazione').checked;
+    var insurance  = insChecked ? Math.round(base * PERCENTUALE_ASSICURAZIONE) : 0;
+    var total      = base + insurance;
+
+    // Build breakdown lines
+    var totalPersons   = adultCount + childCount;
+    var effectiveTotal = (adultCount === 1 && childCount === 1) ? 2 : totalPersons;
+    var lines = [];
+    if (adultCount === 1 && childCount === 0) {
+      lines.push('€' + (PREZZO_ADULTO + SUPPLEMENTO_SINGOLA).toLocaleString('it-IT') + ' (adulto singolo + suppl.)');
+    } else if (adultCount === 1 && childCount === 1) {
+      lines.push('€' + PREZZO_ADULTO.toLocaleString('it-IT') + ' × 2 (bambino come adulto)');
+    } else {
+      lines.push('€' + PREZZO_ADULTO.toLocaleString('it-IT') + ' × 2 adulti');
+      if (effectiveTotal >= 3) {
+        var s3 = PREZZO_TERZO_QUARTO_LETTO >= 0 ? '+€' : '−€';
+        lines.push(s3 + Math.abs(PREZZO_TERZO_QUARTO_LETTO).toLocaleString('it-IT') + ' (3° posto)');
+      }
+      if (effectiveTotal >= 4) {
+        var s4 = PREZZO_TERZO_QUARTO_LETTO >= 0 ? '+€' : '−€';
+        lines.push(s4 + Math.abs(PREZZO_TERZO_QUARTO_LETTO).toLocaleString('it-IT') + ' (4° posto)');
+      }
+    }
+    if (insChecked) {
+      lines.push('+€' + insurance.toLocaleString('it-IT') + ' assicurazione (' + Math.round(PERCENTUALE_ASSICURAZIONE * 100) + '%)');
+    }
+
+    var peTotal   = document.getElementById('pe-total');
+    var peBreak   = document.getElementById('pe-breakdown');
+    var peSavings = document.getElementById('pe-savings');
+    var insLabel  = document.getElementById('assicurazione-price-label');
+
+    if (peTotal) peTotal.textContent = '€' + total.toLocaleString('it-IT');
+    if (peBreak) peBreak.textContent = lines.join('  ·  ');
+    if (insLabel) insLabel.textContent = '+€' + Math.round(base * PERCENTUALE_ASSICURAZIONE).toLocaleString('it-IT');
+
+    if (peSavings && PREZZO_MEDIO_CONCORRENZA_PER_PERSONA > 0) {
+      var savings = calcCompetitor() - total;
+      if (savings > 0) {
+        peSavings.textContent = '✓ Risparmi €' + savings.toLocaleString('it-IT') + ' rispetto ai prezzi di mercato';
+        peSavings.style.display = 'block';
+      } else {
+        peSavings.style.display = 'none';
+      }
+    }
+  }
+
+  // -- Counter buttons (max 4 total) --
   document.querySelectorAll('.counter-btn').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var counter = btn.dataset.counter;
       var action  = btn.dataset.action;
       if (counter === 'adulti') {
-        adultCount = Math.max(1, adultCount + (action === 'inc' ? 1 : -1));
+        var next = adultCount + (action === 'inc' ? 1 : -1);
+        if (next < 1 || next + childCount > 4) return;
+        adultCount = next;
         document.getElementById('adulti-val').textContent = adultCount;
         document.getElementById('adulti-hidden').value    = adultCount;
       } else {
-        childCount = Math.max(0, childCount + (action === 'inc' ? 1 : -1));
+        var nextC = childCount + (action === 'inc' ? 1 : -1);
+        if (nextC < 0 || adultCount + nextC > 4) return;
+        childCount = nextC;
         document.getElementById('bambini-val').textContent = childCount;
         document.getElementById('bambini-hidden').value    = childCount;
         rebuildChildAges();
@@ -732,114 +804,66 @@ $status_labels_rel = ['confermata'=>'Confermata','ultimi-posti'=>'Ultimi posti',
     });
   });
 
-  // -- Price calculation --
-  function updatePrice() {
-    var roomSel    = document.getElementById('f-room-type');
-    var roomDelta  = roomSel ? parseInt(roomSel.options[roomSel.selectedIndex].dataset.delta || 0) : 0;
-    var addonTotal = 0;
-    document.querySelectorAll('.addon-item input[type=checkbox]:checked').forEach(function (cb) {
-      addonTotal += parseInt(cb.dataset.price || 0);
-    });
-    var perPerson = pricePerPerson + roomDelta;
-    var total     = (perPerson * adultCount) + (addonTotal * (adultCount + childCount));
-    var peTotal   = document.getElementById('pe-total');
-    var peBreak   = document.getElementById('pe-breakdown');
-    var peSavings = document.getElementById('pe-savings');
-    if (peTotal)  peTotal.textContent  = '€' + total.toLocaleString('it-IT');
-    if (peBreak)  peBreak.textContent  = '€' + perPerson.toLocaleString('it-IT') + ' × ' + adultCount + ' adulti' +
-                                         (addonTotal > 0 ? ' + €' + addonTotal.toLocaleString('it-IT') + ' optional' : '');
-    if (peSavings && competitorBenchmark > 0) {
-      var savings = (competitorBenchmark - perPerson) * adultCount;
-      peSavings.textContent = savings > 0 ? 'Risparmia €' + savings.toLocaleString('it-IT') + ' rispetto al prezzo medio di mercato' : '';
-    }
-  }
+  // Insurance toggle
+  var cbAss = document.getElementById('cb-assicurazione');
+  if (cbAss) cbAss.addEventListener('change', updatePrice);
 
-  if (document.getElementById('f-room-type')) {
-    document.getElementById('f-room-type').addEventListener('change', updatePrice);
-  }
-  document.querySelectorAll('.addon-item input[type=checkbox]').forEach(function (cb) {
-    cb.addEventListener('change', updatePrice);
-  });
   updatePrice(); // Initial render
 
   // -- Agency code SHA-256 validation --
-  // Converts ArrayBuffer to lowercase hex string
   function bufToHex(buf) {
     return Array.from(new Uint8Array(buf))
       .map(function (b) { return b.toString(16).padStart(2, '0'); })
       .join('');
   }
 
-  // Hashes the entered code with SHA-256 and compares against agencyCodeHash.
-  // Reveals agency-fields on match; shows feedback message in either case.
-  // Falls back to showing fields on any non-empty entry when hash is absent.
   function validateAgencyCode(codeValue) {
     var feedback     = document.getElementById('agency-code-feedback');
     var agencyFields = document.getElementById('agency-fields');
     if (!agencyFields) return;
 
-    // Fallback: no hash configured — show fields for any non-empty code
-    if (!agencyCodeHash) {
-      if (codeValue.trim()) {
-        agencyFields.style.display = 'block';
-        if (feedback) { feedback.textContent = ''; }
-      } else {
-        agencyFields.style.display = 'none';
-      }
+    if (!VALID_AGENCY_HASH) {
+      agencyFields.style.display = codeValue.trim() ? 'block' : 'none';
       return;
     }
-
     if (!codeValue.trim()) {
       agencyFields.style.display = 'none';
       if (feedback) { feedback.textContent = ''; feedback.style.color = ''; }
       return;
     }
-
     var encoder = new TextEncoder();
     crypto.subtle.digest('SHA-256', encoder.encode(codeValue)).then(function (hashBuf) {
       var hex = bufToHex(hashBuf);
-      if (hex === agencyCodeHash) {
+      if (hex === VALID_AGENCY_HASH) {
         agencyFields.style.display = 'block';
-        if (feedback) {
-          feedback.textContent = 'Codice valido — campi agenzia sbloccati.';
-          feedback.style.color = '#2ecc71';
-        }
+        if (feedback) { feedback.textContent = 'Codice valido — campi agenzia sbloccati.'; feedback.style.color = '#2ecc71'; }
       } else {
         agencyFields.style.display = 'none';
-        if (feedback) {
-          feedback.textContent = 'Codice non valido.';
-          feedback.style.color = '#CC0031';
-        }
+        if (feedback) { feedback.textContent = 'Codice non valido.'; feedback.style.color = '#CC0031'; }
       }
     });
   }
 
   var agencyCodeInput = document.getElementById('f-agency-code');
   if (agencyCodeInput) {
-    agencyCodeInput.addEventListener('input', function () {
-      validateAgencyCode(agencyCodeInput.value);
-    });
+    agencyCodeInput.addEventListener('input', function () { validateAgencyCode(agencyCodeInput.value); });
   }
 
-  // -- B2B toggle --
+  // -- B2B/B2C toggle --
   document.querySelectorAll('.client-toggle__btn').forEach(function (btn) {
     btn.addEventListener('click', function () {
       document.querySelectorAll('.client-toggle__btn').forEach(function (b) { b.classList.remove('active'); });
       btn.classList.add('active');
-      var type = btn.dataset.type;
-      document.getElementById('tipo-cliente-hidden').value = type;
-
+      var type          = btn.dataset.type;
       var agencyCodeRow = document.getElementById('agency-code-row');
       var agencyFields  = document.getElementById('agency-fields');
       var feedback      = document.getElementById('agency-code-feedback');
+      document.getElementById('tipo-cliente-hidden').value = type;
 
       if (type === 'agenzia') {
-        // Show code entry field; agency-fields remain hidden until code validates
         if (agencyCodeRow) agencyCodeRow.style.display = 'block';
-        // Re-validate whatever is already typed (clears stale state on re-toggle)
         if (agencyCodeInput) validateAgencyCode(agencyCodeInput.value);
       } else {
-        // Switched back to Privato: hide both code field and agency-specific fields
         if (agencyCodeRow) agencyCodeRow.style.display = 'none';
         if (agencyFields)  agencyFields.style.display  = 'none';
         if (feedback) { feedback.textContent = ''; feedback.style.color = ''; }
@@ -847,7 +871,7 @@ $status_labels_rel = ['confermata'=>'Confermata','ultimi-posti'=>'Ultimi posti',
     });
   });
 
-  // -- Form submission --
+  // -- Form submission → direct webhook POST --
   var quoteForm = document.getElementById('quote-form');
   if (quoteForm) {
     quoteForm.addEventListener('submit', function (e) {
@@ -855,7 +879,6 @@ $status_labels_rel = ['confermata'=>'Confermata','ultimi-posti'=>'Ultimi posti',
       var errorDiv = document.getElementById('form-error-msg');
       errorDiv.style.display = 'none';
 
-      // Basic validation
       var nome    = document.getElementById('f-nome').value.trim();
       var cognome = document.getElementById('f-cognome').value.trim();
       var email   = document.getElementById('f-email').value.trim();
@@ -865,32 +888,65 @@ $status_labels_rel = ['confermata'=>'Confermata','ultimi-posti'=>'Ultimi posti',
         errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
       }
+      if (!WEBHOOK_URL) {
+        errorDiv.textContent = 'Errore di configurazione: webhook non impostato.';
+        errorDiv.style.display = 'block';
+        return;
+      }
 
       var submitBtn = quoteForm.querySelector('button[type=submit]');
       submitBtn.disabled    = true;
       submitBtn.textContent = 'Invio in corso…';
 
-      var formData = new FormData(quoteForm);
+      var base       = calcBase();
+      var insChecked = document.getElementById('cb-assicurazione').checked;
+      var insurance  = insChecked ? Math.round(base * PERCENTUALE_ASSICURAZIONE) : 0;
+      var totalPrice = base + insurance;
 
-      fetch('/api/submit-form.php', {
+      var childAges = [];
+      document.querySelectorAll('.child-age-input').forEach(function (inp) {
+        if (inp.value) childAges.push(inp.value);
+      });
+
+      var payload = {
+        trip_slug:        document.querySelector('[name=trip_slug]').value,
+        trip_title:       TRIP_TITLE,
+        tipo_cliente:     document.getElementById('tipo-cliente-hidden').value,
+        nome:             nome,
+        cognome:          cognome,
+        email:            email,
+        telefono:         document.getElementById('f-telefono').value.trim(),
+        adulti:           adultCount,
+        bambini:          childCount,
+        eta_bambini:      childAges.join(', '),
+        assicurazione:    insChecked ? 'Si' : 'No',
+        prezzo_totale:    totalPrice,
+        note:             document.getElementById('f-note').value.trim(),
+      };
+
+      var nomeAg = document.getElementById('f-nome-agenzia');
+      if (nomeAg)  payload.nome_agenzia  = nomeAg.value.trim();
+      var iataEl = document.getElementById('f-iata');
+      if (iataEl)  payload.codice_iata   = iataEl.value.trim();
+      var cittaEl = document.getElementById('f-citta');
+      if (cittaEl) payload.citta         = cittaEl.value.trim();
+      var commEl  = document.getElementById('f-commissione');
+      if (commEl)  payload.commissione   = commEl.value.trim();
+      var sendCl  = document.getElementById('cb-send-cliente');
+      if (sendCl)  payload.invia_al_cliente = sendCl.checked ? 'Si' : 'No';
+
+      fetch(WEBHOOK_URL, {
         method: 'POST',
-        body: formData
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       })
-      .then(function (res) { return res.json(); })
-      .then(function (data) {
-        if (data.success) {
-          document.getElementById('quote-form-wrap').innerHTML =
-            '<div class="form-success">' +
-            '<i class="fa-solid fa-circle-check" style="font-size:2.5rem;color:#2ecc71;margin-bottom:1rem;display:block;"></i>' +
-            '<h3 style="font-family:var(--font-heading);margin-bottom:0.5rem;">Richiesta inviata!</h3>' +
-            '<p>Lorenzo ti risponderà entro 24 ore. Grazie per aver scelto Viaggia col Baffo.</p>' +
-            '</div>';
-        } else {
-          errorDiv.textContent = data.error || 'Errore durante l\'invio. Riprova o contattaci su WhatsApp.';
-          errorDiv.style.display = 'block';
-          submitBtn.disabled    = false;
-          submitBtn.textContent = 'Invia Richiesta di Preventivo';
-        }
+      .then(function () {
+        document.getElementById('quote-form-wrap').innerHTML =
+          '<div class="form-success">' +
+          '<i class="fa-solid fa-circle-check" style="font-size:2.5rem;color:#2ecc71;margin-bottom:1rem;display:block;"></i>' +
+          '<h3 style="font-family:var(--font-heading);margin-bottom:0.5rem;">Richiesta inviata!</h3>' +
+          '<p>Lorenzo ti risponderà entro 24 ore. Grazie per aver scelto Viaggia col Baffo.</p>' +
+          '</div>';
       })
       .catch(function () {
         errorDiv.textContent = 'Errore di rete. Controlla la connessione e riprova.';

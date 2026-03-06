@@ -82,10 +82,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // AJAX: action=save_form_config
     if ($action === 'save_form_config') {
         $slug = $_POST['slug'] ?? '';
-        $form_config_raw = $_POST['form_config'] ?? '{}';
-        $webhook_url = trim($_POST['webhook_url'] ?? '');
-        $form_config = json_decode($form_config_raw, true) ?? [];
-        $form_config['webhook_url'] = $webhook_url;
+        $form_config = [
+            'prezzo_adulto'                   => (int)($_POST['prezzo_adulto'] ?? 0),
+            'supplemento_singola'             => (int)($_POST['supplemento_singola'] ?? 0),
+            'prezzo_terzo_letto'              => (int)($_POST['prezzo_terzo_letto'] ?? 0),
+            'prezzo_quarto_letto'             => (int)($_POST['prezzo_quarto_letto'] ?? 0),
+            'prezzo_concorrenza_per_persona'  => (int)($_POST['prezzo_concorrenza_per_persona'] ?? 0),
+            'prezzo_terzo_quarto_concorrenza' => (int)($_POST['prezzo_terzo_quarto_concorrenza'] ?? 0),
+            'percentuale_assicurazione'       => (float)($_POST['percentuale_assicurazione'] ?? 5),
+            'webhook_url'                     => trim($_POST['webhook_url'] ?? ''),
+            'agency_code_hash'                => trim($_POST['agency_code_hash'] ?? ''),
+        ];
         $trips = load_trips();
         foreach ($trips as &$t) {
             if ($t['slug'] === $slug) { $t['form_config'] = $form_config; break; }
@@ -1014,58 +1021,102 @@ $preview_token_val = $trip['preview_token'] ?? '';
         <!-- ══════════════════════════════════════════════════ -->
         <div class="tab-panel" id="tab-formconfig">
           <div class="card">
-            <h3>Configurazione Form Preventivo</h3>
+            <h3>Parametri Form Preventivo</h3>
+            <p style="color:var(--text-muted);font-size:0.875rem;margin-bottom:1.5rem;">
+              Configura i parametri numerici del form. Il form si genera automaticamente — nessun HTML da scrivere.
+            </p>
 
-            <!-- Webhook URL (separate from AI-generated config) -->
-            <div class="form-group">
-              <label for="webhook_url">Webhook URL (per invio preventivi)</label>
-              <input type="text" id="webhook_url" name="webhook_url"
-                     value="<?= htmlspecialchars($trip['form_config']['webhook_url'] ?? '') ?>"
-                     placeholder="https://...">
-              <small>Lascia vuoto per usare il webhook predefinito dalle Impostazioni.</small>
-            </div>
-
-            <hr>
-
-            <!-- AI Generator section -->
-            <h4>Generatore Form con AI</h4>
-            <div class="form-group">
-              <label for="ai_description">Descrivi il viaggio in italiano (prezzi, tipologia, servizi inclusi...)</label>
-              <textarea id="ai_description" rows="5"
-                placeholder="Es: Viaggio in Giappone 12 giorni da €4.200 a persona, camera doppia standard. Include voli, hotel 4 stelle Tokyo e Kyoto, guida italiana, trasferimenti..."></textarea>
-            </div>
-            <button type="button" id="btn-generate-ai" class="btn-primary" onclick="generateAI()">
-              <i class="fa-solid fa-wand-magic-sparkles"></i> Genera Form con AI
-            </button>
-            <span id="ai-loading" style="display:none; margin-left:12px;">
-              <i class="fa-solid fa-spinner fa-spin"></i> Generazione in corso...
-            </span>
-
-            <div id="ai-result" style="display:none; margin-top:20px;">
-              <h4>JSON Generato — modifica se necessario</h4>
-              <textarea id="form_config_json" rows="18" style="font-family:monospace;font-size:13px;"></textarea>
-              <div style="margin-top:12px; display:flex; gap:12px; align-items:center;">
-                <button type="button" class="btn-primary" onclick="saveFormConfig()">
-                  <i class="fa-solid fa-save"></i> Salva Form Config
-                </button>
-                <span id="save-fc-msg" style="display:none; color:var(--success);">
-                  <i class="fa-solid fa-check"></i> Salvato
-                </span>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="fc-prezzo-adulto">Prezzo adulto (€) <span style="color:#cc0031">*</span></label>
+                <input type="number" id="fc-prezzo-adulto" min="0" step="1"
+                       value="<?= (int)($trip['form_config']['prezzo_adulto'] ?? 0) ?>"
+                       placeholder="es. 4350">
+                <small>Prezzo p.p. in camera doppia (min. 2 persone)</small>
+              </div>
+              <div class="form-group">
+                <label for="fc-suppl-singola">Supplemento singola (€)</label>
+                <input type="number" id="fc-suppl-singola" min="0" step="1"
+                       value="<?= (int)($trip['form_config']['supplemento_singola'] ?? 0) ?>"
+                       placeholder="es. 1600">
+              </div>
+              <div class="form-group">
+                <label for="fc-terzo-letto">3° posto letto (€)</label>
+                <input type="number" id="fc-terzo-letto" step="1"
+                       value="<?= (int)($trip['form_config']['prezzo_terzo_letto'] ?? 0) ?>"
+                       placeholder="es. 3000">
+                <small>Può essere negativo (sconto)</small>
+              </div>
+              <div class="form-group">
+                <label for="fc-quarto-letto">4° posto letto (€)</label>
+                <input type="number" id="fc-quarto-letto" step="1"
+                       value="<?= (int)($trip['form_config']['prezzo_quarto_letto'] ?? 0) ?>"
+                       placeholder="es. 3000">
+              </div>
+              <div class="form-group">
+                <label for="fc-concorrenza-pp">Concorrenza p.p. (€)</label>
+                <input type="number" id="fc-concorrenza-pp" min="0" step="1"
+                       value="<?= (int)($trip['form_config']['prezzo_concorrenza_per_persona'] ?? 0) ?>"
+                       placeholder="es. 7000">
+                <small>Per il riquadro "risparmio"</small>
+              </div>
+              <div class="form-group">
+                <label for="fc-concorrenza-34">Concorrenza 3°/4° letto (€)</label>
+                <input type="number" id="fc-concorrenza-34" min="0" step="1"
+                       value="<?= (int)($trip['form_config']['prezzo_terzo_quarto_concorrenza'] ?? 0) ?>"
+                       placeholder="es. 5000">
+              </div>
+              <div class="form-group">
+                <label for="fc-assicurazione">Assicurazione (%)</label>
+                <input type="number" id="fc-assicurazione" min="0" max="20" step="0.5"
+                       value="<?= (float)($trip['form_config']['percentuale_assicurazione'] ?? 5) ?>"
+                       placeholder="5">
+                <small>Percentuale del subtotale</small>
               </div>
             </div>
 
-            <!-- Current form_config display (if exists) -->
-            <?php if (!empty($trip['form_config'])): ?>
-            <div style="margin-top:24px;">
-              <h4>Form Config attuale</h4>
-              <textarea rows="15" style="font-family:monospace;font-size:12px;background:#f8f8f8;width:100%;" readonly><?=
-                htmlspecialchars(json_encode($trip['form_config'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))
-              ?></textarea>
-              <button type="button" class="btn-secondary" style="margin-top:8px;" onclick="loadCurrentConfig()">
-                Carica nel editor per modificare
-              </button>
+            <div class="form-group" style="margin-top:1rem;">
+              <label for="fc-webhook">Webhook URL (Pabbly)</label>
+              <input type="text" id="fc-webhook"
+                     value="<?= htmlspecialchars($trip['form_config']['webhook_url'] ?? '') ?>"
+                     placeholder="https://connect.pabbly.com/...">
             </div>
-            <?php endif; ?>
+
+            <div class="form-group">
+              <label for="fc-agency-hash">Hash PIN agenzia (SHA-256)</label>
+              <input type="text" id="fc-agency-hash"
+                     value="<?= htmlspecialchars($trip['form_config']['agency_code_hash'] ?? 'af97d1baebca1eaae1ce418c082402e60c2529ef719983ad7c8dda6ea1f8e8ee') ?>"
+                     placeholder="SHA-256 hex lowercase">
+              <small>Default: hash del PIN "admin" — sostituisci con l'hash del tuo PIN segreto</small>
+            </div>
+
+            <div style="display:flex;gap:12px;align-items:center;margin-top:1.5rem;">
+              <button type="button" class="btn-primary" onclick="saveFormConfig()">
+                <i class="fa-solid fa-save"></i> Salva Parametri
+              </button>
+              <span id="save-fc-msg" style="display:none; color:var(--success);">
+                <i class="fa-solid fa-check"></i> Salvato
+              </span>
+            </div>
+
+            <hr style="margin:2rem 0;">
+
+            <!-- AI helper — suggests numeric values only -->
+            <h4>Suggerisci parametri con AI <span style="font-size:0.8em;color:var(--text-muted);font-weight:normal;">(opzionale)</span></h4>
+            <p style="font-size:0.875rem;color:var(--text-muted);margin-bottom:1rem;">
+              Descrivi il viaggio e l'AI suggerirà i valori numerici. Verifica e modifica prima di salvare.
+            </p>
+            <div class="form-group">
+              <label for="ai_description">Descrizione per AI</label>
+              <textarea id="ai_description" rows="4"
+                placeholder="Es: Tour West America 15 giorni da €4.350 p.p. in doppia. Concorrenza vende a €7.000. Supplemento singola €1.600..."></textarea>
+            </div>
+            <button type="button" id="btn-generate-ai" class="btn-secondary" onclick="generateAI()">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Suggerisci numeri con AI
+            </button>
+            <span id="ai-loading" style="display:none; margin-left:12px;">
+              <i class="fa-solid fa-spinner fa-spin"></i> Analisi in corso...
+            </span>
           </div>
         </div><!-- /tab-formconfig -->
 
@@ -1394,7 +1445,7 @@ function openPreview() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Form Config — AI generator
+// Form Config — AI suggests numeric params, user saves via individual fields
 // ─────────────────────────────────────────────────────────────────────────────
 function generateAI() {
     const desc = document.getElementById('ai_description').value.trim();
@@ -1410,13 +1461,17 @@ function generateAI() {
     .then(data => {
         document.getElementById('ai-loading').style.display = 'none';
         document.getElementById('btn-generate-ai').disabled = false;
-        if (data.form_config) {
-            // Remove webhook_url from preview (it's managed separately)
-            const cfg = {...data.form_config};
-            delete cfg.webhook_url;
-            document.getElementById('form_config_json').value =
-                JSON.stringify(cfg, null, 2);
-            document.getElementById('ai-result').style.display = 'block';
+        if (data.params) {
+            const p = data.params;
+            const set = (id, val) => { if (val !== undefined && document.getElementById(id)) document.getElementById(id).value = val; };
+            set('fc-prezzo-adulto',   p.prezzo_adulto);
+            set('fc-suppl-singola',   p.supplemento_singola);
+            set('fc-terzo-letto',     p.prezzo_terzo_letto);
+            set('fc-quarto-letto',    p.prezzo_quarto_letto);
+            set('fc-concorrenza-pp',  p.prezzo_concorrenza_per_persona);
+            set('fc-concorrenza-34',  p.prezzo_terzo_quarto_concorrenza);
+            set('fc-assicurazione',   p.percentuale_assicurazione);
+            alert('Parametri suggeriti caricati. Verifica i valori e clicca "Salva Parametri".');
         } else {
             alert('Errore nella generazione. Riprova.');
         }
@@ -1429,15 +1484,22 @@ function generateAI() {
 }
 
 function saveFormConfig() {
-    const jsonStr = document.getElementById('form_config_json').value.trim();
-    let cfg;
-    try { cfg = JSON.parse(jsonStr); } catch(e) { alert('JSON non valido: ' + e.message); return; }
-    const webhookUrl = document.getElementById('webhook_url').value.trim();
     fetch(window.location.href, {
         method: 'POST',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: new URLSearchParams({action: 'save_form_config', slug: tripSlug,
-              form_config: JSON.stringify(cfg), webhook_url: webhookUrl})
+        body: new URLSearchParams({
+            action:                          'save_form_config',
+            slug:                            tripSlug,
+            prezzo_adulto:                   document.getElementById('fc-prezzo-adulto').value,
+            supplemento_singola:             document.getElementById('fc-suppl-singola').value,
+            prezzo_terzo_letto:              document.getElementById('fc-terzo-letto').value,
+            prezzo_quarto_letto:             document.getElementById('fc-quarto-letto').value,
+            prezzo_concorrenza_per_persona:  document.getElementById('fc-concorrenza-pp').value,
+            prezzo_terzo_quarto_concorrenza: document.getElementById('fc-concorrenza-34').value,
+            percentuale_assicurazione:       document.getElementById('fc-assicurazione').value,
+            webhook_url:                     document.getElementById('fc-webhook').value.trim(),
+            agency_code_hash:                document.getElementById('fc-agency-hash').value.trim(),
+        })
     })
     .then(r => r.json())
     .then(data => {
@@ -1447,13 +1509,6 @@ function saveFormConfig() {
             setTimeout(() => msg.style.display = 'none', 2000);
         }
     });
-}
-
-function loadCurrentConfig() {
-    const cfg = {...currentFormConfig};
-    delete cfg.webhook_url;
-    document.getElementById('form_config_json').value = JSON.stringify(cfg, null, 2);
-    document.getElementById('ai-result').style.display = 'block';
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

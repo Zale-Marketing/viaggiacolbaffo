@@ -1,332 +1,384 @@
 [
-  {
-    "slug": "west-america-aprile-2026",
-    "title": "West America Aprile 2026",
-    "continent": "america",
-    "status": "ultimi-posti",
-    "published": true,
-    "date_start": "2026-04-05",
-    "date_end": "2026-04-19",
-    "duration": "15 giorni",
-    "price_from": 3490,
-    "hero_image": "https://images.unsplash.com/photo-1549880338-65ddcdfd017b?w=1600",
-    "gallery": [
-      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200",
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200",
-      "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200",
-      "https://images.unsplash.com/photo-1605833556294-ea5c7a74f57d?w=1200"
-    ],
-    "short_description": "Un viaggio epico attraverso i parchi nazionali e le città iconiche dell'Ovest americano. Lorenzo ti accompagna personalmente in ogni tappa.",
-    "full_description": "L'Ovest americano è una terra di contrasti senza pari: canyon vermiglio scavati da milioni di anni di erosione, foreste di sequoie che sfiorano il cielo, deserti silenziosi dove il tempo sembra essersi fermato. Questo viaggio di 15 giorni ti porta attraverso i simboli più iconici degli Stati Uniti — da Los Angeles a Las Vegas, dal Grand Canyon a Monument Valley — con Lorenzo sempre al tuo fianco per guidarti, raccontarti le storie dei luoghi e farti vivere momenti che non troveresti in nessun tour di gruppo.\n\nIl vantaggio di viaggiare con Lorenzo è la dimensione intima del gruppo: al massimo 10 persone, mai una carovana turistica. Ogni alba davanti all'Antelope Canyon, ogni tramonto sulle Rocce Rosse di Sedona è un momento vissuto davvero, non fotografato di fretta. Lorenzo sceglie gli hotel con cura — boutique hotel nel cuore di Las Vegas, lodge panoramici ai bordi del Grand Canyon — perché anche il riposo fa parte dell'esperienza. Rientrerai a casa con ricordi indelebili e, molto probabilmente, con la voglia di ripartire.",
-    "itinerary": [
-      {
-        "day": 1,
-        "title": "Arrivo a Los Angeles",
-        "location": "Los Angeles, California",
-        "date": "",
-        "description": "Atterraggio a LAX e transfer in hotel nel cuore di Santa Monica. Serata libera per una prima passeggiata sul lungomare di Venice Beach e cena in un ristorante consigliato da Lorenzo.",
-        "image_url": "https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800"
-      },
-      {
-        "day": 2,
-        "title": "Pacific Coast Highway e Malibu",
-        "location": "Malibu — Pacific Coast Highway",
-        "date": "",
-        "description": "Guidiamo lungo la PCH verso nord tra oceano Pacifico e scogliere a picco sull'acqua, con sosta a Malibu per il pranzo. Nel pomeriggio visita a Point Dume e rientro al tramonto con vista spettacolare sulle Malibu Hills.",
-        "image_url": "https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=800"
-      },
-      {
-        "day": 3,
-        "title": "Arrivo a Las Vegas",
-        "location": "Los Angeles → Las Vegas, Nevada",
-        "date": "",
-        "description": "Mattinata a Los Angeles per visitare il Getty Center e il quartiere di Venice. Nel pomeriggio partenza in van verso Las Vegas: arrivo alla Strip all'imbrunire, quando le luci della città iniziano ad accendersi.",
-        "image_url": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800"
-      },
-      {
-        "day": 4,
-        "title": "Tour di Las Vegas",
-        "location": "Las Vegas, Nevada",
-        "date": "",
-        "description": "Giornata libera per esplorare i grandi hotel-casinò della Strip — Bellagio, Caesars Palace, The Venetian — con Lorenzo disponibile per consigli su show ed esperienze locali. Serata con spettacolo a scelta.",
-        "image_url": ""
-      },
-      {
-        "day": 5,
-        "title": "Grand Canyon South Rim",
-        "location": "Grand Canyon, Arizona",
-        "date": "",
-        "description": "Partenza mattutina verso il Grand Canyon: arrivo al South Rim per l'ora di pranzo e pomeriggio interamente dedicato a uno dei luoghi più straordinari della Terra. Lorenzo illustra la geologia del canyon e i migliori belvedere per fotografie memorabili.",
-        "image_url": ""
-      },
-      {
-        "day": 6,
-        "title": "Zion e Bryce Canyon",
-        "location": "Zion / Bryce Canyon, Utah",
-        "date": "",
-        "description": "Escursione nello Zion National Park seguendo il celebre Angels Landing Trail (percorso alternativo incluso per chi preferisce una camminata meno impegnativa). Nel tardo pomeriggio spostamento a Bryce Canyon per assistere al tramonto sulle formazioni di hoodoo arancioni.",
-        "image_url": ""
-      },
-      {
-        "day": 7,
-        "title": "Monument Valley e Antelope Canyon",
-        "location": "Monument Valley / Page, Arizona",
-        "date": "",
-        "description": "Alba iconica a Monument Valley con le Mittens illuminate dalla luce del mattino. Visita guidata all'Antelope Canyon in compagnia di una guida Navajo, poi rientro verso Los Angeles per il volo di rientro il giorno seguente.",
-        "image_url": ""
-      },
-      {
-        "day": 8,
-        "title": "Page e Lake Powell",
-        "location": "Page, Arizona",
-        "date": "",
-        "description": "Esplorazione di Horseshoe Bend e Lake Powell. Lorenzo conduce un'escursione in kayak sul lago.",
-        "image_url": ""
-      },
-      {
-        "day": 9,
-        "title": "Sedona — Rocce Rosse",
-        "location": "Sedona, Arizona",
-        "date": "",
-        "description": "Giornata a Sedona tra le formazioni rocciose rossastre. Trekking a Cathedral Rock al tramonto.",
-        "image_url": ""
-      },
-      {
-        "day": 10,
-        "title": "Phoenix e Desert Botanical Garden",
-        "location": "Phoenix, Arizona",
-        "date": "",
-        "description": "Visita al Desert Botanical Garden e passeggiata nel quartiere artistico di Roosevelt Row.",
-        "image_url": ""
-      },
-      {
-        "day": 11,
-        "title": "Joshua Tree National Park",
-        "location": "Joshua Tree, California",
-        "date": "",
-        "description": "Esplorazione del parco tra i caratteristici alberi di Joshua e formazioni granitiche mozzafiato.",
-        "image_url": ""
-      },
-      {
-        "day": 12,
-        "title": "San Diego",
-        "location": "San Diego, California",
-        "date": "",
-        "description": "Visita al Balboa Park e al quartiere storico del Gaslamp Quarter. Cena di pesce fresco sul lungomare.",
-        "image_url": ""
-      },
-      {
-        "day": 13,
-        "title": "Big Sur e Monterey",
-        "location": "Big Sur — Monterey, California",
-        "date": "",
-        "description": "Guida lungo la leggendaria Highway 1 attraverso Big Sur, con sosta a McWay Falls. Pernottamento a Monterey.",
-        "image_url": ""
-      },
-      {
-        "day": 14,
-        "title": "San Francisco",
-        "location": "San Francisco, California",
-        "date": "",
-        "description": "Arrivo a San Francisco: Golden Gate Bridge, Fisherman's Wharf e giro in cable car. Cena d'addio con Lorenzo.",
-        "image_url": ""
-      },
-      {
-        "day": 15,
-        "title": "Rientro da San Francisco",
-        "location": "San Francisco (SFO), California",
-        "date": "",
-        "description": "Mattinata libera per gli ultimi acquisti. Transfer all'aeroporto SFO per il volo di rientro su Milano Malpensa.",
-        "image_url": ""
-      }
-    ],
-    "included": [
-      "Voli internazionali A/R",
-      "15 notti in hotel selezionati 4*",
-      "Lorenzo con voi ogni giorno",
-      "Trasporti interni con van privato",
-      "Ingressi ai parchi nazionali",
-      "Transfer aeroporti",
-      "Assistenza H24"
-    ],
-    "excluded": [
-      "Assicurazione viaggio",
-      "Pasti non menzionati nel programma",
-      "Mance e spese personali",
-      "Extra in hotel"
-    ],
-    "tags": ["america", "road-trip", "aprile", "coppia", "famiglia", "avventura", "parchi-naturali"],
-    "form_config": {
-      "room_types": [
-        {
-          "slug": "doppia",
-          "label": "Camera Doppia",
-          "price_delta": 0
+    {
+        "slug": "west-america-aprile-2026",
+        "title": "West America Aprile 2026",
+        "continent": "america",
+        "status": "ultimi-posti",
+        "published": true,
+        "date_start": "2026-04-05",
+        "date_end": "2026-04-19",
+        "duration": "15 giorni",
+        "price_from": 3490,
+        "hero_image": "https://images.unsplash.com/photo-1549880338-65ddcdfd017b?w=1600",
+        "gallery": [
+            "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200",
+            "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200",
+            "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200",
+            "https://images.unsplash.com/photo-1605833556294-ea5c7a74f57d?w=1200"
+        ],
+        "short_description": "Un viaggio epico attraverso i parchi nazionali e le città iconiche dell'Ovest americano. Lorenzo ti accompagna personalmente in ogni tappa.",
+        "full_description": "L'Ovest americano è una terra di contrasti senza pari: canyon vermiglio scavati da milioni di anni di erosione, foreste di sequoie che sfiorano il cielo, deserti silenziosi dove il tempo sembra essersi fermato. Questo viaggio di 15 giorni ti porta attraverso i simboli più iconici degli Stati Uniti — da Los Angeles a Las Vegas, dal Grand Canyon a Monument Valley — con Lorenzo sempre al tuo fianco per guidarti, raccontarti le storie dei luoghi e farti vivere momenti che non troveresti in nessun tour di gruppo.\n\nIl vantaggio di viaggiare con Lorenzo è la dimensione intima del gruppo: al massimo 10 persone, mai una carovana turistica. Ogni alba davanti all'Antelope Canyon, ogni tramonto sulle Rocce Rosse di Sedona è un momento vissuto davvero, non fotografato di fretta. Lorenzo sceglie gli hotel con cura — boutique hotel nel cuore di Las Vegas, lodge panoramici ai bordi del Grand Canyon — perché anche il riposo fa parte dell'esperienza. Rientrerai a casa con ricordi indelebili e, molto probabilmente, con la voglia di ripartire.",
+        "itinerary": [
+            {
+                "day": 1,
+                "title": "Arrivo a Los Angeles",
+                "location": "Los Angeles, California",
+                "date": "",
+                "description": "Atterraggio a LAX e transfer in hotel nel cuore di Santa Monica. Serata libera per una prima passeggiata sul lungomare di Venice Beach e cena in un ristorante consigliato da Lorenzo.",
+                "image_url": "https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800"
+            },
+            {
+                "day": 2,
+                "title": "Pacific Coast Highway e Malibu",
+                "location": "Malibu — Pacific Coast Highway",
+                "date": "",
+                "description": "Guidiamo lungo la PCH verso nord tra oceano Pacifico e scogliere a picco sull'acqua, con sosta a Malibu per il pranzo. Nel pomeriggio visita a Point Dume e rientro al tramonto con vista spettacolare sulle Malibu Hills.",
+                "image_url": "https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=800"
+            },
+            {
+                "day": 3,
+                "title": "Arrivo a Las Vegas",
+                "location": "Los Angeles → Las Vegas, Nevada",
+                "date": "",
+                "description": "Mattinata a Los Angeles per visitare il Getty Center e il quartiere di Venice. Nel pomeriggio partenza in van verso Las Vegas: arrivo alla Strip all'imbrunire, quando le luci della città iniziano ad accendersi.",
+                "image_url": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800"
+            },
+            {
+                "day": 4,
+                "title": "Tour di Las Vegas",
+                "location": "Las Vegas, Nevada",
+                "date": "",
+                "description": "Giornata libera per esplorare i grandi hotel-casinò della Strip — Bellagio, Caesars Palace, The Venetian — con Lorenzo disponibile per consigli su show ed esperienze locali. Serata con spettacolo a scelta.",
+                "image_url": ""
+            },
+            {
+                "day": 5,
+                "title": "Grand Canyon South Rim",
+                "location": "Grand Canyon, Arizona",
+                "date": "",
+                "description": "Partenza mattutina verso il Grand Canyon: arrivo al South Rim per l'ora di pranzo e pomeriggio interamente dedicato a uno dei luoghi più straordinari della Terra. Lorenzo illustra la geologia del canyon e i migliori belvedere per fotografie memorabili.",
+                "image_url": ""
+            },
+            {
+                "day": 6,
+                "title": "Zion e Bryce Canyon",
+                "location": "Zion / Bryce Canyon, Utah",
+                "date": "",
+                "description": "Escursione nello Zion National Park seguendo il celebre Angels Landing Trail (percorso alternativo incluso per chi preferisce una camminata meno impegnativa). Nel tardo pomeriggio spostamento a Bryce Canyon per assistere al tramonto sulle formazioni di hoodoo arancioni.",
+                "image_url": ""
+            },
+            {
+                "day": 7,
+                "title": "Monument Valley e Antelope Canyon",
+                "location": "Monument Valley / Page, Arizona",
+                "date": "",
+                "description": "Alba iconica a Monument Valley con le Mittens illuminate dalla luce del mattino. Visita guidata all'Antelope Canyon in compagnia di una guida Navajo, poi rientro verso Los Angeles per il volo di rientro il giorno seguente.",
+                "image_url": ""
+            },
+            {
+                "day": 8,
+                "title": "Page e Lake Powell",
+                "location": "Page, Arizona",
+                "date": "",
+                "description": "Esplorazione di Horseshoe Bend e Lake Powell. Lorenzo conduce un'escursione in kayak sul lago.",
+                "image_url": ""
+            },
+            {
+                "day": 9,
+                "title": "Sedona — Rocce Rosse",
+                "location": "Sedona, Arizona",
+                "date": "",
+                "description": "Giornata a Sedona tra le formazioni rocciose rossastre. Trekking a Cathedral Rock al tramonto.",
+                "image_url": ""
+            },
+            {
+                "day": 10,
+                "title": "Phoenix e Desert Botanical Garden",
+                "location": "Phoenix, Arizona",
+                "date": "",
+                "description": "Visita al Desert Botanical Garden e passeggiata nel quartiere artistico di Roosevelt Row.",
+                "image_url": ""
+            },
+            {
+                "day": 11,
+                "title": "Joshua Tree National Park",
+                "location": "Joshua Tree, California",
+                "date": "",
+                "description": "Esplorazione del parco tra i caratteristici alberi di Joshua e formazioni granitiche mozzafiato.",
+                "image_url": ""
+            },
+            {
+                "day": 12,
+                "title": "San Diego",
+                "location": "San Diego, California",
+                "date": "",
+                "description": "Visita al Balboa Park e al quartiere storico del Gaslamp Quarter. Cena di pesce fresco sul lungomare.",
+                "image_url": ""
+            },
+            {
+                "day": 13,
+                "title": "Big Sur e Monterey",
+                "location": "Big Sur — Monterey, California",
+                "date": "",
+                "description": "Guida lungo la leggendaria Highway 1 attraverso Big Sur, con sosta a McWay Falls. Pernottamento a Monterey.",
+                "image_url": ""
+            },
+            {
+                "day": 14,
+                "title": "San Francisco",
+                "location": "San Francisco, California",
+                "date": "",
+                "description": "Arrivo a San Francisco: Golden Gate Bridge, Fisherman's Wharf e giro in cable car. Cena d'addio con Lorenzo.",
+                "image_url": ""
+            },
+            {
+                "day": 15,
+                "title": "Rientro da San Francisco",
+                "location": "San Francisco (SFO), California",
+                "date": "",
+                "description": "Mattinata libera per gli ultimi acquisti. Transfer all'aeroporto SFO per il volo di rientro su Milano Malpensa.",
+                "image_url": ""
+            }
+        ],
+        "included": [
+            "Voli internazionali A/R",
+            "15 notti in hotel selezionati 4*",
+            "Lorenzo con voi ogni giorno",
+            "Trasporti interni con van privato",
+            "Ingressi ai parchi nazionali",
+            "Transfer aeroporti",
+            "Assistenza H24"
+        ],
+        "excluded": [
+            "Assicurazione viaggio",
+            "Pasti non menzionati nel programma",
+            "Mance e spese personali",
+            "Extra in hotel"
+        ],
+        "tags": [
+            "america",
+            "road-trip",
+            "aprile",
+            "coppia",
+            "famiglia",
+            "avventura",
+            "parchi-naturali"
+        ],
+        "form_config": {
+            "prezzo_adulto": 4350,
+            "supplemento_singola": 1600,
+            "prezzo_terzo_letto": 3000,
+            "prezzo_quarto_letto": 3000,
+            "prezzo_concorrenza_per_persona": 7000,
+            "prezzo_terzo_quarto_concorrenza": 5000,
+            "percentuale_assicurazione": 5,
+            "webhook_url": "https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTY0MDYzMTA0Mzc1MjZiNTUzNDUxM2Ei_pc",
+            "agency_code_hash": "af97d1baebca1eaae1ce418c082402e60c2529ef719983ad7c8dda6ea1f8e8ee"
         },
-        {
-          "slug": "singola",
-          "label": "Camera Singola",
-          "price_delta": 650
+        "webhook_url": "",
+        "accompagnatore": {
+            "nome": "Lorenzo D'Alessandro",
+            "titolo": "Il Baffo — Fondatore e Accompagnatore",
+            "foto": "https://placehold.co/120x120/000744/ffffff?text=Lorenzo",
+            "bio": "Partirà personalmente con questo gruppo. 48 stati americani visitati, oltre 40 anni di esperienza. Con Lorenzo non sei mai solo.",
+            "instagram": "",
+            "whatsapp": ""
         },
-        {
-          "slug": "tripla",
-          "label": "Camera Tripla",
-          "price_delta": -200
+        "volo": {
+            "incluso": true,
+            "andata": {
+                "data": "17 Aprile 2026",
+                "partenza_aeroporto": "Milano Malpensa (MXP)",
+                "arrivo_aeroporto": "Los Angeles (LAX)",
+                "compagnia": "Lufthansa",
+                "numero_volo": "LH 234",
+                "orario_partenza": "10:30",
+                "orario_arrivo": "14:45",
+                "scalo": "Frankfurt (FRA) — 2h layover"
+            },
+            "ritorno": {
+                "data": "1 Maggio 2026",
+                "partenza_aeroporto": "San Francisco (SFO)",
+                "arrivo_aeroporto": "Milano Malpensa (MXP)",
+                "compagnia": "Lufthansa",
+                "numero_volo": "LH 456",
+                "orario_partenza": "16:20",
+                "orario_arrivo": "12:10 +1",
+                "scalo": "Frankfurt (FRA) — 1h 45min layover"
+            }
+        },
+        "hotel": [
+            {
+                "citta": "Los Angeles",
+                "nome": "Hotel Santa Monica Beach",
+                "stelle": 4,
+                "notti": 3,
+                "descrizione": "Hotel moderno a pochi passi dalla spiaggia di Santa Monica.",
+                "image_url": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800",
+                "indirizzo": "Santa Monica, CA",
+                "inclusa_colazione": true
+            },
+            {
+                "citta": "Las Vegas",
+                "nome": "The LINQ Hotel",
+                "stelle": 4,
+                "notti": 3,
+                "descrizione": "Sul famoso Strip di Las Vegas, posizione centrale.",
+                "image_url": "https://images.unsplash.com/photo-1605649487212-47bdab064df7?w=800",
+                "indirizzo": "Las Vegas Strip, NV",
+                "inclusa_colazione": false
+            },
+            {
+                "citta": "San Francisco",
+                "nome": "Union Square Boutique Hotel",
+                "stelle": 4,
+                "notti": 4,
+                "descrizione": "Nel cuore di San Francisco, vicino ai principali attrazioni.",
+                "image_url": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800",
+                "indirizzo": "Union Square, San Francisco, CA",
+                "inclusa_colazione": true
+            }
+        ],
+        "position": 1
+    },
+    {
+        "slug": "giappone-classico-2025",
+        "title": "Giappone Classico — Primavera 2025",
+        "continent": "asia",
+        "status": "sold-out",
+        "published": true,
+        "date_start": "2025-04-01",
+        "date_end": "2025-04-14",
+        "duration": "14 giorni",
+        "price_from": 4290,
+        "hero_image": "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=1600",
+        "gallery": [
+            "https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=1200",
+            "https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=1200",
+            "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=1200"
+        ],
+        "short_description": "Tokyo, Kyoto, Hiroshima e Osaka: il Giappone dei sogni con Lorenzo. Partenza esaurita — unisciti alla lista d'attesa per la prossima edizione.",
+        "full_description": "Quattordici giorni tra i templi millenari di Kyoto, la modernità iperconnessa di Tokyo, l'emozione silenziosa di Hiroshima e la vivacità gastronomica di Osaka — tutto questo in primavera, con i ciliegi in fiore a fare da cornice. Lorenzo ha accompagnato personalmente questo gruppo in un viaggio che molti già definiscono il più bello della loro vita.\n\nLa partenza di aprile 2025 è esaurita. Se vuoi partecipare alla prossima edizione di questo viaggio, scrivici: stiamo raccogliendo le adesioni per stabilire le date della prossima partenza, che sarà programmata non appena raggiungeremo il numero minimo di partecipanti.",
+        "itinerary": [
+            {
+                "day": 1,
+                "title": "Arrivo a Tokyo",
+                "description": "Atterraggio a Narita e transfer in hotel nel quartiere di Shinjuku. Prima passeggiata tra i grattacieli illuminati della città più grande del mondo."
+            },
+            {
+                "day": 3,
+                "title": "Tokyo — Harajuku, Shibuya e Akihabara",
+                "description": "Visita ai quartieri più iconici di Tokyo: il santuario Meiji immerso nel bosco, il Takeshita Street di Harajuku e il celebre incrocio di Shibuya. Serata a Akihabara tra negozi di elettronica e cultura pop."
+            },
+            {
+                "day": 6,
+                "title": "Kyoto — Templi e Gion",
+                "description": "Arrivo a Kyoto in Shinkansen e pomeriggio nel quartiere di Gion, dove è ancora possibile incontrare le geishe. Visita al Kinkaku-ji, il Padiglione d'Oro."
+            },
+            {
+                "day": 10,
+                "title": "Hiroshima e Miyajima",
+                "description": "Visita al Parco della Pace di Hiroshima, tappa doverosa e profondamente toccante. Nel pomeriggio traghetto per l'isola di Miyajima e il torii rosso galleggiante sull'acqua."
+            },
+            {
+                "day": 13,
+                "title": "Osaka e partenza",
+                "description": "Ultimo giorno tra i vicoli dello street food di Dotonbori: takoyaki, okonomiyaki e ramen. Transfer serale all'aeroporto per il volo di rientro in Italia."
+            }
+        ],
+        "included": [
+            "Voli internazionali A/R",
+            "14 notti in ryokan e hotel",
+            "Lorenzo con voi ogni giorno",
+            "Trasporti JR Pass illimitato",
+            "Transfer aeroporti"
+        ],
+        "excluded": [
+            "Assicurazione viaggio",
+            "Pasti non menzionati",
+            "Spese personali"
+        ],
+        "tags": [
+            "asia",
+            "giappone",
+            "primavera",
+            "cultura",
+            "coppia",
+            "famiglia"
+        ],
+        "form_config": [],
+        "webhook_url": "",
+        "position": 0
+    },
+    {
+        "slug": "viaggio-alle-hawaii",
+        "title": "Viaggio alle Hawaii",
+        "continent": "europa",
+        "status": "programmata",
+        "published": false,
+        "deleted": false,
+        "position": 0,
+        "preview_token": "dc983523895e7980823d96ab57699889",
+        "commission_rate": 10,
+        "start_date": "",
+        "end_date": "",
+        "duration": "",
+        "price_from": 0,
+        "hero_image": "https://viaggiacolbaffo.com/wp-content/uploads/2025/11/7.png",
+        "gallery": [],
+        "short_description": "",
+        "full_description": "",
+        "itinerary": [
+            {
+                "day": 1,
+                "title": "Giorno 1",
+                "description": "Rimessa con le mani"
+            }
+        ],
+        "included": [],
+        "excluded": [],
+        "tags": [],
+        "form_config": {
+            "price_per_person": 3000,
+            "single_supplement": 540,
+            "third_bed_price": -180,
+            "fourth_bed_price": -180,
+            "competitor_benchmark": 3600,
+            "room_types": [
+                {
+                    "slug": "doppia",
+                    "label": "Camera Doppia",
+                    "price_delta": 0
+                },
+                {
+                    "slug": "singola",
+                    "label": "Camera Singola",
+                    "price_delta": 540
+                },
+                {
+                    "slug": "tripla",
+                    "label": "Camera Tripla",
+                    "price_delta": -180
+                }
+            ],
+            "addons": [
+                {
+                    "slug": "assicurazione",
+                    "label": "Assicurazione viaggio completa",
+                    "price": 180
+                }
+            ],
+            "fields": [
+                "nome",
+                "cognome",
+                "email",
+                "telefono",
+                "tipo_cliente",
+                "numero_partecipanti",
+                "room_type",
+                "note"
+            ],
+            "webhook_url": "https://golden-snow-66.webhook.cool"
         }
-      ],
-      "addons": [
-        {
-          "slug": "assicurazione",
-          "label": "Assicurazione viaggio completa",
-          "price": 180
-        },
-        {
-          "slug": "premium-economy",
-          "label": "Upgrade Premium Economy",
-          "price": 450
-        }
-      ],
-      "fields": [
-        "nome",
-        "cognome",
-        "email",
-        "telefono",
-        "tipo_cliente",
-        "numero_partecipanti",
-        "room_type",
-        "note"
-      ],
-      "price_per_person": 3490,
-      "single_supplement": 650,
-      "third_bed_price": -200,
-      "fourth_bed_price": -200,
-      "competitor_benchmark": 4200,
-      "agency_code_hash": "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"
-    },
-    "webhook_url": "",
-    "accompagnatore": {
-      "nome": "Lorenzo D'Alessandro",
-      "titolo": "Il Baffo — Fondatore e Accompagnatore",
-      "foto": "https://placehold.co/120x120/000744/ffffff?text=Lorenzo",
-      "bio": "Partirà personalmente con questo gruppo. 48 stati americani visitati, oltre 40 anni di esperienza. Con Lorenzo non sei mai solo.",
-      "instagram": "",
-      "whatsapp": ""
-    },
-    "volo": {
-      "incluso": true,
-      "andata": {
-        "data": "17 Aprile 2026",
-        "partenza_aeroporto": "Milano Malpensa (MXP)",
-        "arrivo_aeroporto": "Los Angeles (LAX)",
-        "compagnia": "Lufthansa",
-        "numero_volo": "LH 234",
-        "orario_partenza": "10:30",
-        "orario_arrivo": "14:45",
-        "scalo": "Frankfurt (FRA) — 2h layover"
-      },
-      "ritorno": {
-        "data": "1 Maggio 2026",
-        "partenza_aeroporto": "San Francisco (SFO)",
-        "arrivo_aeroporto": "Milano Malpensa (MXP)",
-        "compagnia": "Lufthansa",
-        "numero_volo": "LH 456",
-        "orario_partenza": "16:20",
-        "orario_arrivo": "12:10 +1",
-        "scalo": "Frankfurt (FRA) — 1h 45min layover"
-      }
-    },
-    "hotel": [
-      {
-        "citta": "Los Angeles",
-        "nome": "Hotel Santa Monica Beach",
-        "stelle": 4,
-        "notti": 3,
-        "descrizione": "Hotel moderno a pochi passi dalla spiaggia di Santa Monica.",
-        "image_url": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800",
-        "indirizzo": "Santa Monica, CA",
-        "inclusa_colazione": true
-      },
-      {
-        "citta": "Las Vegas",
-        "nome": "The LINQ Hotel",
-        "stelle": 4,
-        "notti": 3,
-        "descrizione": "Sul famoso Strip di Las Vegas, posizione centrale.",
-        "image_url": "https://images.unsplash.com/photo-1605649487212-47bdab064df7?w=800",
-        "indirizzo": "Las Vegas Strip, NV",
-        "inclusa_colazione": false
-      },
-      {
-        "citta": "San Francisco",
-        "nome": "Union Square Boutique Hotel",
-        "stelle": 4,
-        "notti": 4,
-        "descrizione": "Nel cuore di San Francisco, vicino ai principali attrazioni.",
-        "image_url": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800",
-        "indirizzo": "Union Square, San Francisco, CA",
-        "inclusa_colazione": true
-      }
-    ]
-  },
-  {
-    "slug": "giappone-classico-2025",
-    "title": "Giappone Classico — Primavera 2025",
-    "continent": "asia",
-    "status": "sold-out",
-    "published": true,
-    "date_start": "2025-04-01",
-    "date_end": "2025-04-14",
-    "duration": "14 giorni",
-    "price_from": 4290,
-    "hero_image": "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=1600",
-    "gallery": [
-      "https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=1200",
-      "https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=1200",
-      "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=1200"
-    ],
-    "short_description": "Tokyo, Kyoto, Hiroshima e Osaka: il Giappone dei sogni con Lorenzo. Partenza esaurita — unisciti alla lista d'attesa per la prossima edizione.",
-    "full_description": "Quattordici giorni tra i templi millenari di Kyoto, la modernità iperconnessa di Tokyo, l'emozione silenziosa di Hiroshima e la vivacità gastronomica di Osaka — tutto questo in primavera, con i ciliegi in fiore a fare da cornice. Lorenzo ha accompagnato personalmente questo gruppo in un viaggio che molti già definiscono il più bello della loro vita.\n\nLa partenza di aprile 2025 è esaurita. Se vuoi partecipare alla prossima edizione di questo viaggio, scrivici: stiamo raccogliendo le adesioni per stabilire le date della prossima partenza, che sarà programmata non appena raggiungeremo il numero minimo di partecipanti.",
-    "itinerary": [
-      {
-        "day": 1,
-        "title": "Arrivo a Tokyo",
-        "description": "Atterraggio a Narita e transfer in hotel nel quartiere di Shinjuku. Prima passeggiata tra i grattacieli illuminati della città più grande del mondo."
-      },
-      {
-        "day": 3,
-        "title": "Tokyo — Harajuku, Shibuya e Akihabara",
-        "description": "Visita ai quartieri più iconici di Tokyo: il santuario Meiji immerso nel bosco, il Takeshita Street di Harajuku e il celebre incrocio di Shibuya. Serata a Akihabara tra negozi di elettronica e cultura pop."
-      },
-      {
-        "day": 6,
-        "title": "Kyoto — Templi e Gion",
-        "description": "Arrivo a Kyoto in Shinkansen e pomeriggio nel quartiere di Gion, dove è ancora possibile incontrare le geishe. Visita al Kinkaku-ji, il Padiglione d'Oro."
-      },
-      {
-        "day": 10,
-        "title": "Hiroshima e Miyajima",
-        "description": "Visita al Parco della Pace di Hiroshima, tappa doverosa e profondamente toccante. Nel pomeriggio traghetto per l'isola di Miyajima e il torii rosso galleggiante sull'acqua."
-      },
-      {
-        "day": 13,
-        "title": "Osaka e partenza",
-        "description": "Ultimo giorno tra i vicoli dello street food di Dotonbori: takoyaki, okonomiyaki e ramen. Transfer serale all'aeroporto per il volo di rientro in Italia."
-      }
-    ],
-    "included": [
-      "Voli internazionali A/R",
-      "14 notti in ryokan e hotel",
-      "Lorenzo con voi ogni giorno",
-      "Trasporti JR Pass illimitato",
-      "Transfer aeroporti"
-    ],
-    "excluded": [
-      "Assicurazione viaggio",
-      "Pasti non menzionati",
-      "Spese personali"
-    ],
-    "tags": ["asia", "giappone", "primavera", "cultura", "coppia", "famiglia"],
-    "form_config": {},
-    "webhook_url": ""
-  }
+    }
 ]

@@ -9,7 +9,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 require_once __DIR__ . '/../includes/config.php';
 
-// Read JSON body
 $input = json_decode(file_get_contents('php://input'), true);
 $description = trim($input['description'] ?? '');
 
@@ -18,49 +17,37 @@ if (!$description) {
     exit;
 }
 
-// Default form_config (no AI key required)
-function default_form_config(string $description): array {
-    // Extract a rough price hint from the description (look for €X.XXX pattern)
+function default_form_params(string $description): array {
     preg_match('/€\s?([\d\.]+)/', $description, $m);
-    $price = isset($m[1]) ? (int)str_replace('.', '', $m[1]) : 3000;
-
+    $price = isset($m[1]) ? (int)str_replace('.', '', $m[1]) : 4000;
     return [
-        'price_per_person'    => $price,
-        'single_supplement'   => (int)round($price * 0.18),
-        'third_bed_price'     => -(int)round($price * 0.06),
-        'fourth_bed_price'    => -(int)round($price * 0.06),
-        'competitor_benchmark'=> (int)round($price * 1.2),
-        'room_types' => [
-            ['slug' => 'doppia',  'label' => 'Camera Doppia',   'price_delta' => 0],
-            ['slug' => 'singola', 'label' => 'Camera Singola',  'price_delta' => (int)round($price * 0.18)],
-            ['slug' => 'tripla',  'label' => 'Camera Tripla',   'price_delta' => -(int)round($price * 0.06)],
-        ],
-        'addons' => [
-            ['slug' => 'assicurazione', 'label' => 'Assicurazione viaggio completa', 'price' => 180],
-        ],
-        'fields' => ['nome','cognome','email','telefono','tipo_cliente','numero_partecipanti','room_type','note'],
+        'prezzo_adulto'                   => $price,
+        'supplemento_singola'             => (int)round($price * 0.37),
+        'prezzo_terzo_letto'              => (int)round($price * 0.69),
+        'prezzo_quarto_letto'             => (int)round($price * 0.69),
+        'prezzo_concorrenza_per_persona'  => (int)round($price * 1.6),
+        'prezzo_terzo_quarto_concorrenza' => (int)round($price * 1.15),
+        'percentuale_assicurazione'       => 5,
     ];
 }
 
-// No API key — return defaults
 if (!ANTHROPIC_API_KEY) {
     echo json_encode([
-        'success'     => true,
-        'form_config' => default_form_config($description),
-        'source'      => 'default',
+        'success' => true,
+        'params'  => default_form_params($description),
+        'source'  => 'default',
     ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     exit;
 }
 
-// Call Anthropic Claude API
-$system = 'Sei un assistente per operatori turistici italiani. Dato un testo descrittivo di un viaggio, genera un JSON di configurazione form con questi campi ESATTI: price_per_person (intero €), single_supplement (intero €), third_bed_price (intero €, negativo), fourth_bed_price (intero €, negativo), competitor_benchmark (intero €), room_types (array di {slug, label, price_delta}), addons (array di {slug, label, price}), webhook_url (stringa vuota ""). Rispondi SOLO con il JSON valido, nessun testo aggiuntivo, nessun markdown fence.';
+$system = 'Sei un assistente per operatori turistici italiani. Dato un testo descrittivo di un viaggio, suggerisci i parametri numerici per il form preventivo. Rispondi SOLO con un JSON valido con questi campi esatti: prezzo_adulto (intero €, prezzo per adulto in camera doppia), supplemento_singola (intero €, extra per viaggiatore solo), prezzo_terzo_letto (intero €, prezzo 3° posto letto, può essere negativo = sconto), prezzo_quarto_letto (intero €), prezzo_concorrenza_per_persona (intero €, stima prezzo medio concorrenza), prezzo_terzo_quarto_concorrenza (intero €, prezzo concorrenza per 3°/4° letto), percentuale_assicurazione (numero, tipicamente 5). Nessun testo aggiuntivo, nessun markdown fence.';
 
 $payload = json_encode([
     'model'      => 'claude-sonnet-4-6',
-    'max_tokens' => 1024,
+    'max_tokens' => 512,
     'system'     => $system,
     'messages'   => [['role' => 'user', 'content' => $description]],
-    'temperature'=> 0.3,
+    'temperature'=> 0.2,
 ], JSON_UNESCAPED_UNICODE);
 
 $ch = curl_init('https://api.anthropic.com/v1/messages');
@@ -81,32 +68,31 @@ curl_close($ch);
 
 if ($http_code !== 200 || !$result) {
     echo json_encode([
-        'success'     => true,
-        'form_config' => default_form_config($description),
-        'source'      => 'default_fallback',
+        'success' => true,
+        'params'  => default_form_params($description),
+        'source'  => 'default_fallback',
     ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     exit;
 }
 
 $body    = json_decode($result, true);
-$content = $body['content'][0]['text'] ?? '';  // Anthropic response path
-$form_config = json_decode($content, true);
-if (!is_array($form_config)) {
-    // Try stripping any accidental markdown fences
-    $clean = preg_replace('/^```[a-z]*\n?|\n?```$/m', '', trim($content));
-    $form_config = json_decode($clean, true);
+$content = $body['content'][0]['text'] ?? '';
+$params  = json_decode($content, true);
+if (!is_array($params)) {
+    $clean  = preg_replace('/^```[a-z]*\n?|\n?```$/m', '', trim($content));
+    $params = json_decode($clean, true);
 }
-if (!is_array($form_config)) {
+if (!is_array($params)) {
     echo json_encode([
-        'success'     => true,
-        'form_config' => default_form_config($description),
-        'source'      => 'default_parse_fallback',
+        'success' => true,
+        'params'  => default_form_params($description),
+        'source'  => 'default_parse_fallback',
     ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     exit;
 }
 
 echo json_encode([
-    'success'     => true,
-    'form_config' => $form_config,
-    'source'      => 'ai',
+    'success' => true,
+    'params'  => $params,
+    'source'  => 'ai',
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
