@@ -102,7 +102,7 @@
 - [ ] **ADMIN-08**: Admin edit form: tag chip input — predefined tags selectable as gold pills; typing adds custom tags; tags removable; saved as array
 - [ ] **ADMIN-09**: Admin edit form: AI form generator section — plain Italian description textarea, "Genera Form con AI" button, loading state, JSON preview of generated form_config, webhook_url editable field, save to trip
 - [ ] **ADMIN-10**: Admin edit form: save actions — "Salva Bozza" (unpublished), "Pubblica" (published=true), "Anteprima" (opens viaggio.php?slug= in new tab)
-- [ ] **ADMIN-11**: admin/config.php stores: admin password, OpenAI API key (empty default), default webhook URL, WhatsApp number, Tally form URLs
+- [x] **ADMIN-11**: admin/config.php stores: admin password, OpenAI API key (empty default), default webhook URL, WhatsApp number, Tally form URLs
 
 ## v2 Requirements
 
@@ -210,7 +210,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ADMIN-08 | Phase 6 — Admin Panel | Pending |
 | ADMIN-09 | Phase 6 — Admin Panel | Pending |
 | ADMIN-10 | Phase 6 — Admin Panel | Pending |
-| ADMIN-11 | Phase 6 — Admin Panel | Pending |
+| ADMIN-11 | Phase 6 — Admin Panel | Complete |
 
 **Coverage:**
 - v1 requirements: 56 total
