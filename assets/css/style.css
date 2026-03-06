@@ -208,6 +208,21 @@ h1, h2, h3, h4 {
 .status--sold-out     { background: #555555; color: #FFFFFF; }
 .status--programmata  { background: #000744; color: #FFFFFF; }
 
+/* Standalone status pills (outside card context) */
+.status-pill {
+  display: inline-block;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.status-confermata   { background-color: #2ecc71 !important; color: #FFFFFF !important; }
+.status-ultimi-posti { background-color: #e67e22 !important; color: #FFFFFF !important; }
+.status-sold-out     { background-color: #555555 !important; color: #FFFFFF !important; }
+.status-programmata  { background-color: #000744 !important; color: #FFFFFF !important; }
+
 .trip-card__content {
   position: absolute;
   bottom: 0;

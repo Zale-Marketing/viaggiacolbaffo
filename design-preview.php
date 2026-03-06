@@ -107,10 +107,13 @@ require_once ROOT . '/includes/header.php';
       <p class="section-header__subtitle">All button variants — never use red as a primary action</p>
     </div>
     <p style="font-size:0.75rem;color:var(--grey);margin-bottom:1rem;">On dark background:</p>
-    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:2rem;">
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;align-items:flex-start;margin-bottom:2rem;">
       <a href="#" class="btn btn-primary">Scopri il viaggio</a>
       <a href="#" class="btn btn--outline-white">Richiedi info</a>
-      <a href="#" class="btn btn-accent">⚠ Ultimi posti</a>
+      <div style="text-align:center;">
+        <a href="#" class="btn btn-accent">Urgenza (uso limitato)</a>
+        <p style="font-size:0.75rem;color:#888;margin-top:8px;">Solo per banner urgenza — mai come CTA principale</p>
+      </div>
     </div>
     <p style="font-size:0.75rem;color:var(--grey);margin-bottom:1rem;">On white background:</p>
     <div style="background:#fff;padding:1.5rem;border-radius:8px;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
@@ -127,10 +130,10 @@ require_once ROOT . '/includes/header.php';
     <p class="section-header__subtitle">Trip availability badges — sold-out is grey, not red</p>
   </div>
   <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-    <span class="trip-card__status status--confermata">Confermata</span>
-    <span class="trip-card__status status--ultimi-posti">Ultimi Posti</span>
-    <span class="trip-card__status status--sold-out">Sold Out</span>
-    <span class="trip-card__status status--programmata">Programmata</span>
+    <span class="status-pill status-confermata">Confermata</span>
+    <span class="status-pill status-ultimi-posti">Ultimi Posti</span>
+    <span class="status-pill status-sold-out">Sold Out</span>
+    <span class="status-pill status-programmata">Programmata</span>
   </div>
 </section>
 
