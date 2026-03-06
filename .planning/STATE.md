@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Phase 3 context gathered
-last_updated: "2026-03-06T14:44:22.551Z"
+stopped_at: Completed 03-trip-catalog-01-PLAN.md
+last_updated: "2026-03-06T15:07:08.745Z"
 last_activity: 2026-03-06 — Roadmap created, 56 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 2
-  total_plans: 7
-  completed_plans: 7
+  total_plans: 9
+  completed_plans: 8
   percent: 0
 ---
 
@@ -57,6 +57,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 02-homepage P02 | 1min | 2 tasks | 0 files |
 | Phase 02-homepage P03 | 2min | 2 tasks | 2 files |
 | Phase 02-homepage P04 | 2min | 2 tasks | 1 files |
+| Phase 03-trip-catalog P01 | 1min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -87,6 +88,8 @@ Recent decisions affecting current work:
 - [Quick-1-logo]: White pill background on .header-logo img and .footer-logo img — logo asset untouched, legible on any surface
 - [Quick-1-logo]: Scroll threshold 80px on hero pages — keeps header transparent while user reads above-fold content
 - [Phase 02-homepage]: min-height 280px on .trip-card prevents mobile card collapse, 3.5rem top padding on .trip-card__content clears badge zone, 4-stop gradient keeps top 30% transparent for badge legibility
+- [Phase 03-trip-catalog]: Filter bar sticky at top:80px to clear site header; active pill uses #000744 navy (not var(--gold) which is red urgency)
+- [Phase 03-trip-catalog]: PHP pre-apply single GET tag only; TALLY_CATALOG_URL guarded with PHP conditional; inline IIFE at page bottom
 
 ### Pending Todos
 
@@ -104,6 +107,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T14:44:22.547Z
-Stopped at: Phase 3 context gathered
-Resume file: .planning/phases/03-trip-catalog/03-CONTEXT.md
+Last session: 2026-03-06T15:07:08.742Z
+Stopped at: Completed 03-trip-catalog-01-PLAN.md
+Resume file: None

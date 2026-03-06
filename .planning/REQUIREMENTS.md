@@ -42,12 +42,12 @@
 
 ### Trip Catalog
 
-- [ ] **CATALOG-01**: Hero banner "I Nostri Viaggi" over dark travel photo
-- [ ] **CATALOG-02**: Dual-row filter bar: Row 1 = continent filters (Tutti + 6 continents); Row 2 = tag/theme filters (Tutti + all tags from tags.json); active filter shows gold background
-- [ ] **CATALOG-03**: Trip count display "Mostrando X viaggi" updates dynamically with filtering
-- [ ] **CATALOG-04**: Trip grid: 3-col desktop / 2-col tablet / 1-col mobile, cards identical to homepage
-- [ ] **CATALOG-05**: JavaScript filtering: clicking filters shows only matching trips; multiple tag filters combinable (AND logic); smooth CSS transition on filter change; URL params preserved for deep-linking (?continent=america&tag=famiglia)
-- [ ] **CATALOG-06**: Empty state when no trips match: friendly message + small custom request form (Tally embed configurable in config.php)
+- [x] **CATALOG-01**: Hero banner "I Nostri Viaggi" over dark travel photo
+- [x] **CATALOG-02**: Dual-row filter bar: Row 1 = continent filters (Tutti + 6 continents); Row 2 = tag/theme filters (Tutti + all tags from tags.json); active filter shows gold background
+- [x] **CATALOG-03**: Trip count display "Mostrando X viaggi" updates dynamically with filtering
+- [x] **CATALOG-04**: Trip grid: 3-col desktop / 2-col tablet / 1-col mobile, cards identical to homepage
+- [x] **CATALOG-05**: JavaScript filtering: clicking filters shows only matching trips; multiple tag filters combinable (AND logic); smooth CSS transition on filter change; URL params preserved for deep-linking (?continent=america&tag=famiglia)
+- [x] **CATALOG-06**: Empty state when no trips match: friendly message + small custom request form (Tally embed configurable in config.php)
 
 ### Single Trip Page
 
@@ -165,12 +165,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | HOME-07 | Phase 2 — Homepage | Complete |
 | HOME-08 | Phase 2 — Homepage | Complete |
 | HOME-09 | Phase 2 — Homepage | Complete |
-| CATALOG-01 | Phase 3 — Trip Catalog | Pending |
-| CATALOG-02 | Phase 3 — Trip Catalog | Pending |
-| CATALOG-03 | Phase 3 — Trip Catalog | Pending |
-| CATALOG-04 | Phase 3 — Trip Catalog | Pending |
-| CATALOG-05 | Phase 3 — Trip Catalog | Pending |
-| CATALOG-06 | Phase 3 — Trip Catalog | Pending |
+| CATALOG-01 | Phase 3 — Trip Catalog | Complete |
+| CATALOG-02 | Phase 3 — Trip Catalog | Complete |
+| CATALOG-03 | Phase 3 — Trip Catalog | Complete |
+| CATALOG-04 | Phase 3 — Trip Catalog | Complete |
+| CATALOG-05 | Phase 3 — Trip Catalog | Complete |
+| CATALOG-06 | Phase 3 — Trip Catalog | Complete |
 | TRIP-01 | Phase 4 — Trip Detail + Quote Form | Pending |
 | TRIP-02 | Phase 4 — Trip Detail + Quote Form | Pending |
 | TRIP-03 | Phase 4 — Trip Detail + Quote Form | Pending |
