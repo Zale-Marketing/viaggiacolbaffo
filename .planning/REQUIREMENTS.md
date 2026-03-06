@@ -30,10 +30,10 @@
 
 ### Homepage
 
-- [ ] **HOME-01**: Full-viewport hero section: logo centered, tagline "Viaggia col Baffo — E non cambi mai più", subline, two CTAs ("Scopri i viaggi" gold + "Sei un'agenzia?" outline white), cinematic dark background Unsplash photo
+- [ ] **HOME-01**: Full-viewport hero section: tagline "Viaggia col Baffo — E non cambi mai più", subline, two CTAs ("Scopri i viaggi" gold + "Sei un'agenzia?" outline white), cinematic dark background Unsplash photo. No logo inside the hero — the sticky header logo is sufficient.
 - [ ] **HOME-02**: Urgency bar below hero: "West America Aprile 2026 — Ultimi 5 posti disponibili" (hardcoded, updatable)
 - [ ] **HOME-03**: "I Nostri Viaggi Attivi" section: reads published=true trips from trips.json, renders trip cards in horizontal-scroll mobile / grid desktop layout
-- [ ] **HOME-04**: "Esplora le Destinazioni" section: 6 cards grid (3x2 desktop), America / Asia / Europa / Africa / Oceania / Medio Oriente, each with Unsplash photo, dark overlay, centered name in Playfair, hover zoom + gold border effect, links to destinazione.php?slug=
+- [ ] **HOME-04**: "Esplora le Destinazioni" section: 6 cards grid (3x2 desktop), America / Asia / Europa / Africa / Oceania / Medio Oriente, each with Unsplash photo, dark overlay, centered name in Playfair, hover zoom + white border effect, links to destinazione.php?slug=
 - [ ] **HOME-05**: "Perché viaggiare col Baffo" section: 4 icon blocks — Lorenzo sempre con te, 40 anni di esperienza, Pacchetto tutto incluso, Assistenza H24
 - [ ] **HOME-06**: "Chi è il Baffo" section: two-column layout — left placeholder portrait, right Lorenzo's story (48 US states, Y86 Travel since 1986, personal accompaniment, IATA badge)
 - [ ] **HOME-07**: "Cosa dicono di noi" section: 3 testimonial cards with stars, name, trip name, review text
