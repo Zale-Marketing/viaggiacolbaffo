@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 05-destinations-b2b-01-PLAN.md
-last_updated: "2026-03-06T19:39:46.161Z"
+stopped_at: Completed 05-destinations-b2b-02-PLAN.md
+last_updated: "2026-03-06T19:42:54.273Z"
 last_activity: 2026-03-06 — Roadmap created, 56 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 18
-  completed_plans: 14
+  completed_plans: 15
   percent: 0
 ---
 
@@ -64,6 +64,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 04-trip-detail-quote-form P03 | 3min | 2 tasks | 1 files |
 | Phase 04-trip-detail-quote-form P04 | 5min | 2 tasks | 2 files |
 | Phase 05-destinations-b2b P01 | 4min | 2 tasks | 3 files |
+| Phase 05-destinations-b2b P02 | 4min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -114,6 +115,8 @@ Recent decisions affecting current work:
 - [Quick-3-timeline-volo-hotel]: hotel key appended after volo key in trips.json; hotel-section placed between itinerary and cosa-include in viaggio.php
 - [Phase 05-destinations-b2b]: TALLY_B2B_URL was already defined in config.php — only added WAITLIST_WEBHOOK_URL and WHATSAPP_B2B_FALLBACK to avoid duplicate define() errors
 - [Phase 05-destinations-b2b]: All Phase 5 CSS uses unique dest-* and b2b-* prefixes — no collision with existing trip-card, section, btn--gold rules
+- [Phase 05-destinations-b2b]: Breadcrumb 'Destinazioni' is plain text — /destinazioni list page does not exist in v1
+- [Phase 05-destinations-b2b]: api/submit-waitlist.php returns success+note when WAITLIST_WEBHOOK_URL is empty — graceful degradation
 
 ### Pending Todos
 
@@ -133,6 +136,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T19:39:46.158Z
-Stopped at: Completed 05-destinations-b2b-01-PLAN.md
+Last session: 2026-03-06T19:42:54.270Z
+Stopped at: Completed 05-destinations-b2b-02-PLAN.md
 Resume file: None
