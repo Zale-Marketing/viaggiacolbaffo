@@ -34,11 +34,11 @@
 - [x] **HOME-02**: Urgency bar below hero: "West America Aprile 2026 — Ultimi 5 posti disponibili" (hardcoded, updatable)
 - [x] **HOME-03**: "I Nostri Viaggi Attivi" section: reads published=true trips from trips.json, renders trip cards in horizontal-scroll mobile / grid desktop layout
 - [x] **HOME-04**: "Esplora le Destinazioni" section: 6 cards grid (3x2 desktop), America / Asia / Europa / Africa / Oceania / Medio Oriente, each with Unsplash photo, dark overlay, centered name in Playfair, hover zoom + white border effect, links to destinazione.php?slug=
-- [ ] **HOME-05**: "Perché viaggiare col Baffo" section: 4 icon blocks — Lorenzo sempre con te, 40 anni di esperienza, Pacchetto tutto incluso, Assistenza H24
-- [ ] **HOME-06**: "Chi è il Baffo" section: two-column layout — left placeholder portrait, right Lorenzo's story (48 US states, Y86 Travel since 1986, personal accompaniment, IATA badge)
-- [ ] **HOME-07**: "Cosa dicono di noi" section: 3 testimonial cards with stars, name, trip name, review text
-- [ ] **HOME-08**: "Sei un'agenzia di viaggi?" full-width dark/gold-bordered banner with headline and CTA linking to agenzie.php
-- [ ] **HOME-09**: Footer: logo, nav links, phone, WhatsApp link, email, Instagram/Facebook icons, IATA badge, P.IVA, copyright
+- [x] **HOME-05**: "Perché viaggiare col Baffo" section: 4 icon blocks — Lorenzo sempre con te, 40 anni di esperienza, Pacchetto tutto incluso, Assistenza H24
+- [x] **HOME-06**: "Chi è il Baffo" section: two-column layout — left placeholder portrait, right Lorenzo's story (48 US states, Y86 Travel since 1986, personal accompaniment, IATA badge)
+- [x] **HOME-07**: "Cosa dicono di noi" section: 3 testimonial cards with stars, name, trip name, review text
+- [x] **HOME-08**: "Sei un'agenzia di viaggi?" full-width dark/gold-bordered banner with headline and CTA linking to agenzie.php
+- [x] **HOME-09**: Footer: logo, nav links, phone, WhatsApp link, email, Instagram/Facebook icons, IATA badge, P.IVA, copyright
 
 ### Trip Catalog
 
@@ -160,11 +160,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | HOME-02 | Phase 2 — Homepage | Complete |
 | HOME-03 | Phase 2 — Homepage | Complete |
 | HOME-04 | Phase 2 — Homepage | Complete |
-| HOME-05 | Phase 2 — Homepage | Pending |
-| HOME-06 | Phase 2 — Homepage | Pending |
-| HOME-07 | Phase 2 — Homepage | Pending |
-| HOME-08 | Phase 2 — Homepage | Pending |
-| HOME-09 | Phase 2 — Homepage | Pending |
+| HOME-05 | Phase 2 — Homepage | Complete |
+| HOME-06 | Phase 2 — Homepage | Complete |
+| HOME-07 | Phase 2 — Homepage | Complete |
+| HOME-08 | Phase 2 — Homepage | Complete |
+| HOME-09 | Phase 2 — Homepage | Complete |
 | CATALOG-01 | Phase 3 — Trip Catalog | Pending |
 | CATALOG-02 | Phase 3 — Trip Catalog | Pending |
 | CATALOG-03 | Phase 3 — Trip Catalog | Pending |
