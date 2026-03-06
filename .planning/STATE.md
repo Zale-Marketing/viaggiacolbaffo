@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 05-destinations-b2b-02-PLAN.md
-last_updated: "2026-03-06T19:42:54.273Z"
+stopped_at: Completed 05-destinations-b2b-03-PLAN.md
+last_updated: "2026-03-06T19:43:48.983Z"
 last_activity: 2026-03-06 — Roadmap created, 56 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 18
-  completed_plans: 15
+  completed_plans: 16
   percent: 0
 ---
 
@@ -65,6 +65,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 04-trip-detail-quote-form P04 | 5min | 2 tasks | 2 files |
 | Phase 05-destinations-b2b P01 | 4min | 2 tasks | 3 files |
 | Phase 05-destinations-b2b P02 | 4min | 2 tasks | 2 files |
+| Phase 05-destinations-b2b P03 | 3min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -117,6 +118,8 @@ Recent decisions affecting current work:
 - [Phase 05-destinations-b2b]: All Phase 5 CSS uses unique dest-* and b2b-* prefixes — no collision with existing trip-card, section, btn--gold rules
 - [Phase 05-destinations-b2b]: Breadcrumb 'Destinazioni' is plain text — /destinazioni list page does not exist in v1
 - [Phase 05-destinations-b2b]: api/submit-waitlist.php returns success+note when WAITLIST_WEBHOOK_URL is empty — graceful degradation
+- [Phase 05-destinations-b2b]: Commission language locked to 'commissioni competitive' only — no specific percentage ever written in agenzie.php
+- [Phase 05-destinations-b2b]: destinazioni.php uses dest-cosa-card classes with 16/9 aspect-ratio override — no new CSS needed for listing cards
 
 ### Pending Todos
 
@@ -136,6 +139,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T19:42:54.270Z
-Stopped at: Completed 05-destinations-b2b-02-PLAN.md
+Last session: 2026-03-06T19:43:48.980Z
+Stopped at: Completed 05-destinations-b2b-03-PLAN.md
 Resume file: None
