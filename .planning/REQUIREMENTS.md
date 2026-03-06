@@ -23,10 +23,10 @@
 
 ### Data Layer
 
-- [ ] **DATA-01**: trips.json stores all trip data: slug, title, continent, status (confermata/ultimi-posti/sold-out/programmata), published (bool), dates, duration, price_from, hero_image, gallery (array), short_description, full_description, itinerary (array of {day, title, description}), included (array), excluded (array), tags (array), form_config (object)
-- [ ] **DATA-02**: tags.json stores all available tags with slug and display label (continents, themes, months, occasions)
-- [ ] **DATA-03**: PHP functions.php provides: load_trips(), get_trip_by_slug(), get_trips_by_continent(), get_trips_by_tag(), save_trips(), load_tags()
-- [ ] **DATA-04**: Sample data pre-populated: "West America Aprile 2026" trip with real content, status ultimi-posti, price 3490, published true, full itinerary, tags [america, road-trip, aprile, coppia, famiglia, avventura, parchi-naturali]
+- [x] **DATA-01**: trips.json stores all trip data: slug, title, continent, status (confermata/ultimi-posti/sold-out/programmata), published (bool), dates, duration, price_from, hero_image, gallery (array), short_description, full_description, itinerary (array of {day, title, description}), included (array), excluded (array), tags (array), form_config (object)
+- [x] **DATA-02**: tags.json stores all available tags with slug and display label (continents, themes, months, occasions)
+- [x] **DATA-03**: PHP functions.php provides: load_trips(), get_trip_by_slug(), get_trips_by_continent(), get_trips_by_tag(), save_trips(), load_tags()
+- [x] **DATA-04**: Sample data pre-populated: "West America Aprile 2026" trip with real content, status ultimi-posti, price 3490, published true, full itinerary, tags [america, road-trip, aprile, coppia, famiglia, avventura, parchi-naturali]
 
 ### Homepage
 
@@ -152,10 +152,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DESIGN-03 | Phase 1 — Foundation | Pending |
 | DESIGN-04 | Phase 1 — Foundation | Pending |
 | DESIGN-05 | Phase 1 — Foundation | Pending |
-| DATA-01 | Phase 1 — Foundation | Pending |
-| DATA-02 | Phase 1 — Foundation | Pending |
-| DATA-03 | Phase 1 — Foundation | Pending |
-| DATA-04 | Phase 1 — Foundation | Pending |
+| DATA-01 | Phase 1 — Foundation | Complete |
+| DATA-02 | Phase 1 — Foundation | Complete |
+| DATA-03 | Phase 1 — Foundation | Complete |
+| DATA-04 | Phase 1 — Foundation | Complete |
 | HOME-01 | Phase 2 — Homepage | Pending |
 | HOME-02 | Phase 2 — Homepage | Pending |
 | HOME-03 | Phase 2 — Homepage | Pending |
