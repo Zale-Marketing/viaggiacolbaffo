@@ -143,4 +143,4 @@ Note: Phase 5 depends on Phase 1 (not Phase 3/4), so it could run in parallel wi
 | 3. Trip Catalog | 2/2 | Complete   | 2026-03-06 |
 | 4. Trip Detail + Quote Form | 4/5 | In Progress|  |
 | 5. Destinations + B2B | 4/4 | Complete   | 2026-03-06 |
-| 6. Admin Panel | 5/7 | In Progress|  |
+| 6. Admin Panel | 6/7 | In Progress|  |

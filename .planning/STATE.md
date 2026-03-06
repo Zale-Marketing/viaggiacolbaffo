@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 06-admin-panel-03-PLAN.md
-last_updated: "2026-03-06T21:32:29.530Z"
+stopped_at: Completed 06-admin-panel-06-PLAN.md
+last_updated: "2026-03-06T21:36:27.891Z"
 last_activity: 2026-03-06 — Roadmap created, 56 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 25
-  completed_plans: 22
+  completed_plans: 23
   percent: 0
 ---
 
@@ -73,6 +73,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 06-admin-panel P02 | 3min | 2 tasks | 2 files |
 | Phase 06-admin-panel P04 | 3min | 2 tasks | 3 files |
 | Phase 06-admin-panel P03 | 4min | 2 tasks | 1 files |
+| Phase 06-admin-panel P06 | 2min | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -140,6 +141,9 @@ Recent decisions affecting current work:
 - [Phase 06-admin-panel]: tags.php cascade delete: save_tags() then save_trips() in same PHP request
 - [Phase 06-admin-panel]: slug_locked computed from trip published flag at PHP render time; passed to JS via json_encode — slug becomes readonly and stays locked even if re-saved as draft
 - [Phase 06-admin-panel]: form_config preserved from existing trip data during POST save — not overwritten by edit-trip.php form fields (Form Config tab is Plan 06)
+- [Phase 06-admin-panel]: save_form_config merges webhook_url inside form_config before writing to trips.json — matches existing schema
+- [Phase 06-admin-panel]: regenerate_token AJAX posts to same page instead of /admin/ajax.php — self-contained handler in edit-trip.php
+- [Phase 06-admin-panel]: previewToken declared as let (not const) to allow update by regenerateToken() without page reload
 
 ### Pending Todos
 
@@ -160,6 +164,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T21:32:29.527Z
-Stopped at: Completed 06-admin-panel-03-PLAN.md
+Last session: 2026-03-06T21:36:27.887Z
+Stopped at: Completed 06-admin-panel-06-PLAN.md
 Resume file: None
