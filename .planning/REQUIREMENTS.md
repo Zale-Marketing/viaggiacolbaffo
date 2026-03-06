@@ -15,11 +15,11 @@
 
 ### Design System
 
-- [ ] **DESIGN-01**: CSS variables defined: --black #0D0D0D, --gold #C9A84C, --gold-light #e8c76a, --white #FFFFFF, --dark #1a1a1a, --dark-card #222222, --grey #888888, status colors (green/orange/red), --font-heading Playfair Display, --font-body Inter, --radius 12px, --shadow, --transition
-- [ ] **DESIGN-02**: Google Fonts loaded (Playfair Display + Inter) and Font Awesome 6 CDN for icons
-- [ ] **DESIGN-03**: Mobile-first responsive design: 1-col mobile, 2-col tablet, 3-col desktop grids
-- [ ] **DESIGN-04**: Trip cards: full-bleed photo, gradient overlay, continent badge (gold pill, top-left), status pill (top-right: green/orange/red), Playfair title, dates, duration, price, CTA link
-- [ ] **DESIGN-05**: Cinematic section headers in Playfair Display with gold accent underlines; smooth 0.3s transitions on all interactive elements
+- [x] **DESIGN-01**: CSS variables defined: --black #0D0D0D, --gold #C9A84C, --gold-light #e8c76a, --white #FFFFFF, --dark #1a1a1a, --dark-card #222222, --grey #888888, status colors (green/orange/red), --font-heading Playfair Display, --font-body Inter, --radius 12px, --shadow, --transition
+- [x] **DESIGN-02**: Google Fonts loaded (Playfair Display + Inter) and Font Awesome 6 CDN for icons
+- [x] **DESIGN-03**: Mobile-first responsive design: 1-col mobile, 2-col tablet, 3-col desktop grids
+- [x] **DESIGN-04**: Trip cards: full-bleed photo, gradient overlay, continent badge (gold pill, top-left), status pill (top-right: green/orange/red), Playfair title, dates, duration, price, CTA link
+- [x] **DESIGN-05**: Cinematic section headers in Playfair Display with gold accent underlines; smooth 0.3s transitions on all interactive elements
 
 ### Data Layer
 
@@ -147,11 +147,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INFRA-03 | Phase 1 — Foundation | Complete |
 | INFRA-04 | Phase 1 — Foundation | Complete |
 | INFRA-05 | Phase 1 — Foundation | Complete |
-| DESIGN-01 | Phase 1 — Foundation | Pending |
-| DESIGN-02 | Phase 1 — Foundation | Pending |
-| DESIGN-03 | Phase 1 — Foundation | Pending |
-| DESIGN-04 | Phase 1 — Foundation | Pending |
-| DESIGN-05 | Phase 1 — Foundation | Pending |
+| DESIGN-01 | Phase 1 — Foundation | Complete |
+| DESIGN-02 | Phase 1 — Foundation | Complete |
+| DESIGN-03 | Phase 1 — Foundation | Complete |
+| DESIGN-04 | Phase 1 — Foundation | Complete |
+| DESIGN-05 | Phase 1 — Foundation | Complete |
 | DATA-01 | Phase 1 — Foundation | Complete |
 | DATA-02 | Phase 1 — Foundation | Complete |
 | DATA-03 | Phase 1 — Foundation | Complete |

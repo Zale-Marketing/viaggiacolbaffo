@@ -12,7 +12,7 @@ Six phases deliver a complete tour operator website on PHP + vanilla stack. Phas
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - Infrastructure, design system, and data layer that all other phases depend on
+- [x] **Phase 1: Foundation** - Infrastructure, design system, and data layer that all other phases depend on (completed 2026-03-06)
 - [ ] **Phase 2: Homepage** - Full cinematic homepage that conveys Lorenzo's intimacy and premium experience
 - [ ] **Phase 3: Trip Catalog** - Browsable trip catalog with dual-row continent + tag filtering
 - [ ] **Phase 4: Trip Detail + Quote Form** - Full trip experience: itinerary, gallery, and AI-powered quote form
@@ -107,7 +107,7 @@ Note: Phase 5 depends on Phase 1 (not Phase 3/4), so it could run in parallel wi
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 2/3 | In Progress|  |
+| 1. Foundation | 3/3 | Complete   | 2026-03-06 |
 | 2. Homepage | 0/TBD | Not started | - |
 | 3. Trip Catalog | 0/TBD | Not started | - |
 | 4. Trip Detail + Quote Form | 0/TBD | Not started | - |

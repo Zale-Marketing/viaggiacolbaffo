@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 01-foundation-01-02-PLAN.md
-last_updated: "2026-03-06T11:12:57.892Z"
+stopped_at: Completed 01-foundation-01-03-PLAN.md (awaiting Task 3 human checkpoint)
+last_updated: "2026-03-06T11:17:22.090Z"
 last_activity: 2026-03-06 — Roadmap created, 56 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 3
-  completed_plans: 2
+  completed_plans: 3
   percent: 0
 ---
 
@@ -52,6 +52,7 @@ Progress: [░░░░░░░░░░] 0%
 *Updated after each plan completion*
 | Phase 01-foundation P01 | 2 | 2 tasks | 8 files |
 | Phase 01-foundation P02 | 2 | 2 tasks | 3 files |
+| Phase 01-foundation P03 | 2 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -72,6 +73,8 @@ Recent decisions affecting current work:
 - [Phase 01-foundation]: trips.json Italian text uses literal UTF-8 (JSON_UNESCAPED_UNICODE) for readable operator editing
 - [Phase 01-foundation]: Japan form_config is empty object — sold-out trips suppress the Phase 4 quote form widget
 - [Phase 01-foundation]: save_trips wraps array_values() — ensures 0-indexed JSON array after deletions in Phase 6 admin
+- [Phase 01-foundation]: Trip card class names are PERMANENT from Plan 03 — phases 2-4 consume them directly without modification
+- [Phase 01-foundation]: crossorigin attribute required on fonts.gstatic.com preconnect — without it the preconnect is silently ignored for CORS font requests
 
 ### Pending Todos
 
@@ -83,6 +86,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T11:12:57.890Z
-Stopped at: Completed 01-foundation-01-02-PLAN.md
+Last session: 2026-03-06T11:17:22.087Z
+Stopped at: Completed 01-foundation-01-03-PLAN.md (awaiting Task 3 human checkpoint)
 Resume file: None
