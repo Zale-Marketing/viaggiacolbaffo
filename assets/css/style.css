@@ -829,3 +829,176 @@ body.has-hero #site-header.scrolled nav a {
 .site-footer__bottom p {
   margin: 0;
 }
+
+/* ============================================================
+   PHASE 3: TRIP CATALOG
+   ============================================================ */
+
+/* --- 1. Catalog hero (short banner, 35-40vh) --- */
+
+.catalog-hero {
+  position: relative;
+  height: 38vh;
+  min-height: 260px;
+  background-image: url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.catalog-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.catalog-hero__content {
+  position: relative;
+  z-index: 2;
+  padding: 0 1.5rem;
+}
+
+.catalog-hero__title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: var(--white);
+  margin: 0 0 0.5rem;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.catalog-hero__sub {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.8);
+  margin: 0;
+}
+
+/* --- 2. Filter bar (sticky, below sticky header) --- */
+/* NOTE: top: 80px clears the sticky site header (~82px rendered height).
+   If filter bar overlaps header in UAT, increase to top: 84px. */
+
+.filter-bar {
+  position: sticky;
+  top: 80px;
+  z-index: 90;
+  background: var(--dark-card);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 0.75rem 0;
+}
+
+.filter-bar__row {
+  display: flex;
+  overflow-x: auto;
+  gap: 0.5rem;
+  padding: 0.375rem 1.5rem;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  flex-wrap: nowrap;
+}
+
+.filter-bar__row::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- 3. Filter pills --- */
+/* Active filter: navy #000744 — NOT var(--gold) which is red urgency color */
+
+.filter-pill {
+  flex-shrink: 0;
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1.5px solid rgba(255,255,255,0.5);
+  background: transparent;
+  color: var(--white);
+  font-size: 0.85rem;
+  font-weight: 500;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.filter-pill:hover {
+  border-color: var(--white);
+  background: rgba(255,255,255,0.1);
+}
+
+.filter-pill--active {
+  background: #000744;
+  border-color: #000744;
+  color: var(--white);
+}
+
+/* --- 4. Count display (between filter bar and grid) --- */
+
+.catalog-count {
+  text-align: center;
+  padding: 1.25rem 0 0.5rem;
+  font-size: 0.9rem;
+  color: var(--grey);
+}
+
+.catalog-count__number {
+  color: var(--white);
+  font-weight: 600;
+  transition: opacity 0.15s ease;
+}
+
+.count-fade {
+  opacity: 0;
+}
+
+/* --- 5. Empty state --- */
+
+.catalog-empty {
+  display: none;
+  text-align: center;
+  padding: 4rem 1.5rem;
+  background: var(--dark);
+  border-radius: var(--radius);
+  margin: 2rem 0;
+}
+
+.catalog-empty__title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  color: var(--white);
+  margin: 0 0 0.5rem;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.75rem;
+}
+
+.catalog-empty__title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3rem;
+  height: 3px;
+  background: #000744;
+}
+
+.catalog-empty__text {
+  color: rgba(255,255,255,0.75);
+  max-width: 500px;
+  margin: 1rem auto 2rem;
+  line-height: 1.6;
+}
+
+.catalog-empty iframe {
+  width: 100%;
+  max-width: 600px;
+  height: 400px; /* Adjust once Tally form field count is known */
+  border: none;
+  border-radius: var(--radius);
+}
+
+.catalog-empty__cta-fallback {
+  color: rgba(255,255,255,0.6);
+  font-style: italic;
+}
