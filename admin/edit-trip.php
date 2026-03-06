@@ -59,7 +59,7 @@ $slug_locked = !$is_new && ($trip['published'] ?? false);
 
 // ── PHP slug generator (mirrors JS generateSlug) ─────────────────────────────
 function php_generate_slug(string $title): string {
-    $slug = mb_strtolower($title, 'UTF-8');
+    $slug = strtolower($title);
     $slug = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $slug);
     $slug = preg_replace('/[^a-z0-9\s-]/', '', $slug);
     $slug = trim($slug);
@@ -943,7 +943,7 @@ $preview_token_val = $trip['preview_token'] ?? '';
                     placeholder="Un breve testo che appare nelle card e nelle anteprime..."
                     oninput="updateShortDescCounter(this)"><?= htmlspecialchars($trip['short_description'] ?? '') ?></textarea>
                 <div class="char-counter" id="short-desc-counter">
-                    <?php $sd_len = mb_strlen($trip['short_description'] ?? ''); ?>
+                    <?php $sd_len = strlen($trip['short_description'] ?? ''); ?>
                     <span id="short-desc-remaining"><?= 160 - $sd_len ?></span> / 160 caratteri rimanenti
                 </div>
             </div>
