@@ -14,11 +14,18 @@
   { "slug": "coppia", "label": "Per Coppia", "category": "per chi" },
   { "slug": "famiglia", "label": "Per Famiglie", "category": "per chi" },
   { "slug": "gruppo", "label": "Piccoli Gruppi", "category": "per chi" },
+  { "slug": "gennaio", "label": "Gennaio", "category": "mese" },
+  { "slug": "febbraio", "label": "Febbraio", "category": "mese" },
+  { "slug": "marzo", "label": "Marzo", "category": "mese" },
   { "slug": "aprile", "label": "Aprile", "category": "mese" },
   { "slug": "maggio", "label": "Maggio", "category": "mese" },
   { "slug": "giugno", "label": "Giugno", "category": "mese" },
+  { "slug": "luglio", "label": "Luglio", "category": "mese" },
+  { "slug": "agosto", "label": "Agosto", "category": "mese" },
   { "slug": "settembre", "label": "Settembre", "category": "mese" },
   { "slug": "ottobre", "label": "Ottobre", "category": "mese" },
+  { "slug": "novembre", "label": "Novembre", "category": "mese" },
+  { "slug": "dicembre", "label": "Dicembre", "category": "mese" },
   { "slug": "giappone", "label": "Giappone", "category": "tipo viaggio" },
   { "slug": "primavera", "label": "In Primavera", "category": "tipo viaggio" }
 ]

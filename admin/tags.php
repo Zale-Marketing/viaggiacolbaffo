@@ -193,7 +193,7 @@ foreach ($tags as $tag) {
                 <span class="badge"><?= count($cat_tags) ?></span>
             </div>
             <div class="card__body">
-                <div class="tag-chips" id="chips-<?= htmlspecialchars($cat_key) ?>">
+                <div class="tag-chips" id="chips-<?= htmlspecialchars(str_replace(' ', '-', $cat_key)) ?>">
                     <?php if (empty($cat_tags)): ?>
                     <span class="tag-empty">Nessun tag in questa categoria</span>
                     <?php else: ?>
@@ -227,7 +227,7 @@ foreach ($tags as $tag) {
                 <span class="badge"><?= count($cat_tags) ?></span>
             </div>
             <div class="card__body">
-                <div class="tag-chips" id="chips-<?= htmlspecialchars($cat_key) ?>">
+                <div class="tag-chips" id="chips-<?= htmlspecialchars(str_replace(' ', '-', $cat_key)) ?>">
                     <?php foreach ($cat_tags as $tag): ?>
                     <span class="tag-chip" data-slug="<?= htmlspecialchars($tag['slug']) ?>">
                         <?= htmlspecialchars($tag['label']) ?>
@@ -280,7 +280,7 @@ foreach ($tags as $tag) {
                     return;
                 }
                 // Append chip to the correct group
-                const cat = data.tag.category || 'altro';
+                const cat = (data.tag.category || 'altro').replace(/ /g, '-');
                 const container = document.getElementById('chips-' + cat)
                                || document.getElementById('chips-altro');
                 if (container) {
