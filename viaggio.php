@@ -560,6 +560,9 @@ if (!CONFIG.room_types || CONFIG.room_types.length === 0) {
   .qf-toggle-btn { flex:1; text-align:center; }
   .qf-counter-wrap { justify-content:center; }
 }
+.whatsapp-cta { color: #333 !important; }
+.whatsapp-cta p { color: #333 !important; }
+.whatsapp-cta a { color: #cc0031 !important; font-weight: 600; }
 </style>
 
 <section class="quote-form-section" id="richiedi-preventivo">
@@ -601,16 +604,16 @@ if (!CONFIG.room_types || CONFIG.room_types.length === 0) {
             <div id="agency-code-feedback" style="font-size:13px;margin-top:4px;"></div>
           </div>
 
-          <!-- 3. Email Agenzia -->
-          <div class="qf-field">
-            <label class="qf-label" for="emailAgenzia">Email Agenzia *</label>
-            <input class="qf-input" type="email" id="emailAgenzia" name="email_agenzia" required>
-          </div>
-
-          <!-- 4. Telefono -->
-          <div class="qf-field">
-            <label class="qf-label" for="telefonoAgenzia">Telefono *</label>
-            <input class="qf-input" type="tel" id="telefonoAgenzia" name="telefono" required>
+          <!-- 3+4. Email Agenzia + Telefono (grid 50/50) -->
+          <div class="qf-grid">
+            <div class="qf-field">
+              <label class="qf-label" for="emailAgenzia">Email Agenzia *</label>
+              <input class="qf-input" type="email" id="emailAgenzia" name="email_agenzia" required>
+            </div>
+            <div class="qf-field">
+              <label class="qf-label" for="telefonoAgenzia">Telefono *</label>
+              <input class="qf-input" type="tel" id="telefonoAgenzia" name="telefono" required>
+            </div>
           </div>
 
           <!-- 5. Nome Cliente Finale -->
@@ -674,7 +677,7 @@ if (!CONFIG.room_types || CONFIG.room_types.length === 0) {
             </div>
             <input type="hidden" name="adulti" id="adulti-hidden" value="2">
           </div>
-          <div class="qf-field" id="bambini-row" style="display:<?php echo !empty($fc['child_discounts_enabled']) ? 'block' : 'none'; ?>;">
+          <div class="qf-field" id="bambini-row" style="display:block;">
             <label class="qf-label">Bambini</label>
             <div class="qf-counter-wrap">
               <button class="qf-counter-btn" type="button" id="btn-bambini-dec">−</button>
@@ -843,7 +846,6 @@ function toggleClientEmail() {
     var maxPersons = Math.max.apply(null, CONFIG.room_types.map(function(r){ return parseInt(r.replace('X','')); }));
     var adultCount = Math.min(2, maxPersons);
     var childCount = 0;
-    if (!CONFIG.child_discounts_enabled) { childCount = 0; }
     document.getElementById('adulti-val').textContent = adultCount;
     document.getElementById('adulti-hidden').value = adultCount;
     var isAgency   = true;
@@ -878,6 +880,7 @@ function toggleClientEmail() {
 
     // -- Rebuild child age inputs --
     function rebuildChildAges() {
+      if (!CONFIG.child_discounts_enabled) return;
       var container = document.getElementById('child-ages');
       if (!container) return;
       var existing = container.querySelectorAll('.qf-child-age-input');
@@ -1076,38 +1079,6 @@ function toggleClientEmail() {
     updatePrice();
     updateButtonStates();
 
-    // -- SHA-256 helper --
-    function bufToHex(buf) {
-      return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
-    }
-
-    // -- Agency code SHA-256 validation (inline feedback, no unlock gate) --
-    function validateAgencyCode(val) {
-      var feedback = document.getElementById('agency-code-feedback');
-      if (!val.trim()) {
-        agencyUnlocked = false;
-        if (feedback) feedback.textContent = '';
-        return;
-      }
-      if (!CONFIG.agency_code_hash) {
-        agencyUnlocked = true;
-        if (feedback) { feedback.textContent = ''; }
-        return;
-      }
-      crypto.subtle.digest('SHA-256', new TextEncoder().encode(val)).then(function(hashBuf) {
-        var hex = bufToHex(hashBuf);
-        if (hex === CONFIG.agency_code_hash) {
-          agencyUnlocked = true;
-          if (feedback) { feedback.textContent = '✓ Codice valido'; feedback.style.color = '#28a745'; }
-        } else {
-          agencyUnlocked = false;
-          if (feedback) { feedback.textContent = '✗ Codice non valido'; feedback.style.color = '#cc0031'; }
-        }
-      });
-    }
-
-    // Agency code validation runs only on submit
-
     // -- B2B/B2C toggle --
     document.getElementById('btn-agenzia').addEventListener('click', function() {
       isAgency = true;
@@ -1131,6 +1102,7 @@ function toggleClientEmail() {
       e.preventDefault();
       var errorDiv = document.getElementById('form-error-msg');
       errorDiv.style.display = 'none';
+      var submitBtn = document.getElementById('qf-submit-btn');
 
       // Validate required fields by mode
       if (isAgency) {
@@ -1138,8 +1110,31 @@ function toggleClientEmail() {
         var emailAg  = (document.getElementById('emailAgenzia')||{}).value||'';
         var telAg    = (document.getElementById('telefonoAgenzia')||{}).value||'';
         var nomeCliente = (document.getElementById('nomeCliente')||{}).value||'';
+        var agencyCodeVal = (document.getElementById('codiceAgenzia')||{}).value||'';
         if (!nomeAg.trim()) { errorDiv.textContent = 'Inserisci il nome agenzia.'; errorDiv.style.display = 'block'; return; }
-        if (!agencyUnlocked) { errorDiv.textContent = 'Inserisci un codice agenzia valido.'; errorDiv.style.display = 'block'; return; }
+        if (!agencyUnlocked) {
+          if (agencyCodeVal.trim()) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Verifica…';
+            crypto.subtle.digest('SHA-256', new TextEncoder().encode(agencyCodeVal))
+              .then(function(hashBuf) {
+                var hex = Array.from(new Uint8Array(hashBuf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+                if (hex === CONFIG.agency_code_hash) {
+                  agencyUnlocked = true;
+                  document.getElementById('quote-form').dispatchEvent(new Event('submit'));
+                } else {
+                  errorDiv.textContent = 'Codice agenzia non valido.';
+                  errorDiv.style.display = 'block';
+                  submitBtn.disabled = false;
+                  submitBtn.textContent = 'Invia Richiesta di Preventivo';
+                }
+              });
+            return;
+          }
+          errorDiv.textContent = 'Inserisci il codice agenzia.';
+          errorDiv.style.display = 'block';
+          return;
+        }
         if (!emailAg.trim()) { errorDiv.textContent = 'Inserisci l\'email agenzia.'; errorDiv.style.display = 'block'; return; }
         if (!telAg.trim()) { errorDiv.textContent = 'Inserisci il telefono.'; errorDiv.style.display = 'block'; return; }
         if (!nomeCliente.trim()) { errorDiv.textContent = 'Inserisci il nome del cliente finale.'; errorDiv.style.display = 'block'; return; }
@@ -1165,7 +1160,6 @@ function toggleClientEmail() {
         return;
       }
 
-      var submitBtn = document.getElementById('qf-submit-btn');
       submitBtn.disabled = true;
       submitBtn.textContent = 'Invio in corso…';
 
