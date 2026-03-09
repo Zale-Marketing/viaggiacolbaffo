@@ -346,6 +346,124 @@ $preview_token_val = $trip['preview_token'] ?? '';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="/admin/admin.css">
     <style>
+/* ── Image Uploader Component ─────────────────────── */
+.img-uploader {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  background: #fafbff;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+  cursor: pointer;
+}
+.img-uploader:hover,
+.img-uploader.drag-active {
+  border-color: var(--navy);
+  background: var(--navy-light);
+}
+.img-uploader.has-image {
+  border-style: solid;
+  border-color: var(--navy);
+  padding: 0;
+  overflow: hidden;
+}
+.img-uploader__dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 28px 20px;
+  text-align: center;
+  pointer-events: none;
+}
+.img-uploader__icon { font-size: 28px; color: var(--navy); opacity: 0.4; }
+.img-uploader__label { font-size: 13px; font-weight: 600; color: var(--navy); }
+.img-uploader__hint  { font-size: 11px; color: var(--text-muted); }
+.img-uploader__preview {
+  width: 100%;
+  display: none;
+  position: relative;
+}
+.img-uploader.has-image .img-uploader__dropzone { display: none; }
+.img-uploader.has-image .img-uploader__preview  { display: block; }
+.img-uploader__preview img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  display: block;
+}
+.img-uploader__preview-actions {
+  position: absolute; top: 8px; right: 8px;
+  display: flex; gap: 6px;
+}
+.img-uploader__btn-remove,
+.img-uploader__btn-change {
+  width: 32px; height: 32px;
+  border-radius: 8px; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; transition: all 0.15s;
+}
+.img-uploader__btn-change { background: var(--navy); color: #fff; }
+.img-uploader__btn-change:hover { background: var(--navy-dark); }
+.img-uploader__btn-remove { background: var(--danger); color: #fff; }
+.img-uploader__btn-remove:hover { background: var(--danger-dark); }
+.img-uploader__progress {
+  position: absolute; inset: 0;
+  background: rgba(0,7,68,0.7);
+  display: none; align-items: center; justify-content: center;
+  border-radius: calc(var(--radius) - 2px);
+  color: #fff; font-size: 13px; font-weight: 600; gap: 8px;
+}
+.img-uploader__progress.active { display: flex; }
+.img-uploader__file-input { display: none; }
+
+.gallery-uploader {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  background: #fafbff;
+  padding: 20px;
+  transition: border-color 0.2s, background 0.2s;
+  cursor: pointer;
+}
+.gallery-uploader:hover,
+.gallery-uploader.drag-active {
+  border-color: var(--navy);
+  background: var(--navy-light);
+}
+.gallery-uploader__hint {
+  text-align: center; padding: 12px 0;
+  font-size: 13px; color: var(--text-muted);
+  pointer-events: none;
+}
+.gallery-uploader__hint i { font-size: 20px; display: block; margin-bottom: 6px; color: var(--navy); opacity: 0.4; }
+.gallery-thumbs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.gallery-thumb {
+  position: relative; border-radius: 8px; overflow: hidden;
+  aspect-ratio: 4/3; background: #eee;
+  border: 2px solid var(--border);
+}
+.gallery-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.gallery-thumb__remove {
+  position: absolute; top: 4px; right: 4px;
+  width: 24px; height: 24px; border-radius: 6px;
+  background: var(--danger); color: #fff;
+  border: none; cursor: pointer; font-size: 11px;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.15s;
+}
+.gallery-thumb:hover .gallery-thumb__remove { opacity: 1; }
+.gallery-thumb__uploading {
+  position: absolute; inset: 0;
+  background: rgba(0,7,68,0.6);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 11px;
+}
+
         /* ── Edit form specific styles ── */
         .edit-page {
             padding-bottom: 100px; /* space for sticky footer */
@@ -998,37 +1116,40 @@ $preview_token_val = $trip['preview_token'] ?? '';
         <!-- ══════════════════════════════════════════════════ -->
         <div class="tab-panel" id="tab-media">
 
-            <h3 class="section-title">Immagine hero</h3>
+            <h3 class="section-title">Immagine Hero</h3>
             <div class="form-group" style="margin-bottom:16px;">
-                <label for="hero_image">URL immagine hero</label>
-                <input type="url" id="hero_image" name="hero_image"
-                    value="<?= htmlspecialchars($trip['hero_image'] ?? '') ?>"
-                    placeholder="https://images.unsplash.com/..."
-                    oninput="updateHeroPreview(this.value)">
-            </div>
-            <div class="hero-preview-wrap">
-                <img id="hero-preview"
-                    src="<?= htmlspecialchars($trip['hero_image'] ?? '') ?>"
-                    alt="Anteprima hero"
-                    style="<?= !empty($trip['hero_image']) ? 'display:block;' : 'display:none;' ?>">
+              <label>Immagine principale del viaggio</label>
+              <div class="img-uploader <?= !empty($trip['hero_image']) ? 'has-image' : '' ?>" id="uploader-hero">
+                <div class="img-uploader__dropzone">
+                  <div class="img-uploader__icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                  <div class="img-uploader__label">Trascina qui l'immagine o clicca per selezionarla</div>
+                  <div class="img-uploader__hint">JPG, PNG, WEBP — max 8MB</div>
+                </div>
+                <div class="img-uploader__preview">
+                  <img src="<?= htmlspecialchars($trip['hero_image'] ?? '') ?>" alt="Hero">
+                  <div class="img-uploader__preview-actions">
+                    <button type="button" class="img-uploader__btn-change" title="Cambia"><i class="fa-solid fa-arrows-rotate"></i></button>
+                    <button type="button" class="img-uploader__btn-remove" title="Rimuovi"><i class="fa-solid fa-trash"></i></button>
+                  </div>
+                </div>
+                <div class="img-uploader__progress"><i class="fa-solid fa-spinner fa-spin"></i> Caricamento...</div>
+                <input type="file" class="img-uploader__file-input" accept="image/*">
+              </div>
+              <input type="hidden" id="hero_image" name="hero_image" value="<?= htmlspecialchars($trip['hero_image'] ?? '') ?>">
             </div>
 
             <h3 class="section-title" style="margin-top:24px;">Galleria</h3>
-            <div class="form-group" style="margin-bottom:8px;">
-                <label for="gallery">URL galleria <span class="muted">una URL per riga</span></label>
-                <textarea id="gallery" name="gallery" rows="6"
-                    placeholder="https://images.unsplash.com/photo-1...&#10;https://images.unsplash.com/photo-2..."
-                    oninput="updateGalleryPreview(this.value)"><?= htmlspecialchars($gallery_text) ?></textarea>
-            </div>
-            <div class="gallery-grid" id="gallery-grid">
-                <?php foreach ($trip['gallery'] ?? [] as $img_url): ?>
-                <?php if (trim($img_url)): ?>
-                <div class="gallery-thumb" data-url="<?= htmlspecialchars($img_url) ?>">
-                    <img src="<?= htmlspecialchars($img_url) ?>" alt="gallery" loading="lazy">
-                    <button type="button" class="gallery-thumb-remove" onclick="removeGalleryUrl(this)" title="Rimuovi"><i class="fa-solid fa-xmark"></i></button>
+            <div class="form-group">
+              <label>Foto galleria <span style="font-weight:400;color:var(--text-muted);font-size:12px;">— trascina più immagini contemporaneamente</span></label>
+              <div class="gallery-uploader" id="uploader-gallery">
+                <div class="gallery-thumbs" id="gallery-thumbs"></div>
+                <div class="gallery-uploader__hint">
+                  <i class="fa-solid fa-images"></i>
+                  Trascina le foto qui o clicca per selezionarle — JPG, PNG, WEBP
                 </div>
-                <?php endif; ?>
-                <?php endforeach; ?>
+                <input type="file" class="img-uploader__file-input" accept="image/*" multiple>
+              </div>
+              <textarea id="gallery" name="gallery" style="display:none;"><?= htmlspecialchars($gallery_text) ?></textarea>
             </div>
 
         </div><!-- /tab-media -->
@@ -1094,9 +1215,24 @@ $preview_token_val = $trip['preview_token'] ?? '';
                         <input type="text" name="itinerary_date[]"
                             value="<?= htmlspecialchars($day['date'] ?? '') ?>"
                             placeholder="Data (es. 5 Aprile 2026)">
-                        <input type="url" name="itinerary_image[]"
-                            value="<?= htmlspecialchars($day['image_url'] ?? '') ?>"
-                            placeholder="URL Immagine giorno">
+                        <div class="img-uploader <?= !empty($day['image_url']) ? 'has-image' : '' ?>"
+                             id="uploader-itin-<?= $i ?>"
+                             style="margin-bottom:0;">
+                          <div class="img-uploader__dropzone" style="padding:14px 10px;">
+                            <div class="img-uploader__icon" style="font-size:18px;"><i class="fa-solid fa-image"></i></div>
+                            <div class="img-uploader__label" style="font-size:12px;">Foto del giorno</div>
+                          </div>
+                          <div class="img-uploader__preview">
+                            <img src="<?= htmlspecialchars($day['image_url'] ?? '') ?>" alt="Giorno <?= $i+1 ?>">
+                            <div class="img-uploader__preview-actions">
+                              <button type="button" class="img-uploader__btn-change" title="Cambia"><i class="fa-solid fa-arrows-rotate"></i></button>
+                              <button type="button" class="img-uploader__btn-remove" title="Rimuovi"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                          </div>
+                          <div class="img-uploader__progress"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                          <input type="file" class="img-uploader__file-input" accept="image/*">
+                        </div>
+                        <input type="hidden" id="itin_img_<?= $i ?>" name="itinerary_image[]" value="<?= htmlspecialchars($day['image_url'] ?? '') ?>">
                         <textarea name="itinerary_desc[]" rows="3"
                             placeholder="Descrizione..."><?= htmlspecialchars($day['description'] ?? '') ?></textarea>
                     </div>
@@ -1321,16 +1457,27 @@ $hotels_data = $trip['hotel'] ?? [];
     <label>Biografia</label>
     <textarea name="accompagnatore_bio" rows="4" placeholder="Breve bio..."><?= htmlspecialchars($acc['bio'] ?? '') ?></textarea>
   </div>
-  <div class="form-group" style="margin-bottom:8px;">
-    <label>Foto URL</label>
-    <input type="url" name="accompagnatore_foto" id="acc-foto-url"
-           value="<?= htmlspecialchars($acc['foto'] ?? '') ?>"
-           placeholder="https://..."
-           oninput="var i=document.getElementById('acc-foto-preview');i.src=this.value;i.style.display=this.value?'block':'none';">
+  <div class="form-group" style="margin-bottom:16px;">
+    <label>Foto Accompagnatore</label>
+    <div class="img-uploader <?= !empty($acc['foto']) ? 'has-image' : '' ?>"
+         id="uploader-acc" style="max-width:280px;">
+      <div class="img-uploader__dropzone" style="padding:20px;">
+        <div class="img-uploader__icon"><i class="fa-solid fa-user-circle"></i></div>
+        <div class="img-uploader__label">Foto profilo</div>
+        <div class="img-uploader__hint">JPG, PNG — max 8MB</div>
+      </div>
+      <div class="img-uploader__preview">
+        <img src="<?= htmlspecialchars($acc['foto'] ?? '') ?>" alt="Accompagnatore" style="max-height:160px;object-fit:cover;">
+        <div class="img-uploader__preview-actions">
+          <button type="button" class="img-uploader__btn-change" title="Cambia"><i class="fa-solid fa-arrows-rotate"></i></button>
+          <button type="button" class="img-uploader__btn-remove" title="Rimuovi"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </div>
+      <div class="img-uploader__progress"><i class="fa-solid fa-spinner fa-spin"></i></div>
+      <input type="file" class="img-uploader__file-input" accept="image/*">
+    </div>
+    <input type="hidden" id="accompagnatore_foto" name="accompagnatore_foto" value="<?= htmlspecialchars($acc['foto'] ?? '') ?>">
   </div>
-  <img id="acc-foto-preview"
-       src="<?= htmlspecialchars($acc['foto'] ?? '') ?>"
-       style="<?= !empty($acc['foto']) ? 'display:block;' : 'display:none;' ?>max-height:120px;border-radius:50%;border:2px solid #ddd;margin-bottom:16px;">
   <div class="form-group" style="margin-bottom:16px;">
     <label>WhatsApp</label>
     <input type="text" name="accompagnatore_whatsapp" value="<?= htmlspecialchars($acc['whatsapp'] ?? '') ?>" placeholder="es. +39 333 1234567">
@@ -1405,7 +1552,26 @@ $hotels_data = $trip['hotel'] ?? [];
       </div>
       <div class="form-group" style="margin-bottom:12px;"><label>Indirizzo</label><input type="text" name="hotel_indirizzo[]" value="<?= htmlspecialchars($h['indirizzo'] ?? '') ?>" placeholder="es. Santa Monica, CA"></div>
       <div class="form-group" style="margin-bottom:12px;"><label>Descrizione</label><textarea name="hotel_descrizione[]" rows="2"><?= htmlspecialchars($h['descrizione'] ?? '') ?></textarea></div>
-      <div class="form-group" style="margin-bottom:12px;"><label>Foto URL</label><input type="url" name="hotel_foto[]" value="<?= htmlspecialchars($h['image_url'] ?? '') ?>" placeholder="https://..."></div>
+      <div class="form-group" style="margin-bottom:12px;">
+        <label>Foto Hotel</label>
+        <div class="img-uploader <?= !empty($h['image_url']) ? 'has-image' : '' ?>"
+             id="uploader-hotel-<?= $hi ?>">
+          <div class="img-uploader__dropzone" style="padding:14px 10px;">
+            <div class="img-uploader__icon" style="font-size:18px;"><i class="fa-solid fa-hotel"></i></div>
+            <div class="img-uploader__label" style="font-size:12px;">Foto dell'hotel</div>
+          </div>
+          <div class="img-uploader__preview">
+            <img src="<?= htmlspecialchars($h['image_url'] ?? '') ?>" alt="Hotel">
+            <div class="img-uploader__preview-actions">
+              <button type="button" class="img-uploader__btn-change" title="Cambia"><i class="fa-solid fa-arrows-rotate"></i></button>
+              <button type="button" class="img-uploader__btn-remove" title="Rimuovi"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
+          <div class="img-uploader__progress"><i class="fa-solid fa-spinner fa-spin"></i></div>
+          <input type="file" class="img-uploader__file-input" accept="image/*">
+        </div>
+        <input type="hidden" id="hotel_img_<?= $hi ?>" name="hotel_foto[]" value="<?= htmlspecialchars($h['image_url'] ?? '') ?>">
+      </div>
       <div class="form-group" style="margin-bottom:0;"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:400;"><input type="checkbox" name="hotel_colazione_<?= $hi ?>[]" value="1" <?= !empty($h['inclusa_colazione'])?'checked':'' ?>> Colazione inclusa</label></div>
     </div>
     <?php endforeach; ?>
@@ -1558,49 +1724,6 @@ function updateDuration() {
 }
 document.getElementById('start_date').addEventListener('change', updateDuration);
 document.getElementById('end_date').addEventListener('change', updateDuration);
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Hero image preview
-// ─────────────────────────────────────────────────────────────────────────────
-function updateHeroPreview(url) {
-    const img = document.getElementById('hero-preview');
-    if (!img) return;
-    if (url && url.trim()) {
-        img.src = url.trim();
-        img.style.display = 'block';
-    } else {
-        img.src = '';
-        img.style.display = 'none';
-    }
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Gallery URL preview grid
-// ─────────────────────────────────────────────────────────────────────────────
-function updateGalleryPreview(value) {
-    const grid = document.getElementById('gallery-grid');
-    if (!grid) return;
-    grid.innerHTML = '';
-    const urls = value.split('\n').map(u => u.trim()).filter(Boolean);
-    urls.forEach(url => {
-        const div = document.createElement('div');
-        div.className = 'gallery-thumb';
-        div.dataset.url = url;
-        div.innerHTML = `
-            <img src="${escHtml(url)}" alt="gallery" loading="lazy">
-            <button type="button" class="gallery-thumb-remove" onclick="removeGalleryUrl(this)" title="Rimuovi"><i class="fa-solid fa-xmark"></i></button>`;
-        grid.appendChild(div);
-    });
-}
-
-function removeGalleryUrl(btn) {
-    const thumb = btn.closest('.gallery-thumb');
-    const url   = thumb.dataset.url;
-    const ta    = document.getElementById('gallery');
-    const lines = ta.value.split('\n').filter(l => l.trim() !== url.trim());
-    ta.value = lines.join('\n');
-    thumb.remove();
-}
 
 function escHtml(str) {
     return str.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -1755,7 +1878,22 @@ function addItineraryRow() {
             <input type="text" name="itinerary_title[]" placeholder="Titolo giorno">
             <input type="text" name="itinerary_location[]" placeholder="Città / Luogo (es. Las Vegas, NV)">
             <input type="text" name="itinerary_date[]" placeholder="Data (es. 5 Aprile 2026)">
-            <input type="url" name="itinerary_image[]" placeholder="URL Immagine giorno">
+            <div class="img-uploader" id="uploader-itin-${n}" style="margin-bottom:0;">
+              <div class="img-uploader__dropzone" style="padding:14px 10px;">
+                <div class="img-uploader__icon" style="font-size:18px;"><i class="fa-solid fa-image"></i></div>
+                <div class="img-uploader__label" style="font-size:12px;">Foto del giorno</div>
+              </div>
+              <div class="img-uploader__preview">
+                <img src="" alt="Giorno ${n}">
+                <div class="img-uploader__preview-actions">
+                  <button type="button" class="img-uploader__btn-change" title="Cambia"><i class="fa-solid fa-arrows-rotate"></i></button>
+                  <button type="button" class="img-uploader__btn-remove" title="Rimuovi"><i class="fa-solid fa-trash"></i></button>
+                </div>
+              </div>
+              <div class="img-uploader__progress"><i class="fa-solid fa-spinner fa-spin"></i></div>
+              <input type="file" class="img-uploader__file-input" accept="image/*">
+            </div>
+            <input type="hidden" id="itin_img_${n}" name="itinerary_image[]" value="">
             <textarea name="itinerary_desc[]" rows="3" placeholder="Descrizione..."></textarea>
         </div>
         <div class="itinerary-actions">
@@ -1764,6 +1902,7 @@ function addItineraryRow() {
             <button type="button" class="btn-icon btn-danger-icon" onclick="removeRow(this)" title="Elimina"><i class="fa-solid fa-trash"></i></button>
         </div>`;
     container.appendChild(div);
+    initSingleUploader('uploader-itin-' + n, 'itin_img_' + n);
     initDrag(); // re-bind drag events to new row
 }
 
@@ -1781,9 +1920,10 @@ function addHotelRow() {
       + '<div class="form-grid" style="margin-bottom:12px;"><div class="form-group"><label>Stelle</label><select name="hotel_stelle[]"><option value="1">1 ★</option><option value="2">2 ★</option><option value="3">3 ★</option><option value="4" selected>4 ★</option><option value="5">5 ★</option></select></div><div class="form-group"><label>Notti</label><input type="number" name="hotel_notti[]" min="1" value="1"></div></div>'
       + '<div class="form-group" style="margin-bottom:12px;"><label>Indirizzo</label><input type="text" name="hotel_indirizzo[]" placeholder="es. Via Veneto, Roma"></div>'
       + '<div class="form-group" style="margin-bottom:12px;"><label>Descrizione</label><textarea name="hotel_descrizione[]" rows="2"></textarea></div>'
-      + '<div class="form-group" style="margin-bottom:12px;"><label>Foto URL</label><input type="url" name="hotel_foto[]" placeholder="https://..."></div>'
+      + '<div class="form-group" style="margin-bottom:12px;"><label>Foto Hotel</label><div class="img-uploader" id="uploader-hotel-' + hi + '"><div class="img-uploader__dropzone" style="padding:14px 10px;"><div class="img-uploader__icon" style="font-size:18px;"><i class="fa-solid fa-hotel"></i></div><div class="img-uploader__label" style="font-size:12px;">Foto dell\'hotel</div></div><div class="img-uploader__preview"><img src="" alt="Hotel"><div class="img-uploader__preview-actions"><button type="button" class="img-uploader__btn-change" title="Cambia"><i class="fa-solid fa-arrows-rotate"></i></button><button type="button" class="img-uploader__btn-remove" title="Rimuovi"><i class="fa-solid fa-trash"></i></button></div></div><div class="img-uploader__progress"><i class="fa-solid fa-spinner fa-spin"></i></div><input type="file" class="img-uploader__file-input" accept="image/*"></div><input type="hidden" id="hotel_img_' + hi + '" name="hotel_foto[]" value=""></div>'
       + '<div class="form-group" style="margin-bottom:0;"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:400;"><input type="checkbox" name="hotel_colazione_new[]" value="1"> Colazione inclusa</label></div>';
     document.getElementById('hotels-rows').appendChild(div);
+    initSingleUploader('uploader-hotel-' + hi, 'hotel_img_' + hi);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1948,19 +2088,194 @@ function saveFormConfig() {
 document.addEventListener('DOMContentLoaded', () => {
     initDrag();
     renumberItinerary();
-    // Init gallery grid if values present
-    const galleryTa = document.getElementById('gallery');
-    if (galleryTa && galleryTa.value.trim()) {
-        updateGalleryPreview(galleryTa.value);
-    }
     // Init short desc counter
     const sdTa = document.getElementById('short_description');
     if (sdTa) updateShortDescCounter(sdTa);
-    // Init hero preview
-    const heroInput = document.getElementById('hero_image');
-    if (heroInput && heroInput.value.trim()) {
-        updateHeroPreview(heroInput.value.trim());
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// IMAGE UPLOADER COMPONENT
+// ─────────────────────────────────────────────────────────────────────────────
+
+function initSingleUploader(wrapperId, hiddenInputId) {
+    var wrapper = document.getElementById(wrapperId);
+    var hiddenInput = document.getElementById(hiddenInputId);
+    if (!wrapper || !hiddenInput) return;
+
+    var fileInput = wrapper.querySelector('.img-uploader__file-input');
+    var preview   = wrapper.querySelector('.img-uploader__preview img');
+    var progress  = wrapper.querySelector('.img-uploader__progress');
+    var btnRemove = wrapper.querySelector('.img-uploader__btn-remove');
+    var btnChange = wrapper.querySelector('.img-uploader__btn-change');
+
+    if (hiddenInput.value) setPreview(hiddenInput.value);
+
+    function setPreview(url) {
+        hiddenInput.value = url;
+        if (preview) preview.src = url;
+        if (url) {
+            wrapper.classList.add('has-image');
+        } else {
+            wrapper.classList.remove('has-image');
+        }
     }
+
+    function uploadFile(file) {
+        if (!file || !file.type.startsWith('image/')) {
+            alert('Seleziona un file immagine (JPG, PNG, WEBP).');
+            return;
+        }
+        if (progress) progress.classList.add('active');
+        var fd = new FormData();
+        fd.append('file', file);
+        fetch('/admin/upload.php', { method: 'POST', body: fd })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (progress) progress.classList.remove('active');
+                if (data.success) {
+                    setPreview(data.url);
+                } else {
+                    alert('Errore upload: ' + (data.error || 'sconosciuto'));
+                }
+            })
+            .catch(function(err) {
+                if (progress) progress.classList.remove('active');
+                alert('Errore di rete: ' + err.message);
+            });
+    }
+
+    wrapper.addEventListener('click', function(e) {
+        if (e.target === btnRemove || e.target === btnChange ||
+            e.target.closest('.img-uploader__btn-remove') ||
+            e.target.closest('.img-uploader__btn-change')) return;
+        fileInput.click();
+    });
+
+    if (fileInput) {
+        fileInput.addEventListener('change', function() {
+            if (fileInput.files && fileInput.files[0]) uploadFile(fileInput.files[0]);
+        });
+    }
+
+    wrapper.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        wrapper.classList.add('drag-active');
+    });
+    wrapper.addEventListener('dragleave', function() {
+        wrapper.classList.remove('drag-active');
+    });
+    wrapper.addEventListener('drop', function(e) {
+        e.preventDefault();
+        wrapper.classList.remove('drag-active');
+        var file = e.dataTransfer.files[0];
+        if (file) uploadFile(file);
+    });
+
+    if (btnRemove) {
+        btnRemove.addEventListener('click', function(e) {
+            e.stopPropagation();
+            setPreview('');
+        });
+    }
+    if (btnChange) {
+        btnChange.addEventListener('click', function(e) {
+            e.stopPropagation();
+            fileInput.click();
+        });
+    }
+}
+
+function initGalleryUploader(wrapperId, hiddenInputId) {
+    var wrapper     = document.getElementById(wrapperId);
+    var hiddenInput = document.getElementById(hiddenInputId);
+    if (!wrapper || !hiddenInput) return;
+
+    var thumbsContainer = wrapper.querySelector('.gallery-thumbs');
+    var fileInput       = wrapper.querySelector('.img-uploader__file-input');
+    var urls = hiddenInput.value ? hiddenInput.value.split('\n').filter(Boolean) : [];
+    urls.forEach(function(url) { addThumb(url); });
+
+    function syncHidden() {
+        var allUrls = [];
+        thumbsContainer.querySelectorAll('.gallery-thumb[data-url]').forEach(function(t) {
+            allUrls.push(t.dataset.url);
+        });
+        hiddenInput.value = allUrls.join('\n');
+    }
+
+    function addThumb(url) {
+        var div = document.createElement('div');
+        div.className = 'gallery-thumb';
+        div.dataset.url = url;
+        div.innerHTML =
+            '<img src="' + url + '" loading="lazy">' +
+            '<button type="button" class="gallery-thumb__remove" title="Rimuovi"><i class="fa-solid fa-xmark"></i></button>';
+        div.querySelector('.gallery-thumb__remove').addEventListener('click', function(e) {
+            e.stopPropagation();
+            div.remove();
+            syncHidden();
+        });
+        thumbsContainer.appendChild(div);
+    }
+
+    function uploadFile(file) {
+        if (!file || !file.type.startsWith('image/')) return;
+        var placeholder = document.createElement('div');
+        placeholder.className = 'gallery-thumb';
+        placeholder.innerHTML = '<div class="gallery-thumb__uploading"><i class="fa-solid fa-spinner fa-spin"></i></div>';
+        thumbsContainer.appendChild(placeholder);
+
+        var fd = new FormData();
+        fd.append('file', file);
+        fetch('/admin/upload.php', { method: 'POST', body: fd })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                placeholder.remove();
+                if (data.success) { addThumb(data.url); syncHidden(); }
+                else { alert('Errore: ' + (data.error || 'sconosciuto')); }
+            })
+            .catch(function() { placeholder.remove(); });
+    }
+
+    function uploadFiles(files) {
+        Array.from(files).forEach(function(f) { uploadFile(f); });
+    }
+
+    wrapper.addEventListener('click', function(e) {
+        if (e.target.closest('.gallery-thumb__remove')) return;
+        fileInput.click();
+    });
+    if (fileInput) {
+        fileInput.addEventListener('change', function() {
+            if (fileInput.files) uploadFiles(fileInput.files);
+        });
+    }
+    wrapper.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        wrapper.classList.add('drag-active');
+    });
+    wrapper.addEventListener('dragleave', function() {
+        wrapper.classList.remove('drag-active');
+    });
+    wrapper.addEventListener('drop', function(e) {
+        e.preventDefault();
+        wrapper.classList.remove('drag-active');
+        uploadFiles(e.dataTransfer.files);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    initSingleUploader('uploader-hero', 'hero_image');
+    initSingleUploader('uploader-acc', 'accompagnatore_foto');
+    initGalleryUploader('uploader-gallery', 'gallery');
+    document.querySelectorAll('[id^="uploader-itin-"]').forEach(function(el) {
+        var idx = el.id.replace('uploader-itin-', '');
+        initSingleUploader('uploader-itin-' + idx, 'itin_img_' + idx);
+    });
+    document.querySelectorAll('[id^="uploader-hotel-"]').forEach(function(el) {
+        var idx = el.id.replace('uploader-hotel-', '');
+        initSingleUploader('uploader-hotel-' + idx, 'hotel_img_' + idx);
+    });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

@@ -1,0 +1,5 @@
+php_flag engine off
+Options -ExecCGI
+<FilesMatch "\.(php|php3|php4|php5|phtml|pl|py|jsp|asp|sh|cgi)$">
+  deny from all
+</FilesMatch>
