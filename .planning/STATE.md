@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-03-06)
 Phase: 1 of 6 (Foundation)
 Plan: 0 of TBD in current phase
 Status: Ready to plan
-Last activity: 2026-03-09 - Completed quick task 5: Fix 4 bugs: room toggles inverted, B2B fields missing, checkbox labels invisible, counter room limits
+Last activity: 2026-03-09 - Completed quick task 7: Fix 3 bugs: room_types default empty, Salva Bozza Form Config pre-save, toggleClientEmail global scope
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -163,9 +163,10 @@ None yet.
 | 4 | destinazione.php text alignment, waitlist form redesign, agenzie B2B inline form, 404 for unknown slugs | 2026-03-06 | 35a698f | [4-fix-destinazione-php-text-alignment-wait](./quick/4-fix-destinazione-php-text-alignment-wait/) |
 | 5 | Fix 4 bugs: room toggles inverted, B2B fields missing, checkbox labels invisible, counter room limits | 2026-03-09 | af8d755 | [5-fix-4-bugs-room-toggles-inverted-b2b-fie](./quick/5-fix-4-bugs-room-toggles-inverted-b2b-fie/) |
 | 6 | Fix 7 bugs: room pills default OFF, X2 pill toggle, CSS explicit values, save redirect, toggleClientEmail scope, agency validation submit-only, adultCount min init, pricing labels, child counter | 2026-03-09 | 4756396 | [6-fix-7-bugs-room-pills-ui-toggleclientema](./quick/6-fix-7-bugs-room-pills-ui-toggleclientema/) |
+| 7 | Fix 3 bugs: room_types default empty, Salva Bozza Form Config pre-save, toggleClientEmail global scope | 2026-03-09 | 69cb663 | [7-fix-3-bugs-room-types-default-empty-subm](./quick/7-fix-3-bugs-room-types-default-empty-subm/) |
 
 ## Session Continuity
 
-Last session: 2026-03-09T10:14:48Z
-Stopped at: Completed quick task 6: Fix 7 bugs — room pills, UI toggles, client email
+Last session: 2026-03-09T10:29:04Z
+Stopped at: Completed quick task 7: Fix 3 bugs — room_types default, Salva Bozza Form Config, toggleClientEmail
 Resume file: None
