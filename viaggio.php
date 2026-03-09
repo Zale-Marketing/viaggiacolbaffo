@@ -430,7 +430,7 @@ $status_labels_rel = ['confermata'=>'Confermata','ultimi-posti'=>'Ultimi posti',
 const CONFIG = {
   nome_viaggio: "<?= htmlspecialchars($trip['title'] ?? '') ?>",
   prezzo_base_persona: <?= (int)($fc['prezzo_base_persona'] ?? 4350) ?>,
-  room_types: <?= json_encode($fc['room_types'] ?? ['X1','X2','X3','X4']) ?>,
+  room_types: <?= json_encode($fc['room_types'] ?? []) ?>,
   supplemento_singola: <?= (int)($fc['supplemento_singola'] ?? 1600) ?>,
   sconto_terzo_letto: <?= (int)($fc['sconto_terzo_letto'] ?? 0) ?>,
   sconto_quarto_letto: <?= (int)($fc['sconto_quarto_letto'] ?? 0) ?>,
@@ -445,6 +445,10 @@ const CONFIG = {
   agency_code_hash: "<?= htmlspecialchars($fc['agency_code_hash'] ?? 'af97d1baebca1eaae1ce418c082402e60c2529ef719983ad7c8dda6ea1f8e8ee') ?>",
   webhook_url: "<?= htmlspecialchars($fc['webhook_url'] ?? '') ?>"
 };
+if (!CONFIG.room_types || CONFIG.room_types.length === 0) {
+  document.getElementById('quote-form-wrap').innerHTML =
+    '<div class="qf-error">Il form non è ancora configurato. Contatta Lorenzo direttamente su WhatsApp.</div>';
+}
 </script>
 <!-- ========================================================
      QUOTE FORM SECTION
@@ -736,6 +740,15 @@ const CONFIG = {
 <?php require_once ROOT . '/includes/footer.php'; ?>
 
 <script>
+function toggleClientEmail() {
+  var checkbox = document.getElementById('inviaEmailCliente');
+  var box = document.getElementById('emailClienteBox');
+  var emailInput = document.getElementById('emailCliente');
+  if (!checkbox || !box || !emailInput) return;
+  box.style.display = checkbox.checked ? 'block' : 'none';
+  emailInput.required = checkbox.checked;
+  if (!checkbox.checked) emailInput.value = '';
+}
 (function () {
   // --- Sticky top bar ---
   var hero   = document.querySelector('.trip-hero');
@@ -826,15 +839,6 @@ const CONFIG = {
   // QUOTE FORM — CONFIG-driven pricing, B2B default, SHA-256 agency code
   // ----------------------------------------------------------------
   <?php if ($has_form): ?>
-  function toggleClientEmail() {
-    var checkbox = document.getElementById('inviaEmailCliente');
-    var box = document.getElementById('emailClienteBox');
-    var emailInput = document.getElementById('emailCliente');
-    if (!checkbox || !box || !emailInput) return;
-    box.style.display = checkbox.checked ? 'block' : 'none';
-    emailInput.required = checkbox.checked;
-    if (!checkbox.checked) emailInput.value = '';
-  }
   (function() {
     var maxPersons = Math.max.apply(null, CONFIG.room_types.map(function(r){ return parseInt(r.replace('X','')); }));
     var adultCount = Math.min(2, maxPersons);
