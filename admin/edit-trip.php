@@ -1033,7 +1033,7 @@ $preview_token_val = $trip['preview_token'] ?? '';
         <!-- ══════════════════════════════════════════════════ -->
         <?php
         $fc = $trip['form_config'] ?? [];
-        $fc_room_types = $fc['room_types'] ?? ['X1','X2','X3','X4'];
+        $fc_room_types = $fc['room_types'] ?? [];
         $fc_brackets   = $fc['child_discount_brackets'] ?? [];
         ?>
         <div class="tab-panel" id="tab-formconfig">
@@ -1216,16 +1216,17 @@ $preview_token_val = $trip['preview_token'] ?? '';
         <style>
         .room-pill {
           padding: 8px 18px;
-          border: 2px solid var(--border);
+          border: 2px solid #ccc;
           border-radius: 20px;
           background: white;
+          color: #666;
           font-weight: 600;
           cursor: pointer;
           transition: all .15s;
         }
         .room-pill.active {
-          background: var(--primary);
-          border-color: var(--primary);
+          background: #000744;
+          border-color: #000744;
           color: white;
         }
         .toggle-switch { position:relative; display:inline-block; width:44px; height:24px; }
@@ -1606,7 +1607,7 @@ function generateAI() {
 }
 
 // ─── Form Config helpers ─────────────────────────────────────────────────────
-let activeRoomTypes = <?= json_encode($fc_room_types ?? ['X1','X2','X3','X4']) ?>;
+let activeRoomTypes = <?= json_encode($fc_room_types ?? []) ?>;
 
 function toggleRoom(btn) {
     const room = btn.dataset.room;
@@ -1626,13 +1627,12 @@ function toggleRoom(btn) {
 
 // Re-apply panel visibility on load based on activeRoomTypes
 document.addEventListener('DOMContentLoaded', function() {
-    ['X1','X3','X4','X5'].forEach(function(room) {
+    ['X1','X2','X3','X4','X5'].forEach(function(room) {
         const btn   = document.querySelector('.room-pill[data-room="' + room + '"]');
         const panel = document.getElementById('rp-' + room);
-        if (!panel) return;
         const isActive = activeRoomTypes.includes(room);
         if (btn) { btn.classList.toggle('active', isActive); }
-        panel.style.display = isActive ? 'block' : 'none';
+        if (panel) { panel.style.display = isActive ? 'block' : 'none'; }
     });
 });
 
@@ -1710,9 +1710,7 @@ function saveFormConfig() {
     .then(r => r.json())
     .then(data => {
         if (data.success) {
-            const msg = document.getElementById('save-fc-msg');
-            msg.style.display = 'inline';
-            setTimeout(() => msg.style.display = 'none', 2000);
+            window.location.href = window.location.pathname + '?slug=' + tripSlug + '&saved=1&tab=formconfig';
         }
     });
 }
