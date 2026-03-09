@@ -1486,6 +1486,8 @@ body.has-hero #site-header.scrolled nav a {
     padding: 8px 14px 6px;
     height: auto;
     gap: 4px 10px;
+    background: #000744 !important;
+    min-width: 0;
   }
 
   .trip-topbar__left {
