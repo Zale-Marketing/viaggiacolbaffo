@@ -576,9 +576,11 @@ if (!CONFIG.room_types || CONFIG.room_types.length === 0) {
     <div id="quote-form-wrap">
 
       <!-- B2B/B2C toggle -->
-      <div class="qf-toggle-wrap">
+      <div style="display:flex;justify-content:center;margin-bottom:24px;">
+      <div class="qf-toggle-wrap" style="margin-bottom:0;">
         <button class="qf-toggle-btn active" type="button" data-type="agenzia" id="btn-agenzia">Agenzia</button>
         <button class="qf-toggle-btn" type="button" data-type="privato" id="btn-privato">Privato</button>
+      </div>
       </div>
 
       <div id="form-error-msg" style="display:none;" class="qf-error"></div>
@@ -590,52 +592,54 @@ if (!CONFIG.room_types || CONFIG.room_types.length === 0) {
         <div id="b2b-fields">
           <div class="qf-section-title">Dati Agenzia</div>
 
-          <!-- 1. Nome Agenzia -->
+          <!-- 1. Nome Agenzia — full width -->
           <div class="qf-field">
             <label class="qf-label" for="nomeAgenzia">Nome Agenzia *</label>
             <input class="qf-input" type="text" id="nomeAgenzia" name="nome_agenzia" required>
           </div>
 
-          <!-- 2. Codice Agenzia with SHA-256 validation -->
-          <div class="qf-field">
-            <label class="qf-label" for="codiceAgenzia">Codice Agenzia *</label>
-            <input class="qf-input" type="password" id="codiceAgenzia" name="agency_code" autocomplete="off" placeholder="Inserisci il codice agenzia" required>
-            <span class="qf-error-text" id="codiceAgenzia-error"></span>
-            <div id="agency-code-feedback" style="font-size:13px;margin-top:4px;"></div>
-          </div>
-
-          <!-- 3+4. Email Agenzia + Telefono (grid 50/50) -->
+          <!-- 2+3. Codice Agenzia + Email Agenzia (50/50) -->
           <div class="qf-grid">
+            <div class="qf-field">
+              <label class="qf-label" for="codiceAgenzia">Codice Agenzia *</label>
+              <input class="qf-input" type="password" id="codiceAgenzia" name="agency_code" autocomplete="off" placeholder="Inserisci il codice agenzia" required>
+              <span class="qf-error-text" id="codiceAgenzia-error"></span>
+              <div id="agency-code-feedback" style="font-size:13px;margin-top:4px;"></div>
+            </div>
             <div class="qf-field">
               <label class="qf-label" for="emailAgenzia">Email Agenzia *</label>
               <input class="qf-input" type="email" id="emailAgenzia" name="email_agenzia" required>
             </div>
+          </div>
+
+          <!-- 4+5. Telefono + Nome Cliente Finale (50/50) -->
+          <div class="qf-grid" style="margin-top:16px;">
             <div class="qf-field">
               <label class="qf-label" for="telefonoAgenzia">Telefono *</label>
               <input class="qf-input" type="tel" id="telefonoAgenzia" name="telefono" required>
             </div>
-          </div>
-
-          <!-- 5. Nome Cliente Finale -->
-          <div class="qf-field">
-            <label class="qf-label" for="nomeCliente">Nome Cliente Finale *</label>
-            <input class="qf-input" type="text" id="nomeCliente" name="nome_cliente_finale" required>
+            <div class="qf-field">
+              <label class="qf-label" for="nomeCliente">Nome Cliente Finale *</label>
+              <input class="qf-input" type="text" id="nomeCliente" name="nome_cliente_finale" required>
+            </div>
           </div>
 
           <!-- 6. Checkbox + conditional email -->
-          <div class="qf-checkbox-group">
-            <label>
-              <input type="checkbox" id="inviaEmailCliente" name="invia_al_cliente" value="1" onclick="toggleClientEmail()">
-              Invia preventivo anche al cliente
-            </label>
-          </div>
-          <div id="emailClienteBox" class="qf-field" style="display:none;">
-            <label class="qf-label" for="emailCliente">Email Cliente *</label>
-            <input class="qf-input" type="email" id="emailCliente" name="email_cliente">
+          <div style="margin-top:16px;">
+            <div class="qf-checkbox-group">
+              <label>
+                <input type="checkbox" id="inviaEmailCliente" name="invia_al_cliente" value="1" onclick="toggleClientEmail()">
+                Invia preventivo anche al cliente
+              </label>
+            </div>
+            <div id="emailClienteBox" class="qf-field" style="display:none;">
+              <label class="qf-label" for="emailCliente">Email Cliente *</label>
+              <input class="qf-input" type="email" id="emailCliente" name="email_cliente">
+            </div>
           </div>
 
           <!-- 7. Agency guarantee message -->
-          <div style="padding:15px;background:#f8f9fa;border-left:4px solid #000744;border-radius:4px;font-size:13px;color:#555;margin-top:20px;">
+          <div style="padding:15px;background:#f8f9fa;border-left:4px solid #000744;border-radius:4px;font-size:13px;color:#555;margin-top:16px;">
             🛡️ <strong>Garanzia per le Agenzie:</strong> Non contatteremo mai direttamente il vostro cliente. Qualora in futuro il cliente decidesse di prenotare con noi senza passare dalla vostra agenzia, vi riconosceremo comunque la vostra commissione.
           </div>
         </div>
@@ -668,36 +672,28 @@ if (!CONFIG.room_types || CONFIG.room_types.length === 0) {
         <!-- Group Composition -->
         <div class="qf-section" style="margin-top:20px;">
           <div class="qf-section-title">Composizione Gruppo</div>
-          <div class="qf-field">
-            <label class="qf-label">Adulti</label>
-            <div class="qf-counter-wrap">
-              <button class="qf-counter-btn" type="button" id="btn-adulti-dec">−</button>
-              <span class="qf-counter-val" id="adulti-val">2</span>
-              <button class="qf-counter-btn" type="button" id="btn-adulti-inc">+</button>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+            <div class="qf-field">
+              <label class="qf-label">Adulti</label>
+              <div class="qf-counter-wrap">
+                <button class="qf-counter-btn" type="button" id="btn-adulti-dec">−</button>
+                <span class="qf-counter-val" id="adulti-val">2</span>
+                <button class="qf-counter-btn" type="button" id="btn-adulti-inc">+</button>
+              </div>
+              <input type="hidden" name="adulti" id="adulti-hidden" value="2">
             </div>
-            <input type="hidden" name="adulti" id="adulti-hidden" value="2">
-          </div>
-          <div class="qf-field" id="bambini-row" style="display:block;">
-            <label class="qf-label">Bambini</label>
-            <div class="qf-counter-wrap">
-              <button class="qf-counter-btn" type="button" id="btn-bambini-dec">−</button>
-              <span class="qf-counter-val" id="bambini-val">0</span>
-              <button class="qf-counter-btn" type="button" id="btn-bambini-inc">+</button>
+            <div class="qf-field" id="bambini-row" style="display:block;">
+              <label class="qf-label">Bambini</label>
+              <div class="qf-counter-wrap">
+                <button class="qf-counter-btn" type="button" id="btn-bambini-dec">−</button>
+                <span class="qf-counter-val" id="bambini-val">0</span>
+                <button class="qf-counter-btn" type="button" id="btn-bambini-inc">+</button>
+              </div>
+              <input type="hidden" name="bambini" id="bambini-hidden" value="0">
             </div>
-            <input type="hidden" name="bambini" id="bambini-hidden" value="0">
-            <div id="child-ages" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;"></div>
           </div>
+          <div id="child-ages" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;"></div>
           <div id="group-error" style="display:none;color:#cc0031;font-size:14px;margin-top:8px;font-weight:600;"></div>
-        </div>
-
-        <!-- Price Box -->
-        <div class="qf-price-box" id="price-box">
-          <div id="price-lines"></div>
-          <div class="qf-total-line">
-            <span>TOTALE FINALE</span>
-            <span id="pe-total">€0</span>
-          </div>
-          <div id="pe-savings" style="display:none;"></div>
         </div>
 
         <!-- Insurance -->
@@ -712,6 +708,16 @@ if (!CONFIG.room_types || CONFIG.room_types.length === 0) {
           </label>
         </div>
         <?php endif; ?>
+
+        <!-- Price Box -->
+        <div class="qf-price-box" id="price-box">
+          <div id="price-lines"></div>
+          <div class="qf-total-line">
+            <span>TOTALE FINALE</span>
+            <span id="pe-total">€0</span>
+          </div>
+          <div id="pe-savings" style="display:none;"></div>
+        </div>
 
         <!-- Note -->
         <div class="qf-field">
@@ -872,7 +878,7 @@ function toggleClientEmail() {
     // -- Child ages array --
     function getChildAges() {
       var ages = [];
-      document.querySelectorAll('.qf-child-age-input').forEach(function(inp) {
+      document.querySelectorAll('#child-ages .qf-child-age-input').forEach(function(inp) {
         ages.push(inp.value !== '' ? parseInt(inp.value) : null);
       });
       return ages;
@@ -888,14 +894,24 @@ function toggleClientEmail() {
       existing.forEach(function(inp){ oldVals.push(inp.value); });
       container.innerHTML = '';
       for (var i = 0; i < childCount; i++) {
+        var wrap = document.createElement('div');
+        wrap.className = 'qf-child-age-wrap';
+        wrap.style.cssText = 'display:flex;flex-direction:column;gap:4px;';
+        var lbl = document.createElement('label');
+        lbl.className = 'qf-label';
+        lbl.textContent = 'Età bambino ' + (i+1) + ' *';
         var inp = document.createElement('input');
         inp.type = 'number'; inp.min = 0; inp.max = 17;
-        inp.className = 'qf-child-age-input';
-        inp.placeholder = 'Età bambino ' + (i+1);
+        inp.className = 'qf-input qf-child-age-input';
+        inp.style.cssText = 'width:130px;padding:10px 14px;';
+        inp.placeholder = 'Anni (0-17)';
         inp.name = 'eta_bambini[]';
+        inp.required = true;
         if (oldVals[i] !== undefined) inp.value = oldVals[i];
         inp.addEventListener('input', updatePrice);
-        container.appendChild(inp);
+        wrap.appendChild(lbl);
+        wrap.appendChild(inp);
+        container.appendChild(wrap);
       }
     }
 
