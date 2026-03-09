@@ -164,9 +164,10 @@ None yet.
 | 5 | Fix 4 bugs: room toggles inverted, B2B fields missing, checkbox labels invisible, counter room limits | 2026-03-09 | af8d755 | [5-fix-4-bugs-room-toggles-inverted-b2b-fie](./quick/5-fix-4-bugs-room-toggles-inverted-b2b-fie/) |
 | 6 | Fix 7 bugs: room pills default OFF, X2 pill toggle, CSS explicit values, save redirect, toggleClientEmail scope, agency validation submit-only, adultCount min init, pricing labels, child counter | 2026-03-09 | 4756396 | [6-fix-7-bugs-room-pills-ui-toggleclientema](./quick/6-fix-7-bugs-room-pills-ui-toggleclientema/) |
 | 7 | Fix 3 bugs: room_types default empty, Salva Bozza Form Config pre-save, toggleClientEmail global scope | 2026-03-09 | 69cb663 | [7-fix-3-bugs-room-types-default-empty-subm](./quick/7-fix-3-bugs-room-types-default-empty-subm/) |
+| 8 | Fix 5 bugs: room pills default, B2B grid, bambini counter always visible, WhatsApp legibility, agency code submit-time validation | 2026-03-09 | f3e0946 | [8-fix-5-bugs-room-pills-default-b2b-grid-b](./quick/8-fix-5-bugs-room-pills-default-b2b-grid-b/) |
 
 ## Session Continuity
 
-Last session: 2026-03-09T10:29:04Z
-Stopped at: Completed quick task 7: Fix 3 bugs — room_types default, Salva Bozza Form Config, toggleClientEmail
+Last session: 2026-03-09T10:47:15Z
+Stopped at: Completed quick task 8: Fix 5 bugs — Section F agency inputs, B2B grid, bambini counter, WhatsApp colors, agency code crypto.subtle
 Resume file: None
