@@ -523,7 +523,9 @@ const CONFIG = {
   border:2px solid transparent; transition:border-color .2s; margin-bottom:12px;
 }
 .qf-checkbox-group:hover { border-color:#000744; }
-.qf-checkbox-group label { display:flex; align-items:center; gap:10px; cursor:pointer; font-size:15px; }
+.qf-checkbox-group label { display:flex; align-items:center; gap:10px; cursor:pointer; font-size:15px; color: #333 !important; }
+.qf-checkbox-group label strong { color: #000744 !important; }
+.qf-checkbox-group label small { color: #666 !important; }
 .qf-checkbox-group input[type=checkbox] { accent-color:#cc0031; width:18px; height:18px; }
 .qf-agency-banner {
   background:#f0f8f0; border:1px solid #2ecc71; border-radius:6px;
@@ -583,45 +585,46 @@ const CONFIG = {
 
           <!-- 1. Nome Agenzia -->
           <div class="qf-field">
-            <label class="qf-label" for="f-nome-agenzia">Nome Agenzia *</label>
-            <input class="qf-input" type="text" id="f-nome-agenzia" name="nome_agenzia">
+            <label class="qf-label" for="nomeAgenzia">Nome Agenzia *</label>
+            <input class="qf-input" type="text" id="nomeAgenzia" name="nome_agenzia" required>
           </div>
 
           <!-- 2. Codice Agenzia with SHA-256 validation -->
           <div class="qf-field">
-            <label class="qf-label" for="f-agency-code">Codice Agenzia *</label>
-            <input class="qf-input" type="password" id="f-agency-code" name="agency_code" autocomplete="off" placeholder="Inserisci il codice agenzia">
+            <label class="qf-label" for="codiceAgenzia">Codice Agenzia *</label>
+            <input class="qf-input" type="password" id="codiceAgenzia" name="agency_code" autocomplete="off" placeholder="Inserisci il codice agenzia" required>
+            <span class="qf-error-text" id="codiceAgenzia-error"></span>
             <div id="agency-code-feedback" style="font-size:13px;margin-top:4px;"></div>
           </div>
 
           <!-- 3. Email Agenzia -->
           <div class="qf-field">
-            <label class="qf-label" for="f-email-agenzia">Email Agenzia *</label>
-            <input class="qf-input" type="email" id="f-email-agenzia" name="email_agenzia">
+            <label class="qf-label" for="emailAgenzia">Email Agenzia *</label>
+            <input class="qf-input" type="email" id="emailAgenzia" name="email_agenzia" required>
           </div>
 
           <!-- 4. Telefono -->
           <div class="qf-field">
-            <label class="qf-label" for="f-telefono-b2b">Telefono *</label>
-            <input class="qf-input" type="tel" id="f-telefono-b2b" name="telefono">
+            <label class="qf-label" for="telefonoAgenzia">Telefono *</label>
+            <input class="qf-input" type="tel" id="telefonoAgenzia" name="telefono" required>
           </div>
 
           <!-- 5. Nome Cliente Finale -->
           <div class="qf-field">
-            <label class="qf-label" for="f-nome-cliente">Nome Cliente Finale *</label>
-            <input class="qf-input" type="text" id="f-nome-cliente" name="nome_cliente_finale">
+            <label class="qf-label" for="nomeCliente">Nome Cliente Finale *</label>
+            <input class="qf-input" type="text" id="nomeCliente" name="nome_cliente_finale" required>
           </div>
 
           <!-- 6. Checkbox + conditional email -->
           <div class="qf-checkbox-group">
             <label>
-              <input type="checkbox" id="cb-send-cliente" name="invia_al_cliente" value="1" onchange="toggleClientEmail(this.checked)">
+              <input type="checkbox" id="inviaEmailCliente" name="invia_al_cliente" value="1" onclick="toggleClientEmail()">
               Invia preventivo anche al cliente
             </label>
           </div>
-          <div id="cliente-email-row" class="qf-field" style="display:none;">
-            <label class="qf-label" for="f-email-cliente">Email Cliente *</label>
-            <input class="qf-input" type="email" id="f-email-cliente" name="email_cliente">
+          <div id="emailClienteBox" class="qf-field" style="display:none;">
+            <label class="qf-label" for="emailCliente">Email Cliente *</label>
+            <input class="qf-input" type="email" id="emailCliente" name="email_cliente">
           </div>
 
           <!-- 7. Agency guarantee message -->
@@ -823,9 +826,18 @@ const CONFIG = {
   // QUOTE FORM — CONFIG-driven pricing, B2B default, SHA-256 agency code
   // ----------------------------------------------------------------
   <?php if ($has_form): ?>
-  function toggleClientEmail(show) {
-    var row = document.getElementById('cliente-email-row');
-    if (row) row.style.display = show ? 'block' : 'none';
+  function toggleClientEmail() {
+    var checkbox = document.getElementById('inviaEmailCliente');
+    var box = document.getElementById('emailClienteBox');
+    var emailInput = document.getElementById('emailCliente');
+    if (!checkbox || !box || !emailInput) return;
+    if (checkbox.checked) {
+      box.style.display = 'block';
+      emailInput.required = true;
+    } else {
+      box.style.display = 'none';
+      emailInput.required = false;
+    }
   }
   (function() {
     var adultCount = 2;
@@ -938,6 +950,14 @@ const CONFIG = {
       return ct;
     }
 
+    function updateButtonStates() {
+      var total = adultCount + childCount;
+      var adultIncBtn = document.getElementById('btn-adulti-inc');
+      var bambiniIncBtn = document.getElementById('btn-bambini-inc');
+      if (adultIncBtn) adultIncBtn.disabled = (adultCount >= maxPersons) || (total >= maxPersons);
+      if (bambiniIncBtn) bambiniIncBtn.disabled = (total >= maxPersons);
+    }
+
     function updatePrice() {
       var n = adultCount + childCount;
       var groupErr = document.getElementById('group-error');
@@ -952,10 +972,15 @@ const CONFIG = {
       if (n === 1 && CONFIG.room_types.indexOf('X1') === -1) {
         if (groupErr) { groupErr.textContent = 'La camera singola non è disponibile per questo viaggio.'; groupErr.style.display = 'block'; }
         if (submitBtn) submitBtn.disabled = true;
+        var pb = document.getElementById('price-box');
+        if (pb) pb.style.display = 'none';
         return;
       }
       if (groupErr) groupErr.style.display = 'none';
       if (submitBtn) submitBtn.disabled = false;
+
+      var priceBox = document.getElementById('price-box');
+      if (priceBox) priceBox.style.display = 'block';
 
       var pricing = calcPricing();
       var subtotale = pricing.subtotale;
@@ -999,6 +1024,7 @@ const CONFIG = {
           }
         }
       }
+      updateButtonStates();
     }
 
     // -- Counter logic --
@@ -1017,21 +1043,28 @@ const CONFIG = {
     }
 
     document.getElementById('btn-adulti-inc').addEventListener('click', function() {
-      if (adultCount + childCount < maxPersons) setCount('adulti', adultCount + 1);
+      if (adultCount + childCount < maxPersons) {
+        setCount('adulti', adultCount + 1);
+      }
+      updateButtonStates();
     });
     document.getElementById('btn-adulti-dec').addEventListener('click', function() {
       if (adultCount > 1) setCount('adulti', adultCount - 1);
+      updateButtonStates();
     });
     var bInc = document.getElementById('btn-bambini-inc');
     var bDec = document.getElementById('btn-bambini-dec');
     if (bInc) bInc.addEventListener('click', function() {
       if (adultCount + childCount < maxPersons) setCount('bambini', childCount + 1);
+      updateButtonStates();
     });
     if (bDec) bDec.addEventListener('click', function() {
       if (childCount > 0) setCount('bambini', childCount - 1);
+      updateButtonStates();
     });
 
     updatePrice();
+    updateButtonStates();
 
     // -- SHA-256 helper --
     function bufToHex(buf) {
@@ -1063,7 +1096,7 @@ const CONFIG = {
       });
     }
 
-    var agencyInput = document.getElementById('f-agency-code');
+    var agencyInput = document.getElementById('codiceAgenzia');
     if (agencyInput) agencyInput.addEventListener('input', function(){ validateAgencyCode(agencyInput.value); });
 
     // -- B2B/B2C toggle --
@@ -1092,18 +1125,18 @@ const CONFIG = {
 
       // Validate required fields by mode
       if (isAgency) {
-        var nomeAg   = (document.getElementById('f-nome-agenzia')||{}).value||'';
-        var emailAg  = (document.getElementById('f-email-agenzia')||{}).value||'';
-        var telAg    = (document.getElementById('f-telefono-b2b')||{}).value||'';
-        var nomeCliente = (document.getElementById('f-nome-cliente')||{}).value||'';
+        var nomeAg   = (document.getElementById('nomeAgenzia')||{}).value||'';
+        var emailAg  = (document.getElementById('emailAgenzia')||{}).value||'';
+        var telAg    = (document.getElementById('telefonoAgenzia')||{}).value||'';
+        var nomeCliente = (document.getElementById('nomeCliente')||{}).value||'';
         if (!nomeAg.trim()) { errorDiv.textContent = 'Inserisci il nome agenzia.'; errorDiv.style.display = 'block'; return; }
         if (!agencyUnlocked) { errorDiv.textContent = 'Inserisci un codice agenzia valido.'; errorDiv.style.display = 'block'; return; }
         if (!emailAg.trim()) { errorDiv.textContent = 'Inserisci l\'email agenzia.'; errorDiv.style.display = 'block'; return; }
         if (!telAg.trim()) { errorDiv.textContent = 'Inserisci il telefono.'; errorDiv.style.display = 'block'; return; }
         if (!nomeCliente.trim()) { errorDiv.textContent = 'Inserisci il nome del cliente finale.'; errorDiv.style.display = 'block'; return; }
-        var sendCl = document.getElementById('cb-send-cliente');
+        var sendCl = document.getElementById('inviaEmailCliente');
         if (sendCl && sendCl.checked) {
-          var emailCl = (document.getElementById('f-email-cliente')||{}).value||'';
+          var emailCl = (document.getElementById('emailCliente')||{}).value||'';
           if (!emailCl.trim()) { errorDiv.textContent = 'Inserisci l\'email del cliente.'; errorDiv.style.display = 'block'; return; }
         }
       } else {
@@ -1156,12 +1189,12 @@ const CONFIG = {
       };
 
       if (isAgency) {
-        payload.nome_agenzia       = (document.getElementById('f-nome-agenzia')||{}).value||'';
-        payload.email_agenzia      = (document.getElementById('f-email-agenzia')||{}).value||'';
-        payload.telefono           = (document.getElementById('f-telefono-b2b')||{}).value||'';
-        payload.nome_cliente_finale= (document.getElementById('f-nome-cliente')||{}).value||'';
-        payload.invia_al_cliente   = document.getElementById('cb-send-cliente').checked ? 'Si' : 'No';
-        payload.email_cliente      = (document.getElementById('f-email-cliente')||{}).value||'';
+        payload.nome_agenzia       = (document.getElementById('nomeAgenzia')||{}).value||'';
+        payload.email_agenzia      = (document.getElementById('emailAgenzia')||{}).value||'';
+        payload.telefono           = (document.getElementById('telefonoAgenzia')||{}).value||'';
+        payload.nome_cliente_finale= (document.getElementById('nomeCliente')||{}).value||'';
+        payload.invia_al_cliente   = document.getElementById('inviaEmailCliente').checked ? 'Si' : 'No';
+        payload.email_cliente      = (document.getElementById('emailCliente')||{}).value||'';
       } else {
         payload.nome     = (document.getElementById('f-nome')||{}).value||'';
         payload.cognome  = (document.getElementById('f-cognome')||{}).value||'';
