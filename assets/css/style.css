@@ -1599,11 +1599,11 @@ body.has-hero #site-header.scrolled nav a {
 }
 
 @media (max-width: 768px) {
-  .trip-tabs { top: 80px; }
+  .trip-tabs { top: 94px; }
 }
 
 @media (max-width: 480px) {
-  .trip-tabs { top: 75px; }
+  .trip-tabs { top: 88px; }
 }
 
 .trip-tabs__nav {
