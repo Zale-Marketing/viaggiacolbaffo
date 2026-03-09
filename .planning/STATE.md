@@ -162,9 +162,10 @@ None yet.
 | 3 | Fix timeline visuals (red gradient line + red dots), redesign volo section (two-column card grid), add Alloggi tab with 3 hotel cards | 2026-03-06 | b961c05 | [3-fix-timeline-visuals-redesign-volo-secti](./quick/3-fix-timeline-visuals-redesign-volo-secti/) |
 | 4 | destinazione.php text alignment, waitlist form redesign, agenzie B2B inline form, 404 for unknown slugs | 2026-03-06 | 35a698f | [4-fix-destinazione-php-text-alignment-wait](./quick/4-fix-destinazione-php-text-alignment-wait/) |
 | 5 | Fix 4 bugs: room toggles inverted, B2B fields missing, checkbox labels invisible, counter room limits | 2026-03-09 | af8d755 | [5-fix-4-bugs-room-toggles-inverted-b2b-fie](./quick/5-fix-4-bugs-room-toggles-inverted-b2b-fie/) |
+| 6 | Fix 7 bugs: room pills default OFF, X2 pill toggle, CSS explicit values, save redirect, toggleClientEmail scope, agency validation submit-only, adultCount min init, pricing labels, child counter | 2026-03-09 | 4756396 | [6-fix-7-bugs-room-pills-ui-toggleclientema](./quick/6-fix-7-bugs-room-pills-ui-toggleclientema/) |
 
 ## Session Continuity
 
-Last session: 2026-03-06T21:36:27.887Z
-Stopped at: Completed 06-admin-panel-06-PLAN.md
+Last session: 2026-03-09T10:14:48Z
+Stopped at: Completed quick task 6: Fix 7 bugs — room pills, UI toggles, client email
 Resume file: None
