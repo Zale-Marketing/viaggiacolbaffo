@@ -165,9 +165,10 @@ None yet.
 | 6 | Fix 7 bugs: room pills default OFF, X2 pill toggle, CSS explicit values, save redirect, toggleClientEmail scope, agency validation submit-only, adultCount min init, pricing labels, child counter | 2026-03-09 | 4756396 | [6-fix-7-bugs-room-pills-ui-toggleclientema](./quick/6-fix-7-bugs-room-pills-ui-toggleclientema/) |
 | 7 | Fix 3 bugs: room_types default empty, Salva Bozza Form Config pre-save, toggleClientEmail global scope | 2026-03-09 | 69cb663 | [7-fix-3-bugs-room-types-default-empty-subm](./quick/7-fix-3-bugs-room-types-default-empty-subm/) |
 | 8 | Fix 5 bugs: room pills default, B2B grid, bambini counter always visible, WhatsApp legibility, agency code submit-time validation | 2026-03-09 | f3e0946 | [8-fix-5-bugs-room-pills-default-b2b-grid-b](./quick/8-fix-5-bugs-room-pills-default-b2b-grid-b/) |
+| 9 | Fix 7 UI issues: centered toggle, B2B 50/50 grids, side-by-side counters, labeled child age inputs, insurance before price box, admin toggle #000744, bracket input CSS | 2026-03-09 | 30ebebc | [9-fix-ui-counters-side-by-side-child-ages-](./quick/9-fix-ui-counters-side-by-side-child-ages-/) |
 
 ## Session Continuity
 
-Last session: 2026-03-09T10:47:15Z
-Stopped at: Completed quick task 8: Fix 5 bugs — Section F agency inputs, B2B grid, bambini counter, WhatsApp colors, agency code crypto.subtle
+Last session: 2026-03-09T11:00:00Z
+Stopped at: Completed quick task 9: Fix UI — centered toggle, B2B grids, side-by-side counters, child age labels, insurance order, admin CSS
 Resume file: None
