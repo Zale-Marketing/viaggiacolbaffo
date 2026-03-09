@@ -1190,16 +1190,15 @@ $preview_token_val = $trip['preview_token'] ?? '';
             <h3 style="margin-bottom:0.75rem;">F — Codice Agenzia</h3>
             <div class="form-group">
               <label for="fc-agency-plain">Codice agenzia (testo)</label>
-              <input type="text" id="fc-agency-plain" placeholder="es. 8823" autocomplete="off">
-              <small>Digita il codice — l'hash SHA-256 viene calcolato in tempo reale</small>
+              <input type="text" id="fc-agency-plain" placeholder="es. 8823" autocomplete="off"
+                     value="<?php
+                       $saved_hash = $fc['agency_code_hash'] ?? '';
+                       echo ($saved_hash === 'af97d1baebca1eaae1ce418c082402e60c2529ef719983ad7c8dda6ea1f8e8ee' || $saved_hash === '') ? '8823' : '';
+                     ?>">
+              <small>L'hash viene calcolato automaticamente al salvataggio</small>
             </div>
-            <div class="form-group">
-              <label for="fc-agency-hash">Hash SHA-256 (salvato)</label>
-              <input type="text" id="fc-agency-hash"
-                     value="<?= htmlspecialchars($fc['agency_code_hash'] ?? 'af97d1baebca1eaae1ce418c082402e60c2529ef719983ad7c8dda6ea1f8e8ee') ?>"
-                     placeholder="SHA-256 hex">
-              <small id="fc-hash-preview" style="font-family:monospace;word-break:break-all;color:var(--text-muted);"></small>
-            </div>
+            <input type="hidden" id="fc-agency-hash"
+                   value="<?= htmlspecialchars($fc['agency_code_hash'] ?? 'af97d1baebca1eaae1ce418c082402e60c2529ef719983ad7c8dda6ea1f8e8ee') ?>">
           </div>
 
           <!-- Save -->
