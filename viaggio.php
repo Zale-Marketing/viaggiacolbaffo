@@ -168,6 +168,48 @@ $volo           = $trip['volo'] ?? null;
 </div>
 
 <!-- ========================================================
+     LEAD GATE OVERLAY
+     ======================================================== -->
+<div id="lead-gate" class="lead-gate">
+  <div class="lead-gate__blur-hint">
+    <i class="fa-solid fa-lock"></i>
+    <span>Sblocca il programma completo</span>
+  </div>
+  <div class="lead-gate__card">
+    <div class="lead-gate__icon"><i class="fa-solid fa-map-location-dot"></i></div>
+    <h2 class="lead-gate__title">Scopri tutti i dettagli del viaggio</h2>
+    <p class="lead-gate__subtitle">Inserisci i tuoi dati per accedere all'itinerario completo, agli alloggi, ai prezzi e a tutto quello che è incluso.</p>
+    <div class="lead-gate__form" id="lead-gate-form">
+      <div class="lead-gate__row">
+        <div class="lead-gate__field">
+          <input type="text" id="lg-nome" placeholder="Nome" autocomplete="given-name">
+        </div>
+        <div class="lead-gate__field">
+          <input type="text" id="lg-cognome" placeholder="Cognome" autocomplete="family-name">
+        </div>
+      </div>
+      <div class="lead-gate__row">
+        <div class="lead-gate__field">
+          <input type="email" id="lg-email" placeholder="Email" autocomplete="email">
+        </div>
+        <div class="lead-gate__field">
+          <input type="tel" id="lg-telefono" placeholder="Telefono" autocomplete="tel">
+        </div>
+      </div>
+      <div id="lg-error" class="lead-gate__error" style="display:none;"></div>
+      <button type="button" id="lg-submit" class="lead-gate__btn">
+        <span id="lg-btn-text">Scopri il programma completo</span>
+        <span id="lg-btn-spinner" style="display:none;"><i class="fa-solid fa-spinner fa-spin"></i></span>
+      </button>
+      <p class="lead-gate__privacy">
+        <i class="fa-solid fa-shield-halved"></i>
+        Nessuno spam. I tuoi dati sono al sicuro.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================
      ITINERARY SECTION — TIMELINE
      ======================================================== -->
 <section class="trip-section" id="itinerario">
@@ -176,7 +218,32 @@ $volo           = $trip['volo'] ?? null;
       <h2 class="section-header__title">Itinerario</h2>
     </div>
     <div class="timeline">
-      <?php foreach (($trip['itinerary'] ?? []) as $day): ?>
+    <?php
+    $itinerary_days = $trip['itinerary'] ?? [];
+    $visible_days   = array_slice($itinerary_days, 0, 2);
+    $gated_days     = array_slice($itinerary_days, 2);
+    ?>
+    <?php foreach ($visible_days as $day): ?>
+    <div class="timeline-item">
+      <div class="timeline-dot"><?php echo str_pad((int)$day['day'], 2, '0', STR_PAD_LEFT); ?></div>
+      <div class="timeline-card">
+        <?php if (!empty($day['image_url'])): ?>
+        <img class="timeline-card__photo" src="<?php echo htmlspecialchars($day['image_url']); ?>" alt="<?php echo htmlspecialchars($day['title']); ?>" loading="lazy">
+        <?php endif; ?>
+        <div class="timeline-card__body">
+          <?php if (!empty($day['location'])): ?>
+          <div class="timeline-card__location"><?php echo htmlspecialchars($day['location']); ?></div>
+          <?php endif; ?>
+          <div class="timeline-card__title"><?php echo htmlspecialchars($day['title']); ?></div>
+          <div class="timeline-card__desc"><?php echo strip_tags($day['description'] ?? '', '<p><br><strong><em><ul><ol><li><b><i>'); ?></div>
+        </div>
+      </div>
+    </div>
+    <?php endforeach; ?>
+
+    <?php if (!empty($gated_days)): ?>
+    <div class="gated-content" id="gated-content">
+      <?php foreach ($gated_days as $day): ?>
       <div class="timeline-item">
         <div class="timeline-dot"><?php echo str_pad((int)$day['day'], 2, '0', STR_PAD_LEFT); ?></div>
         <div class="timeline-card">
@@ -194,9 +261,12 @@ $volo           = $trip['volo'] ?? null;
       </div>
       <?php endforeach; ?>
     </div>
+    <?php endif; ?>
+    </div>
   </div>
 </section>
 
+<div class="gated-content" id="gated-accompagnatore">
 <?php if (!empty($accompagnatore['nome'])): ?>
 <!-- ========================================================
      ACCOMPAGNATORE SECTION
@@ -217,7 +287,9 @@ $volo           = $trip['volo'] ?? null;
   </div>
 </div>
 <?php endif; ?>
+</div>
 
+<div class="gated-content" id="gated-volo">
 <?php if (!is_null($volo)): ?>
 <!-- ========================================================
      DETTAGLI VOLO SECTION
@@ -294,7 +366,9 @@ $volo           = $trip['volo'] ?? null;
   </div>
 </div>
 <?php endif; ?>
+</div>
 
+<div class="gated-content" id="gated-alloggi">
 <?php if (!empty($trip['hotel'])): ?>
 <!-- ========================================================
      ALLOGGI SECTION
@@ -352,7 +426,9 @@ $volo           = $trip['volo'] ?? null;
   </div>
 </section>
 <?php endif; ?>
+</div>
 
+<div class="gated-content" id="gated-cosa-include">
 <!-- ========================================================
      COSA INCLUDE SECTION
      ======================================================== -->
@@ -381,7 +457,9 @@ $volo           = $trip['volo'] ?? null;
     </div>
   </div>
 </section>
+</div>
 
+<div class="gated-content" id="gated-galleria">
 <!-- ========================================================
      GALLERY SECTION
      ======================================================== -->
@@ -401,6 +479,7 @@ $volo           = $trip['volo'] ?? null;
     <?php endif; ?>
   </div>
 </section>
+</div>
 
 <!-- ========================================================
      LIGHTBOX
@@ -413,6 +492,7 @@ $volo           = $trip['volo'] ?? null;
   <button class="lightbox__next" id="lb-next" aria-label="Foto successiva"><i class="fa-solid fa-chevron-right"></i></button>
 </div>
 
+<div class="gated-content" id="gated-tags">
 <!-- ========================================================
      TAGS SECTION
      ======================================================== -->
@@ -438,7 +518,9 @@ $volo           = $trip['volo'] ?? null;
   </div>
 </section>
 <?php endif; ?>
+</div>
 
+<div class="gated-content" id="gated-related">
 <!-- ========================================================
      RELATED TRIPS
      ======================================================== -->
@@ -479,7 +561,9 @@ $status_labels_rel = ['confermata'=>'Confermata','ultimi-posti'=>'Ultimi posti',
   </div>
 </section>
 <?php endif; ?>
+</div>
 
+<div class="gated-content" id="gated-preventivo">
 <?php if ($has_form): ?>
 <script>
 const CONFIG = {
@@ -798,12 +882,17 @@ if (!CONFIG.room_types || CONFIG.room_types.length === 0) {
 </div>
 </section>
 <?php endif; ?>
+</div>
 
 </main>
 
 <?php require_once ROOT . '/includes/footer.php'; ?>
 
 <script>
+var GATE = {
+  slug: <?= json_encode($slug) ?>,
+  webhook: <?= json_encode(defined('WAITLIST_WEBHOOK_URL') ? WAITLIST_WEBHOOK_URL : '') ?>
+};
 function toggleClientEmail() {
   var checkbox = document.getElementById('inviaEmailCliente');
   var box = document.getElementById('emailClienteBox');
