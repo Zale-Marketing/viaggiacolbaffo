@@ -924,83 +924,146 @@ function toggleClientEmail() {
 }
 (function () {
   // ── LEAD GATE ──────────────────────────────────────────────────
-  var STORAGE_KEY = 'vcb_unlocked_' + GATE.slug;
-  var gateEl      = document.getElementById('lead-gate');
-  var gatedEls    = document.querySelectorAll('.gated-content');
+  var STORAGE_KEY  = 'vcb_unlocked_' + GATE.slug;
+  var gatedEls     = document.querySelectorAll('.gated-content');
+  var gateBar      = document.getElementById('gate-bar');
+  var gateBarBtn   = document.getElementById('gate-bar-btn');
+  var gateSheet    = document.getElementById('gate-sheet');
+  var gateOverlay  = document.getElementById('gate-overlay');
+  var lgSubmit     = document.getElementById('lg-submit');
+  var lgError      = document.getElementById('lg-error');
+
+  // The sentinel element: bottom of the 2nd visible day
+  // We watch the last .timeline-item NOT inside .gated-content
+  var visibleDays  = document.querySelectorAll('.timeline-item:not(.gated-content .timeline-item)');
+  var sentinel     = visibleDays.length ? visibleDays[visibleDays.length - 1] : null;
+
+  function isUnlocked() {
+    try { return localStorage.getItem(STORAGE_KEY) === '1'; } catch(e) { return false; }
+  }
 
   function unlockGate() {
-    if (gateEl) {
-      gateEl.classList.add('lead-gate--unlocked');
-      setTimeout(function() { gateEl.style.display = 'none'; }, 400);
-    }
+    // Hide bar and sheet
+    if (gateBar)    { gateBar.classList.remove('gate-bar--visible'); }
+    if (gateSheet)  { closeSheet(); }
+    // Reveal all gated content
     gatedEls.forEach(function(el) {
       el.classList.remove('gated-content--hidden');
     });
     try { localStorage.setItem(STORAGE_KEY, '1'); } catch(e) {}
   }
 
-  function isUnlocked() {
-    try { return localStorage.getItem(STORAGE_KEY) === '1'; } catch(e) { return false; }
+  function openSheet() {
+    if (!gateSheet || !gateOverlay) return;
+    gateSheet.classList.add('gate-sheet--open');
+    gateOverlay.classList.add('gate-overlay--visible');
+    document.body.style.overflow = 'hidden';
   }
 
+  function closeSheet() {
+    if (!gateSheet || !gateOverlay) return;
+    gateSheet.classList.remove('gate-sheet--open');
+    gateOverlay.classList.remove('gate-overlay--visible');
+    document.body.style.overflow = '';
+  }
+
+  // If already unlocked on load, skip everything
   if (isUnlocked()) {
     unlockGate();
   } else {
+    // Hide all gated content
     gatedEls.forEach(function(el) {
       el.classList.add('gated-content--hidden');
     });
-  }
 
-  var lgSubmit = document.getElementById('lg-submit');
-  var lgError  = document.getElementById('lg-error');
+    // IntersectionObserver: show bar when sentinel scrolls out of view (user passed it)
+    if (sentinel && gateBar && 'IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (!isUnlocked()) {
+            if (!entry.isIntersecting) {
+              // Sentinel is above the viewport = user scrolled past it
+              gateBar.classList.add('gate-bar--visible');
+            } else {
+              // Sentinel back in view = user scrolled back up
+              gateBar.classList.remove('gate-bar--visible');
+              closeSheet();
+            }
+          }
+        });
+      }, { threshold: 0 });
+      observer.observe(sentinel);
+    }
 
-  if (lgSubmit) {
-    lgSubmit.addEventListener('click', function() {
-      var nome     = (document.getElementById('lg-nome')     || {}).value || '';
-      var cognome  = (document.getElementById('lg-cognome')  || {}).value || '';
-      var email    = (document.getElementById('lg-email')    || {}).value || '';
-      var telefono = (document.getElementById('lg-telefono') || {}).value || '';
+    // Bar click → open sheet
+    if (gateBar) {
+      gateBar.addEventListener('click', openSheet);
+    }
 
-      if (!nome.trim() || !cognome.trim() || !email.trim() || !telefono.trim()) {
-        lgError.textContent = 'Compila tutti i campi per continuare.';
-        lgError.style.display = 'block';
-        return;
-      }
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        lgError.textContent = 'Inserisci un indirizzo email valido.';
-        lgError.style.display = 'block';
-        return;
-      }
-      lgError.style.display = 'none';
+    // Overlay click → close sheet
+    if (gateOverlay) {
+      gateOverlay.addEventListener('click', closeSheet);
+    }
 
-      document.getElementById('lg-btn-text').style.display    = 'none';
-      document.getElementById('lg-btn-spinner').style.display = 'inline';
-      lgSubmit.disabled = true;
+    // Submit
+    if (lgSubmit) {
+      lgSubmit.addEventListener('click', function() {
+        var nome     = (document.getElementById('lg-nome')     || {}).value || '';
+        var cognome  = (document.getElementById('lg-cognome')  || {}).value || '';
+        var email    = (document.getElementById('lg-email')    || {}).value || '';
+        var telefono = (document.getElementById('lg-telefono') || {}).value || '';
+        var privacy  = document.getElementById('lg-privacy');
 
-      var payload = {
-        nome: nome, cognome: cognome, email: email, telefono: telefono,
-        viaggio: GATE.slug, source: 'lead_gate'
-      };
+        if (!nome.trim() || !cognome.trim() || !email.trim() || !telefono.trim()) {
+          lgError.textContent = 'Compila tutti i campi per continuare.';
+          lgError.style.display = 'block';
+          return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          lgError.textContent = 'Inserisci un indirizzo email valido.';
+          lgError.style.display = 'block';
+          return;
+        }
+        if (privacy && !privacy.checked) {
+          lgError.textContent = 'Devi accettare la Privacy Policy per continuare.';
+          lgError.style.display = 'block';
+          return;
+        }
+        lgError.style.display = 'none';
 
-      var doUnlock = function() {
-        document.getElementById('lg-btn-text').style.display    = 'inline';
-        document.getElementById('lg-btn-spinner').style.display = 'none';
-        lgSubmit.disabled = false;
-        unlockGate();
-      };
+        document.getElementById('lg-btn-text').style.display    = 'none';
+        document.getElementById('lg-btn-spinner').style.display = 'inline';
+        lgSubmit.disabled = true;
 
-      if (GATE.webhook) {
-        fetch(GATE.webhook, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        })
-        .then(function() { doUnlock(); })
-        .catch(function() { doUnlock(); });
-      } else {
-        doUnlock();
-      }
-    });
+        var marketing = document.getElementById('lg-marketing');
+        var payload = {
+          nome: nome, cognome: cognome, email: email, telefono: telefono,
+          privacy: true,
+          marketing: marketing ? marketing.checked : false,
+          viaggio: GATE.slug,
+          source: 'lead_gate'
+        };
+
+        var doUnlock = function() {
+          document.getElementById('lg-btn-text').style.display    = 'inline';
+          document.getElementById('lg-btn-spinner').style.display = 'none';
+          lgSubmit.disabled = false;
+          unlockGate();
+        };
+
+        if (GATE.webhook) {
+          fetch(GATE.webhook, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          })
+          .then(function() { doUnlock(); })
+          .catch(function() { doUnlock(); });
+        } else {
+          doUnlock();
+        }
+      });
+    }
   }
   // ── END LEAD GATE ──────────────────────────────────────────────
 
