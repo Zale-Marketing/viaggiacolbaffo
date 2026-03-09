@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-03-06)
 Phase: 1 of 6 (Foundation)
 Plan: 0 of TBD in current phase
 Status: Ready to plan
-Last activity: 2026-03-09 - Completed quick task 7: Fix 3 bugs: room_types default empty, Salva Bozza Form Config pre-save, toggleClientEmail global scope
+Last activity: 2026-03-09 - Completed quick task 10: Fix 4 bugs: updatePrice global scope, insurance event listener, child age labels dynamic, B2C telefono required/validated
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -166,9 +166,10 @@ None yet.
 | 7 | Fix 3 bugs: room_types default empty, Salva Bozza Form Config pre-save, toggleClientEmail global scope | 2026-03-09 | 69cb663 | [7-fix-3-bugs-room-types-default-empty-subm](./quick/7-fix-3-bugs-room-types-default-empty-subm/) |
 | 8 | Fix 5 bugs: room pills default, B2B grid, bambini counter always visible, WhatsApp legibility, agency code submit-time validation | 2026-03-09 | f3e0946 | [8-fix-5-bugs-room-pills-default-b2b-grid-b](./quick/8-fix-5-bugs-room-pills-default-b2b-grid-b/) |
 | 9 | Fix 7 UI issues: centered toggle, B2B 50/50 grids, side-by-side counters, labeled child age inputs, insurance before price box, admin toggle #000744, bracket input CSS | 2026-03-09 | 30ebebc | [9-fix-ui-counters-side-by-side-child-ages-](./quick/9-fix-ui-counters-side-by-side-child-ages-/) |
+| 10 | Fix 4 bugs: updatePrice global scope, insurance event listener via addEventListener, child age labels read CONFIG maxBracket, B2C telefono required + validated | 2026-03-09 | 5fa4d2c | [10-fix-viaggio-php-updateprice-global-scope](./quick/10-fix-viaggio-php-updateprice-global-scope/) |
 
 ## Session Continuity
 
-Last session: 2026-03-09T11:00:00Z
-Stopped at: Completed quick task 9: Fix UI — centered toggle, B2B grids, side-by-side counters, child age labels, insurance order, admin CSS
+Last session: 2026-03-09T12:00:00Z
+Stopped at: Completed quick task 10: Fix updatePrice global scope, insurance event listener, child age dynamic labels, B2C telefono validation
 Resume file: None
