@@ -572,15 +572,6 @@ const CONFIG = {
         <button class="qf-toggle-btn" type="button" data-type="privato" id="btn-privato">Privato</button>
       </div>
 
-      <!-- Agency code unlock -->
-      <div id="agency-code-row" class="qf-section">
-        <div class="qf-field">
-          <label class="qf-label" for="f-agency-code">Codice Agenzia *</label>
-          <input class="qf-input" type="password" id="f-agency-code" autocomplete="off" placeholder="Inserisci il codice agenzia">
-          <div id="agency-code-feedback" style="font-size:13px;margin-top:4px;"></div>
-        </div>
-      </div>
-
       <div id="form-error-msg" style="display:none;" class="qf-error"></div>
 
       <form id="quote-form" novalidate>
@@ -588,28 +579,40 @@ const CONFIG = {
 
         <!-- B2B Fields -->
         <div id="b2b-fields">
-          <div class="qf-agency-banner">
-            <i class="fa-solid fa-shield-halved"></i> Preventivo riservato agenzie — prezzi netto B2B garantiti.
-          </div>
           <div class="qf-section-title">Dati Agenzia</div>
+
+          <!-- 1. Nome Agenzia -->
           <div class="qf-field">
             <label class="qf-label" for="f-nome-agenzia">Nome Agenzia *</label>
             <input class="qf-input" type="text" id="f-nome-agenzia" name="nome_agenzia">
           </div>
-          <div class="qf-grid">
-            <div class="qf-field">
-              <label class="qf-label" for="f-email-agenzia">Email Agenzia *</label>
-              <input class="qf-input" type="email" id="f-email-agenzia" name="email_agenzia" required>
-            </div>
-            <div class="qf-field">
-              <label class="qf-label" for="f-telefono-b2b">Telefono</label>
-              <input class="qf-input" type="tel" id="f-telefono-b2b" name="telefono">
-            </div>
-          </div>
+
+          <!-- 2. Codice Agenzia with SHA-256 validation -->
           <div class="qf-field">
-            <label class="qf-label" for="f-nome-cliente">Nome Cliente Finale</label>
+            <label class="qf-label" for="f-agency-code">Codice Agenzia *</label>
+            <input class="qf-input" type="password" id="f-agency-code" name="agency_code" autocomplete="off" placeholder="Inserisci il codice agenzia">
+            <div id="agency-code-feedback" style="font-size:13px;margin-top:4px;"></div>
+          </div>
+
+          <!-- 3. Email Agenzia -->
+          <div class="qf-field">
+            <label class="qf-label" for="f-email-agenzia">Email Agenzia *</label>
+            <input class="qf-input" type="email" id="f-email-agenzia" name="email_agenzia">
+          </div>
+
+          <!-- 4. Telefono -->
+          <div class="qf-field">
+            <label class="qf-label" for="f-telefono-b2b">Telefono *</label>
+            <input class="qf-input" type="tel" id="f-telefono-b2b" name="telefono">
+          </div>
+
+          <!-- 5. Nome Cliente Finale -->
+          <div class="qf-field">
+            <label class="qf-label" for="f-nome-cliente">Nome Cliente Finale *</label>
             <input class="qf-input" type="text" id="f-nome-cliente" name="nome_cliente_finale">
           </div>
+
+          <!-- 6. Checkbox + conditional email -->
           <div class="qf-checkbox-group">
             <label>
               <input type="checkbox" id="cb-send-cliente" name="invia_al_cliente" value="1" onchange="toggleClientEmail(this.checked)">
@@ -617,8 +620,13 @@ const CONFIG = {
             </label>
           </div>
           <div id="cliente-email-row" class="qf-field" style="display:none;">
-            <label class="qf-label" for="f-email-cliente">Email Cliente</label>
+            <label class="qf-label" for="f-email-cliente">Email Cliente *</label>
             <input class="qf-input" type="email" id="f-email-cliente" name="email_cliente">
+          </div>
+
+          <!-- 7. Agency guarantee message -->
+          <div style="padding:15px;background:#f8f9fa;border-left:4px solid #000744;border-radius:4px;font-size:13px;color:#555;margin-top:20px;">
+            🛡️ <strong>Garanzia per le Agenzie:</strong> Non contatteremo mai direttamente il vostro cliente. Qualora in futuro il cliente decidesse di prenotare con noi senza passare dalla vostra agenzia, vi riconosceremo comunque la vostra commissione.
           </div>
         </div>
 
@@ -687,8 +695,10 @@ const CONFIG = {
         <div class="qf-checkbox-group">
           <label>
             <input type="checkbox" id="cb-assicurazione" name="assicurazione" value="1" onchange="updatePrice()">
-            Aggiungi assicurazione viaggio
-            <span id="assicurazione-price-label" style="color:#cc0031;font-weight:700;margin-left:4px;"></span>
+            <span>
+              <strong>Aggiungi Assicurazione Viaggio (+<?= (int)($fc['percentuale_assicurazione'] ?? 5) ?>%)</strong><br>
+              <small>Protezione completa per il tuo viaggio</small>
+            </span>
           </label>
         </div>
         <?php endif; ?>
@@ -879,42 +889,41 @@ const CONFIG = {
       var subtotale = 0;
 
       if (n === 1) {
-        var singleTotal = pb + CONFIG.supplemento_singola;
-        subtotale = singleTotal;
         lines.push({label: '1 Adulto × ' + fmt(pb), value: pb});
-        if (CONFIG.supplemento_singola) lines.push({label: 'Supplemento Singola', value: CONFIG.supplemento_singola});
+        subtotale += pb;
+        if (CONFIG.supplemento_singola) {
+          lines.push({label: '➕ Supplemento Singola', value: CONFIG.supplemento_singola});
+          subtotale += CONFIG.supplemento_singola;
+        }
       } else {
-        // First 2 people at full base price
-        lines.push({label: adultCount + ' Adult' + (adultCount > 1 ? 'i':'o') + ' × ' + fmt(pb), value: pb * 2});
+        lines.push({label: adultCount + ' Adult' + (adultCount > 1 ? 'i' : 'o') + ' × ' + fmt(pb), value: pb * 2});
         subtotale += pb * 2;
         if (n >= 3) {
           var p3 = pb - CONFIG.sconto_terzo_letto;
-          lines.push({label: '3° Letto', value: p3});
+          lines.push({label: '➕ 3° Letto (Adulto/Bambino)', value: p3});
           subtotale += p3;
         }
         if (n >= 4) {
           var p4 = pb - CONFIG.sconto_quarto_letto;
-          lines.push({label: '4° Letto', value: p4});
+          lines.push({label: '➕ 4° Letto (Adulto/Bambino)', value: p4});
           subtotale += p4;
         }
         if (n >= 5) {
           var p5 = pb - CONFIG.sconto_quinto_letto;
-          lines.push({label: '5° Letto', value: p5});
+          lines.push({label: '➕ 5° Letto (Adulto/Bambino)', value: p5});
           subtotale += p5;
         }
         // Child discounts
         var ages = getChildAges();
-        var totalChildDiscount = 0;
         ages.forEach(function(age, i) {
           if (age !== null && !isNaN(age)) {
             var disc = childDiscountForAge(age);
             if (disc > 0) {
-              totalChildDiscount += disc;
-              lines.push({label: 'Sconto Bambino ' + (i+1) + ' (' + age + ' anni)', value: -disc});
+              lines.push({label: '🎒 Sconto Bambino ' + (i+1) + ' (' + age + ' anni)', value: -disc});
+              subtotale -= disc;
             }
           }
         });
-        subtotale -= totalChildDiscount;
       }
 
       return {lines: lines, subtotale: subtotale};
@@ -955,22 +964,24 @@ const CONFIG = {
       var insurance  = insChecked ? Math.round(subtotale * CONFIG.percentuale_assicurazione) : 0;
       var totale     = subtotale + insurance;
 
-      // Build price lines HTML
+      // Build price lines HTML with subtotal row
       var linesHtml = '';
       pricing.lines.forEach(function(l) {
-        linesHtml += '<div class="qf-price-line"><span>' + l.label + '</span><span>' + (l.value < 0 ? '−' + fmt(-l.value) : fmt(l.value)) + '</span></div>';
+        var valStr = l.value < 0 ? ('−' + fmt(-l.value)) : fmt(l.value);
+        linesHtml += '<div class="qf-price-line"><span>' + l.label + '</span><span>' + valStr + '</span></div>';
       });
+      // Divider + subtotal
+      linesHtml += '<div class="qf-price-line" style="border-top:2px solid rgba(255,255,255,0.4);margin-top:4px;">'
+        + '<span><strong>Subtotale:</strong></span><span><strong>' + fmt(subtotale) + '</strong></span></div>';
       if (insChecked) {
         linesHtml += '<div class="qf-price-line"><span>Assicurazione ' + Math.round(CONFIG.percentuale_assicurazione * 100) + '%</span><span>+' + fmt(insurance) + '</span></div>';
       }
+
       var plEl = document.getElementById('price-lines');
       if (plEl) plEl.innerHTML = linesHtml;
 
       var peTotal = document.getElementById('pe-total');
       if (peTotal) peTotal.textContent = fmt(totale);
-
-      var insLabel = document.getElementById('assicurazione-price-label');
-      if (insLabel) insLabel.textContent = '+' + fmt(Math.round(subtotale * CONFIG.percentuale_assicurazione));
 
       // Savings
       if (CONFIG.competitor_enabled) {
@@ -1027,31 +1038,27 @@ const CONFIG = {
       return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
     }
 
-    // -- Agency code validation --
+    // -- Agency code SHA-256 validation (inline feedback, no unlock gate) --
     function validateAgencyCode(val) {
       var feedback = document.getElementById('agency-code-feedback');
-      var b2bFields = document.getElementById('b2b-fields');
       if (!val.trim()) {
         agencyUnlocked = false;
-        if (b2bFields) b2bFields.style.display = 'none';
-        if (feedback) { feedback.textContent = ''; }
+        if (feedback) feedback.textContent = '';
         return;
       }
       if (!CONFIG.agency_code_hash) {
         agencyUnlocked = true;
-        if (b2bFields) b2bFields.style.display = 'block';
+        if (feedback) { feedback.textContent = ''; }
         return;
       }
       crypto.subtle.digest('SHA-256', new TextEncoder().encode(val)).then(function(hashBuf) {
         var hex = bufToHex(hashBuf);
         if (hex === CONFIG.agency_code_hash) {
           agencyUnlocked = true;
-          if (b2bFields) b2bFields.style.display = 'block';
-          if (feedback) { feedback.textContent = 'Codice valido — campi agenzia sbloccati.'; feedback.style.color = '#2ecc71'; }
+          if (feedback) { feedback.textContent = '✓ Codice valido'; feedback.style.color = '#28a745'; }
         } else {
           agencyUnlocked = false;
-          if (b2bFields) b2bFields.style.display = 'none';
-          if (feedback) { feedback.textContent = 'Codice non valido.'; feedback.style.color = '#cc0031'; }
+          if (feedback) { feedback.textContent = '✗ Codice non valido'; feedback.style.color = '#cc0031'; }
         }
       });
     }
@@ -1059,27 +1066,21 @@ const CONFIG = {
     var agencyInput = document.getElementById('f-agency-code');
     if (agencyInput) agencyInput.addEventListener('input', function(){ validateAgencyCode(agencyInput.value); });
 
-    // Hide B2B fields initially (require code unlock)
-    var b2bFields = document.getElementById('b2b-fields');
-    if (b2bFields) b2bFields.style.display = 'none';
-
     // -- B2B/B2C toggle --
     document.getElementById('btn-agenzia').addEventListener('click', function() {
       isAgency = true;
       this.classList.add('active');
       document.getElementById('btn-privato').classList.remove('active');
       document.getElementById('tipo-cliente-hidden').value = 'agenzia';
-      document.getElementById('agency-code-row').style.display = 'block';
+      document.getElementById('b2b-fields').style.display = 'block';
       document.getElementById('b2c-fields').style.display = 'none';
-      if (agencyInput) validateAgencyCode(agencyInput.value);
     });
     document.getElementById('btn-privato').addEventListener('click', function() {
       isAgency = false;
       this.classList.add('active');
       document.getElementById('btn-agenzia').classList.remove('active');
       document.getElementById('tipo-cliente-hidden').value = 'privato';
-      document.getElementById('agency-code-row').style.display = 'none';
-      if (b2bFields) b2bFields.style.display = 'none';
+      document.getElementById('b2b-fields').style.display = 'none';
       document.getElementById('b2c-fields').style.display = 'block';
     });
 
@@ -1091,17 +1092,19 @@ const CONFIG = {
 
       // Validate required fields by mode
       if (isAgency) {
-        if (!agencyUnlocked) {
-          errorDiv.textContent = 'Inserisci un codice agenzia valido.';
-          errorDiv.style.display = 'block';
-          return;
-        }
-        var nomeAg = (document.getElementById('f-nome-agenzia')||{}).value||'';
-        var emailAg = (document.getElementById('f-email-agenzia')||{}).value||'';
-        if (!nomeAg.trim() || !emailAg.trim()) {
-          errorDiv.textContent = 'Compila Nome Agenzia ed Email Agenzia.';
-          errorDiv.style.display = 'block';
-          return;
+        var nomeAg   = (document.getElementById('f-nome-agenzia')||{}).value||'';
+        var emailAg  = (document.getElementById('f-email-agenzia')||{}).value||'';
+        var telAg    = (document.getElementById('f-telefono-b2b')||{}).value||'';
+        var nomeCliente = (document.getElementById('f-nome-cliente')||{}).value||'';
+        if (!nomeAg.trim()) { errorDiv.textContent = 'Inserisci il nome agenzia.'; errorDiv.style.display = 'block'; return; }
+        if (!agencyUnlocked) { errorDiv.textContent = 'Inserisci un codice agenzia valido.'; errorDiv.style.display = 'block'; return; }
+        if (!emailAg.trim()) { errorDiv.textContent = 'Inserisci l\'email agenzia.'; errorDiv.style.display = 'block'; return; }
+        if (!telAg.trim()) { errorDiv.textContent = 'Inserisci il telefono.'; errorDiv.style.display = 'block'; return; }
+        if (!nomeCliente.trim()) { errorDiv.textContent = 'Inserisci il nome del cliente finale.'; errorDiv.style.display = 'block'; return; }
+        var sendCl = document.getElementById('cb-send-cliente');
+        if (sendCl && sendCl.checked) {
+          var emailCl = (document.getElementById('f-email-cliente')||{}).value||'';
+          if (!emailCl.trim()) { errorDiv.textContent = 'Inserisci l\'email del cliente.'; errorDiv.style.display = 'block'; return; }
         }
       } else {
         var nome    = (document.getElementById('f-nome')||{}).value||'';

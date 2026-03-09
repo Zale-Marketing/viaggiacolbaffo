@@ -1611,17 +1611,30 @@ let activeRoomTypes = <?= json_encode($fc_room_types ?? ['X1','X2','X3','X4']) ?
 function toggleRoom(btn) {
     const room = btn.dataset.room;
     const panel = document.getElementById('rp-' + room);
-    if (btn.classList.contains('active')) {
-        btn.classList.remove('active');
-        activeRoomTypes = activeRoomTypes.filter(r => r !== room);
-        if (panel) panel.style.display = 'none';
-    } else {
+    const willActivate = !btn.classList.contains('active');
+    if (willActivate) {
         btn.classList.add('active');
         if (!activeRoomTypes.includes(room)) activeRoomTypes.push(room);
         activeRoomTypes.sort();
         if (panel) panel.style.display = 'block';
+    } else {
+        btn.classList.remove('active');
+        activeRoomTypes = activeRoomTypes.filter(r => r !== room);
+        if (panel) panel.style.display = 'none';
     }
 }
+
+// Re-apply panel visibility on load based on activeRoomTypes
+document.addEventListener('DOMContentLoaded', function() {
+    ['X1','X3','X4','X5'].forEach(function(room) {
+        const btn   = document.querySelector('.room-pill[data-room="' + room + '"]');
+        const panel = document.getElementById('rp-' + room);
+        if (!panel) return;
+        const isActive = activeRoomTypes.includes(room);
+        if (btn) { btn.classList.toggle('active', isActive); }
+        panel.style.display = isActive ? 'block' : 'none';
+    });
+});
 
 function toggleSection(panelId, show) {
     const el = document.getElementById(panelId);
