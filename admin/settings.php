@@ -44,6 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'company_name',
         'company_vat',
         'company_address',
+        'sg_api_token',
+        'sg_site_id',
     ];
 
     foreach ($text_fields as $field) {
@@ -293,6 +295,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         autocomplete="off"
                     >
                     <p class="form-hint">Usato per la generazione automatica del Form Config con Claude AI.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 6: Cache SiteGround -->
+        <div class="card" style="margin-bottom:24px;">
+            <div class="card__header">
+                <h2 class="card__title"><i class="fa-solid fa-bolt"></i> Cache SiteGround</h2>
+            </div>
+            <div class="card__body">
+                <div class="form-group">
+                    <label class="form-label" for="sg_api_token">API Token SiteGround</label>
+                    <input
+                        type="password"
+                        id="sg_api_token"
+                        name="sg_api_token"
+                        class="form-control"
+                        value="<?= htmlspecialchars($config['sg_api_token'] ?? '') ?>"
+                        autocomplete="off"
+                    >
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="sg_site_id">ID Sito SiteGround</label>
+                    <input
+                        type="text"
+                        id="sg_site_id"
+                        name="sg_site_id"
+                        class="form-control"
+                        value="<?= htmlspecialchars($config['sg_site_id'] ?? '') ?>"
+                    >
+                    <p class="form-hint">Opzionale. Ottieni il token su my.siteground.com → API. Lascia vuoto per disabilitare la pulizia automatica della cache.</p>
                 </div>
             </div>
         </div>

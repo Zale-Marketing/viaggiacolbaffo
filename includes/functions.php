@@ -71,3 +71,28 @@ function save_destinations(array $destinations): bool {
     fclose($fp);
     return true;
 }
+
+/**
+ * purge_sg_cache()
+ * Flushes the SiteGround dynamic cache for the entire site via their REST API.
+ * Requires SG_API_TOKEN and SG_SITE_ID to be defined in config.
+ * Silently skips if credentials are not set.
+ */
+function purge_sg_cache(): void {
+    $token   = defined('SG_API_TOKEN') ? SG_API_TOKEN : '';
+    $site_id = defined('SG_SITE_ID')  ? SG_SITE_ID  : '';
+    if ($token === '' || $site_id === '') return;
+    $url = 'https://api.siteground.com/v1/projects/' . rawurlencode($site_id) . '/cache';
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_CUSTOMREQUEST  => 'DELETE',
+        CURLOPT_HTTPHEADER     => [
+            'Authorization: Bearer ' . $token,
+            'Content-Type: application/json',
+        ],
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT        => 8,
+    ]);
+    curl_exec($ch);
+    curl_close($ch);
+}

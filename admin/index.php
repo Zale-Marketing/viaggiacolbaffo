@@ -48,6 +48,7 @@ if (in_array($ajax_action, ['toggle_published', 'soft_delete', 'restore', 'empty
             if ($trip['slug'] === $slug) {
                 $trip['published'] = !(bool)($trip['published'] ?? false);
                 save_trips($trips);
+                purge_sg_cache();
                 echo json_encode(['success' => true, 'published' => $trip['published']]);
                 exit;
             }

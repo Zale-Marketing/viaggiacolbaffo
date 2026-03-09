@@ -271,7 +271,7 @@ img, svg { display: block; max-width: 100%; }
 }
 
 .admin-card__body {
-  padding: 24px;
+  padding: 28px 28px;
 }
 
 /* Legacy class kept for compat */
@@ -285,7 +285,7 @@ img, svg { display: block; max-width: 100%; }
 }
 .card__header { padding: 18px 24px; border-bottom: 1px solid var(--border); background: #fafbff; }
 .card__title { font-size: 15px; font-weight: 700; color: var(--navy); }
-.card__body { padding: 24px; }
+.card__body { padding: 28px; }
 
 /* ── TABLE ────────────────────────────────────────────────── */
 .admin-table-wrapper {
@@ -849,6 +849,15 @@ textarea { resize: vertical; min-height: 100px; }
   transition: border-color 0.15s;
 }
 .hotel-admin-row:hover { border-color: var(--navy); }
+
+.tab-panel > .admin-card,
+.tab-panel > .card { margin-bottom: 28px; }
+
+.fc-section { padding: 24px 28px; }
+
+.itinerary-row { padding: 20px 20px; }
+
+.hotel-admin-row { padding: 24px 28px; }
 
 /* ── RESPONSIVE ───────────────────────────────────────────── */
 @media (max-width: 768px) {

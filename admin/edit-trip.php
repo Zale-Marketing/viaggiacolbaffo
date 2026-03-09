@@ -344,8 +344,32 @@ $preview_token_val = $trip['preview_token'] ?? '';
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
     <link rel="stylesheet" href="/admin/admin.css">
     <style>
+/* Quill editor skin overrides */
+  .ql-toolbar.ql-snow {
+    border: 1.5px solid var(--border) !important;
+    border-bottom: none !important;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
+    background: #fafbff;
+    font-family: inherit;
+  }
+  .ql-container.ql-snow {
+    border: 1.5px solid var(--border) !important;
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm) !important;
+    font-family: inherit;
+    font-size: 13px;
+    min-height: 90px;
+  }
+  .ql-container.ql-snow:focus-within {
+    border-color: var(--navy) !important;
+    box-shadow: 0 0 0 3px rgba(0,7,68,0.1);
+  }
+  .ql-editor { min-height: 90px; }
+  .itin-quill-container { margin-bottom: 0; }
+
 /* ── Image Uploader Component ─────────────────────── */
 .img-uploader {
   border: 2px dashed var(--border);
@@ -1233,8 +1257,11 @@ $preview_token_val = $trip['preview_token'] ?? '';
                           <input type="file" class="img-uploader__file-input" accept="image/*">
                         </div>
                         <input type="hidden" id="itin_img_<?= $i ?>" name="itinerary_image[]" value="<?= htmlspecialchars($day['image_url'] ?? '') ?>">
-                        <textarea name="itinerary_desc[]" rows="3"
-                            placeholder="Descrizione..."><?= htmlspecialchars($day['description'] ?? '') ?></textarea>
+                        <div class="itin-quill-container" data-idx="<?= $i ?>">
+                          <div id="quill-itin-<?= $i ?>"></div>
+                        </div>
+                        <input type="hidden" name="itinerary_desc[]" id="quill-hidden-itin-<?= $i ?>"
+                               value="<?= htmlspecialchars($day['description'] ?? '') ?>">
                     </div>
                     <div class="itinerary-actions">
                         <button type="button" class="btn-icon" onclick="moveRow(this,-1)" title="Su"><i class="fa-solid fa-chevron-up"></i></button>
@@ -1894,7 +1921,10 @@ function addItineraryRow() {
               <input type="file" class="img-uploader__file-input" accept="image/*">
             </div>
             <input type="hidden" id="itin_img_${n}" name="itinerary_image[]" value="">
-            <textarea name="itinerary_desc[]" rows="3" placeholder="Descrizione..."></textarea>
+            <div class="itin-quill-container" data-idx="${n}">
+              <div id="quill-itin-${n}"></div>
+            </div>
+            <input type="hidden" name="itinerary_desc[]" id="quill-hidden-itin-${n}" value="">
         </div>
         <div class="itinerary-actions">
             <button type="button" class="btn-icon" onclick="moveRow(this,-1)" title="Su"><i class="fa-solid fa-chevron-up"></i></button>
@@ -1903,6 +1933,7 @@ function addItineraryRow() {
         </div>`;
     container.appendChild(div);
     initSingleUploader('uploader-itin-' + n, 'itin_img_' + n);
+    initItinQuill(n);
     initDrag(); // re-bind drag events to new row
 }
 
@@ -2094,6 +2125,33 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Quill rich-text editor for itinerary descriptions
+// ─────────────────────────────────────────────────────────────────────────────
+function initItinQuill(idx) {
+    var editorEl = document.getElementById('quill-itin-' + idx);
+    if (!editorEl) return;
+    var hiddenEl = document.getElementById('quill-hidden-itin-' + idx);
+    var q = new Quill('#quill-itin-' + idx, {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                ['bold', 'italic'],
+                [{ 'list': 'bullet' }],
+                ['clean']
+            ]
+        }
+    });
+    // Load existing HTML content
+    if (hiddenEl && hiddenEl.value) {
+        q.clipboard.dangerouslyPasteHTML(hiddenEl.value);
+    }
+    // Sync to hidden input on every change
+    q.on('text-change', function() {
+        if (hiddenEl) hiddenEl.value = q.root.innerHTML;
+    });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // IMAGE UPLOADER COMPONENT
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -2275,6 +2333,9 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('[id^="uploader-hotel-"]').forEach(function(el) {
         var idx = el.id.replace('uploader-hotel-', '');
         initSingleUploader('uploader-hotel-' + idx, 'hotel_img_' + idx);
+    });
+    document.querySelectorAll('.itin-quill-container').forEach(function(el) {
+        initItinQuill(el.dataset.idx);
     });
 });
 

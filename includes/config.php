@@ -54,5 +54,9 @@ define('DATA_DIR', ROOT . '/data/');
 define('WAITLIST_WEBHOOK_URL', $_acfg['waitlist_webhook_url'] ?? '');    // POST target for destination waitlist form
 define('WHATSAPP_B2B_FALLBACK',$_acfg['b2b_webhook_url']     ?? '');    // WhatsApp link when TALLY_B2B_URL is empty
 
+// SiteGround Dynamic Cache — optional, set in data/admin-config.json
+define('SG_API_TOKEN',  $_acfg['sg_api_token']  ?? '');
+define('SG_SITE_ID',    $_acfg['sg_site_id']    ?? '');
+
 // ── Cleanup: do not pollute global scope with overlay variables ───────────────
 unset($_acfg, $_acfg_file);

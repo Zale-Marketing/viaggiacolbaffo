@@ -84,10 +84,17 @@ require_once ROOT . '/includes/header.php';
      STICKY TOP BAR (appears after hero on scroll)
      ======================================================== -->
 <div class="trip-topbar" id="trip-topbar">
-  <span class="trip-topbar__name"><?php echo htmlspecialchars($trip['title'] ?? ''); ?></span>
-  <?php if ($has_form): ?>
-  <a href="#richiedi-preventivo" class="trip-topbar__cta btn btn--gold">Richiedi Preventivo</a>
-  <?php endif; ?>
+  <div class="trip-topbar__left">
+    <span class="trip-topbar__name"><?php echo htmlspecialchars($trip['title'] ?? ''); ?></span>
+    <?php if (!empty($fc['competitor_enabled'])): ?>
+    <span class="trip-topbar__savings" id="topbar-savings"></span>
+    <?php endif; ?>
+  </div>
+  <div class="trip-topbar__right">
+    <?php if ($has_form): ?>
+    <a href="#richiedi-preventivo" class="trip-topbar__cta">Richiedi Preventivo</a>
+    <?php endif; ?>
+  </div>
 </div>
 
 <!-- ========================================================
@@ -118,6 +125,53 @@ require_once ROOT . '/includes/header.php';
 $accompagnatore = $trip['accompagnatore'] ?? null;
 $volo           = $trip['volo'] ?? null;
 ?>
+
+<!-- ========================================================
+     STICKY TAB NAVIGATION
+     ======================================================== -->
+<div class="trip-tabs" id="trip-tabs">
+  <nav class="trip-tabs__nav">
+    <button class="trip-tabs__btn active" data-target="itinerario">Itinerario</button>
+    <?php if (!empty($trip['hotel'])): ?>
+    <button class="trip-tabs__btn" data-target="alloggi">Alloggi</button>
+    <?php endif; ?>
+    <button class="trip-tabs__btn" data-target="cosa-include">Cosa Include</button>
+    <button class="trip-tabs__btn" data-target="galleria">Galleria</button>
+    <?php if ($has_form): ?>
+    <button class="trip-tabs__btn" data-target="richiedi-preventivo">Richiedi Preventivo</button>
+    <?php endif; ?>
+  </nav>
+</div>
+
+<!-- ========================================================
+     ITINERARY SECTION — TIMELINE
+     ======================================================== -->
+<section class="trip-section" id="itinerario">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-header__title">Itinerario</h2>
+    </div>
+    <div class="timeline">
+      <?php foreach (($trip['itinerary'] ?? []) as $day): ?>
+      <div class="timeline-item">
+        <div class="timeline-dot"><?php echo str_pad((int)$day['day'], 2, '0', STR_PAD_LEFT); ?></div>
+        <div class="timeline-card">
+          <?php if (!empty($day['image_url'])): ?>
+          <img class="timeline-card__photo" src="<?php echo htmlspecialchars($day['image_url']); ?>" alt="<?php echo htmlspecialchars($day['title']); ?>" loading="lazy">
+          <?php endif; ?>
+          <div class="timeline-card__body">
+            <?php if (!empty($day['location'])): ?>
+            <div class="timeline-card__location"><?php echo htmlspecialchars($day['location']); ?></div>
+            <?php endif; ?>
+            <div class="timeline-card__title"><?php echo htmlspecialchars($day['title']); ?></div>
+            <div class="timeline-card__desc"><?php echo strip_tags($day['description'] ?? '', '<p><br><strong><em><ul><ol><li><b><i>'); ?></div>
+          </div>
+        </div>
+      </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</section>
 
 <?php if (!empty($accompagnatore['nome'])): ?>
 <!-- ========================================================
@@ -217,53 +271,6 @@ $volo           = $trip['volo'] ?? null;
 </div>
 <?php endif; ?>
 
-<!-- ========================================================
-     STICKY TAB NAVIGATION
-     ======================================================== -->
-<div class="trip-tabs" id="trip-tabs">
-  <nav class="trip-tabs__nav">
-    <button class="trip-tabs__btn active" data-target="itinerario">Itinerario</button>
-    <?php if (!empty($trip['hotel'])): ?>
-    <button class="trip-tabs__btn" data-target="alloggi">Alloggi</button>
-    <?php endif; ?>
-    <button class="trip-tabs__btn" data-target="cosa-include">Cosa Include</button>
-    <button class="trip-tabs__btn" data-target="galleria">Galleria</button>
-    <?php if ($has_form): ?>
-    <button class="trip-tabs__btn" data-target="richiedi-preventivo">Richiedi Preventivo</button>
-    <?php endif; ?>
-  </nav>
-</div>
-
-<!-- ========================================================
-     ITINERARY SECTION — TIMELINE
-     ======================================================== -->
-<section class="trip-section" id="itinerario">
-  <div class="container">
-    <div class="section-header">
-      <h2 class="section-header__title">Itinerario</h2>
-    </div>
-    <div class="timeline">
-      <?php foreach (($trip['itinerary'] ?? []) as $day): ?>
-      <div class="timeline-item">
-        <div class="timeline-dot"><?php echo str_pad((int)$day['day'], 2, '0', STR_PAD_LEFT); ?></div>
-        <div class="timeline-card">
-          <?php if (!empty($day['image_url'])): ?>
-          <img class="timeline-card__photo" src="<?php echo htmlspecialchars($day['image_url']); ?>" alt="<?php echo htmlspecialchars($day['title']); ?>" loading="lazy">
-          <?php endif; ?>
-          <div class="timeline-card__body">
-            <?php if (!empty($day['location'])): ?>
-            <div class="timeline-card__location"><?php echo htmlspecialchars($day['location']); ?></div>
-            <?php endif; ?>
-            <div class="timeline-card__title"><?php echo htmlspecialchars($day['title']); ?></div>
-            <p class="timeline-card__desc"><?php echo htmlspecialchars($day['description']); ?></p>
-          </div>
-        </div>
-      </div>
-      <?php endforeach; ?>
-    </div>
-  </div>
-</section>
-
 <?php if (!empty($trip['hotel'])): ?>
 <!-- ========================================================
      ALLOGGI SECTION
@@ -274,21 +281,45 @@ $volo           = $trip['volo'] ?? null;
     <div class="section-header">
       <h2 class="section-header__title">Alloggi</h2>
     </div>
-    <div class="hotel-grid">
+    <div class="hotel-list">
       <?php foreach ($trip['hotel'] as $hotel): ?>
-      <div class="hotel-card">
-        <img class="hotel-card-img" src="<?php echo htmlspecialchars($hotel['image_url'] ?? ''); ?>" alt="<?php echo htmlspecialchars($hotel['nome']); ?>" loading="lazy">
-        <span class="hotel-badge-city"><?php echo htmlspecialchars($hotel['citta']); ?></span>
-        <span class="hotel-badge-notti"><?php echo (int)$hotel['notti']; ?> notti</span>
-        <div class="hotel-card-body">
-          <div class="hotel-stars"><?php echo str_repeat('&#9733;', (int)($hotel['stelle'] ?? 0)); ?></div>
-          <div class="hotel-name"><?php echo htmlspecialchars($hotel['nome']); ?></div>
-          <p class="hotel-desc"><?php echo htmlspecialchars($hotel['descrizione'] ?? ''); ?></p>
-          <div class="hotel-address">&#128205; <?php echo htmlspecialchars($hotel['indirizzo'] ?? ''); ?></div>
-          <?php if ($hotel['inclusa_colazione'] ?? false): ?>
-          <span class="hotel-colazione-yes">&#10003; Colazione inclusa</span>
+      <div class="hotel-row">
+        <div class="hotel-row__img-wrap">
+          <?php if (!empty($hotel['image_url'])): ?>
+          <img src="<?php echo htmlspecialchars($hotel['image_url']); ?>"
+               alt="<?php echo htmlspecialchars($hotel['nome']); ?>"
+               loading="lazy" class="hotel-row__img">
           <?php else: ?>
-          <span class="hotel-colazione-no">Colazione non inclusa</span>
+          <div class="hotel-row__img-placeholder"><i class="fa-solid fa-hotel"></i></div>
+          <?php endif; ?>
+          <span class="hotel-badge-notti"><?php echo (int)$hotel['notti']; ?> notti</span>
+        </div>
+        <div class="hotel-row__body">
+          <div class="hotel-row__top">
+            <div>
+              <div class="hotel-row__city">
+                <i class="fa-solid fa-location-dot"></i>
+                <?php echo htmlspecialchars($hotel['citta']); ?>
+              </div>
+              <div class="hotel-row__name"><?php echo htmlspecialchars($hotel['nome']); ?></div>
+              <div class="hotel-stars"><?php echo str_repeat('&#9733;', (int)($hotel['stelle'] ?? 0)); ?></div>
+            </div>
+            <div class="hotel-row__badges">
+              <?php if ($hotel['inclusa_colazione'] ?? false): ?>
+              <span class="hotel-colazione-yes"><i class="fa-solid fa-mug-hot"></i> Colazione inclusa</span>
+              <?php else: ?>
+              <span class="hotel-colazione-no">Colazione non inclusa</span>
+              <?php endif; ?>
+            </div>
+          </div>
+          <?php if (!empty($hotel['descrizione'])): ?>
+          <p class="hotel-row__desc"><?php echo htmlspecialchars($hotel['descrizione']); ?></p>
+          <?php endif; ?>
+          <?php if (!empty($hotel['indirizzo'])): ?>
+          <div class="hotel-row__address">
+            <i class="fa-solid fa-map-pin"></i>
+            <?php echo htmlspecialchars($hotel['indirizzo']); ?>
+          </div>
           <?php endif; ?>
         </div>
       </div>
@@ -766,9 +797,26 @@ function toggleClientEmail() {
 
   function onScroll() {
     var heroBottom = hero ? hero.getBoundingClientRect().bottom : 0;
-    if (topbar) topbar.classList.toggle('visible', heroBottom < 80);
+    var topbarVisible = heroBottom < 80;
+    if (topbar) topbar.classList.toggle('visible', topbarVisible);
+    // Keep tabs below topbar when it's visible, below header when not
+    if (tabs) tabs.style.top = topbarVisible ? '56px' : '60px';
   }
   window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Populate topbar savings badge (for 2 people, no insurance, as reference)
+  if (typeof CONFIG !== 'undefined' && CONFIG.competitor_enabled) {
+    var topbarSavings = document.getElementById('topbar-savings');
+    if (topbarSavings) {
+      var ref_ours = CONFIG.prezzo_base_persona * 2;
+      var ref_comp = CONFIG.prezzo_concorrenza_persona * 2;
+      var ref_save = ref_comp - ref_ours;
+      if (ref_save > 0) {
+        topbarSavings.textContent = '✓ Risparmi fino a €' + ref_save.toLocaleString('it-IT') + ' vs altre agenzie';
+        topbarSavings.style.display = 'inline-flex';
+      }
+    }
+  }
 
   // --- Tab navigation: smooth scroll with offset ---
   document.querySelectorAll('.trip-tabs__btn').forEach(function (btn) {
@@ -777,7 +825,8 @@ function toggleClientEmail() {
       btn.classList.add('active');
       var target = document.getElementById(btn.dataset.target);
       if (!target) return;
-      var offset = (tabs ? tabs.offsetHeight : 0) + 8;
+      var topbarH = (topbar && topbar.classList.contains('visible')) ? 56 : 60;
+      var offset = topbarH + (tabs ? tabs.offsetHeight : 0) + 8;
       var top = target.getBoundingClientRect().top + window.scrollY - offset;
       window.scrollTo({ top: top, behavior: 'smooth' });
     });
@@ -1044,7 +1093,7 @@ function toggleClientEmail() {
       // Savings
       if (CONFIG.competitor_enabled) {
         var peSavings = document.getElementById('pe-savings');
-        var savings = calcCompetitor() - totale;
+        var savings = calcCompetitor() - subtotale;
         if (peSavings) {
           if (savings > 0) {
             peSavings.className = 'qf-savings positive';
