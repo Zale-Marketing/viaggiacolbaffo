@@ -903,6 +903,87 @@ function toggleClientEmail() {
   if (!checkbox.checked) emailInput.value = '';
 }
 (function () {
+  // ── LEAD GATE ──────────────────────────────────────────────────
+  var STORAGE_KEY = 'vcb_unlocked_' + GATE.slug;
+  var gateEl      = document.getElementById('lead-gate');
+  var gatedEls    = document.querySelectorAll('.gated-content');
+
+  function unlockGate() {
+    if (gateEl) {
+      gateEl.classList.add('lead-gate--unlocked');
+      setTimeout(function() { gateEl.style.display = 'none'; }, 400);
+    }
+    gatedEls.forEach(function(el) {
+      el.classList.remove('gated-content--hidden');
+    });
+    try { localStorage.setItem(STORAGE_KEY, '1'); } catch(e) {}
+  }
+
+  function isUnlocked() {
+    try { return localStorage.getItem(STORAGE_KEY) === '1'; } catch(e) { return false; }
+  }
+
+  if (isUnlocked()) {
+    unlockGate();
+  } else {
+    gatedEls.forEach(function(el) {
+      el.classList.add('gated-content--hidden');
+    });
+  }
+
+  var lgSubmit = document.getElementById('lg-submit');
+  var lgError  = document.getElementById('lg-error');
+
+  if (lgSubmit) {
+    lgSubmit.addEventListener('click', function() {
+      var nome     = (document.getElementById('lg-nome')     || {}).value || '';
+      var cognome  = (document.getElementById('lg-cognome')  || {}).value || '';
+      var email    = (document.getElementById('lg-email')    || {}).value || '';
+      var telefono = (document.getElementById('lg-telefono') || {}).value || '';
+
+      if (!nome.trim() || !cognome.trim() || !email.trim() || !telefono.trim()) {
+        lgError.textContent = 'Compila tutti i campi per continuare.';
+        lgError.style.display = 'block';
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        lgError.textContent = 'Inserisci un indirizzo email valido.';
+        lgError.style.display = 'block';
+        return;
+      }
+      lgError.style.display = 'none';
+
+      document.getElementById('lg-btn-text').style.display    = 'none';
+      document.getElementById('lg-btn-spinner').style.display = 'inline';
+      lgSubmit.disabled = true;
+
+      var payload = {
+        nome: nome, cognome: cognome, email: email, telefono: telefono,
+        viaggio: GATE.slug, source: 'lead_gate'
+      };
+
+      var doUnlock = function() {
+        document.getElementById('lg-btn-text').style.display    = 'inline';
+        document.getElementById('lg-btn-spinner').style.display = 'none';
+        lgSubmit.disabled = false;
+        unlockGate();
+      };
+
+      if (GATE.webhook) {
+        fetch(GATE.webhook, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+        .then(function() { doUnlock(); })
+        .catch(function() { doUnlock(); });
+      } else {
+        doUnlock();
+      }
+    });
+  }
+  // ── END LEAD GATE ──────────────────────────────────────────────
+
   // --- Sticky top bar ---
   var hero   = document.querySelector('.trip-hero');
   var topbar = document.getElementById('trip-topbar');
