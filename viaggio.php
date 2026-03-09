@@ -51,7 +51,8 @@ function fmt_date($d): string {
 $date_display = fmt_date($trip['date_start'] ?? '') . ' – ' . fmt_date($trip['date_end'] ?? '');
 
 $form_config = $trip['form_config'] ?? [];
-$has_form    = isset($form_config['prezzo_adulto']) && (int)($form_config['prezzo_adulto']) > 0;
+$fc          = $form_config; // alias for template
+$has_form    = isset($form_config['prezzo_base_persona']) && (int)($form_config['prezzo_base_persona']) > 0;
 
 require_once ROOT . '/includes/header.php';
 ?>
@@ -426,166 +427,294 @@ $status_labels_rel = ['confermata'=>'Confermata','ultimi-posti'=>'Ultimi posti',
 
 <?php if ($has_form): ?>
 <script>
-const PREZZO_ADULTO = <?= (int)($form_config['prezzo_adulto'] ?? 4350) ?>;
-const SUPPLEMENTO_SINGOLA = <?= (int)($form_config['supplemento_singola'] ?? 1600) ?>;
-const PREZZO_TERZO_QUARTO_LETTO = <?= (int)($form_config['prezzo_terzo_letto'] ?? 3000) ?>;
-const PERCENTUALE_ASSICURAZIONE = <?= ($form_config['percentuale_assicurazione'] ?? 5) / 100 ?>;
-const PREZZO_MEDIO_CONCORRENZA_PER_PERSONA = <?= (int)($form_config['prezzo_concorrenza_per_persona'] ?? 7000) ?>;
-const PREZZO_TERZO_QUARTO_LETTO_CONCORRENZA = <?= (int)($form_config['prezzo_terzo_quarto_concorrenza'] ?? 5000) ?>;
-const VALID_AGENCY_HASH = '<?= htmlspecialchars($form_config['agency_code_hash'] ?? 'af97d1baebca1eaae1ce418c082402e60c2529ef719983ad7c8dda6ea1f8e8ee') ?>';
-const WEBHOOK_URL = '<?= htmlspecialchars($form_config['webhook_url'] ?? '') ?>';
-const TRIP_TITLE = '<?= htmlspecialchars($trip['title'] ?? '') ?>';
+const CONFIG = {
+  nome_viaggio: "<?= htmlspecialchars($trip['title'] ?? '') ?>",
+  prezzo_base_persona: <?= (int)($fc['prezzo_base_persona'] ?? 4350) ?>,
+  room_types: <?= json_encode($fc['room_types'] ?? ['X1','X2','X3','X4']) ?>,
+  supplemento_singola: <?= (int)($fc['supplemento_singola'] ?? 1600) ?>,
+  sconto_terzo_letto: <?= (int)($fc['sconto_terzo_letto'] ?? 0) ?>,
+  sconto_quarto_letto: <?= (int)($fc['sconto_quarto_letto'] ?? 0) ?>,
+  sconto_quinto_letto: <?= (int)($fc['sconto_quinto_letto'] ?? 0) ?>,
+  child_discounts_enabled: <?= !empty($fc['child_discounts_enabled']) ? 'true' : 'false' ?>,
+  child_discount_brackets: <?= json_encode($fc['child_discount_brackets'] ?? []) ?>,
+  insurance_enabled: <?= !empty($fc['insurance_enabled']) ? 'true' : 'false' ?>,
+  percentuale_assicurazione: <?= ($fc['percentuale_assicurazione'] ?? 5) / 100 ?>,
+  competitor_enabled: <?= !empty($fc['competitor_enabled']) ? 'true' : 'false' ?>,
+  prezzo_concorrenza_persona: <?= (int)($fc['prezzo_concorrenza_persona'] ?? 7000) ?>,
+  prezzo_concorrenza_letti_extra: <?= (int)($fc['prezzo_concorrenza_letti_extra'] ?? 5000) ?>,
+  agency_code_hash: "<?= htmlspecialchars($fc['agency_code_hash'] ?? 'af97d1baebca1eaae1ce418c082402e60c2529ef719983ad7c8dda6ea1f8e8ee') ?>",
+  webhook_url: "<?= htmlspecialchars($fc['webhook_url'] ?? '') ?>"
+};
 </script>
 <!-- ========================================================
      QUOTE FORM SECTION
      ======================================================== -->
+<style>
+.qf-wrap { max-width:900px; margin:0 auto; font-family:inherit; }
+.qf-header {
+  background: linear-gradient(135deg,#000744 0%,#000a66 100%);
+  color:#fff; padding:28px 32px; border-radius:12px 12px 0 0;
+}
+.qf-header h2 { margin:0 0 6px; font-size:24px; font-weight:700; }
+.qf-header p  { margin:0; opacity:.8; font-size:15px; }
+.qf-body { background:#fff; border:2px solid #000744; border-top:none; padding:28px 32px; border-radius:0 0 12px 12px; }
+.qf-section-title {
+  color:#000744; font-size:20px; font-weight:700;
+  display:flex; align-items:center; gap:10px; margin:0 0 18px;
+}
+.qf-section-title::before {
+  content:''; display:inline-block; width:4px; height:24px;
+  background:#cc0031; border-radius:2px; flex-shrink:0;
+}
+.qf-section { margin-bottom:24px; }
+.qf-toggle-wrap {
+  display:inline-flex; border-radius:50px; overflow:hidden;
+  border:2px solid #000744; margin-bottom:24px;
+}
+.qf-toggle-btn {
+  padding:10px 28px; border:none; background:#fff; color:#000744;
+  font-weight:600; font-size:15px; cursor:pointer; transition:all .2s;
+}
+.qf-toggle-btn.active { background:#cc0031; color:#fff; }
+.qf-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.qf-field { display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
+.qf-label { font-weight:600; color:#000744; font-size:14px; }
+.qf-input, .qf-textarea {
+  padding:12px 16px; border:2px solid #e0e0e0; border-radius:8px;
+  font-size:15px; transition:border-color .2s, box-shadow .2s; font-family:inherit;
+}
+.qf-input:focus, .qf-textarea:focus {
+  outline:none; border-color:#000744;
+  box-shadow:0 0 0 3px rgba(0,7,68,.1);
+}
+.qf-textarea { resize:vertical; min-height:90px; }
+.qf-counter-wrap { display:flex; align-items:center; gap:12px; }
+.qf-counter-btn {
+  width:40px; height:40px; border:2px solid #000744; background:#fff;
+  color:#000744; border-radius:8px; font-size:20px; font-weight:bold;
+  cursor:pointer; transition:all .2s; display:flex; align-items:center; justify-content:center;
+}
+.qf-counter-btn:hover:not(:disabled) { background:#000744; color:#fff; }
+.qf-counter-btn:disabled { opacity:.3; cursor:default; }
+.qf-counter-val { font-size:24px; font-weight:700; color:#000744; min-width:40px; text-align:center; }
+.qf-price-box {
+  background:linear-gradient(135deg,#000744 0%,#000a66 100%);
+  color:#fff; padding:25px; border-radius:12px; margin:24px 0;
+  box-shadow:0 8px 16px rgba(0,7,68,.2);
+}
+.qf-price-line {
+  display:flex; justify-content:space-between; padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.2); font-size:15px;
+}
+.qf-price-line:last-child { border-bottom:none; }
+.qf-total-line {
+  background:#fff; border-radius:8px; padding:15px 18px;
+  color:#000744; font-size:24px; font-weight:700;
+  display:flex; justify-content:space-between; align-items:center; margin-top:16px;
+}
+.qf-savings {
+  border-radius:8px; padding:15px; text-align:center;
+  margin-top:15px; font-weight:600; font-size:15px;
+}
+.qf-savings.positive { background:#fff; border:2px solid #28a745; color:#28a745; }
+.qf-savings.neutral  { background:#fff; border:2px solid #000744; color:#000744; }
+.qf-checkbox-group {
+  padding:16px; background:#f8f9fa; border-radius:8px;
+  border:2px solid transparent; transition:border-color .2s; margin-bottom:12px;
+}
+.qf-checkbox-group:hover { border-color:#000744; }
+.qf-checkbox-group label { display:flex; align-items:center; gap:10px; cursor:pointer; font-size:15px; }
+.qf-checkbox-group input[type=checkbox] { accent-color:#cc0031; width:18px; height:18px; }
+.qf-agency-banner {
+  background:#f0f8f0; border:1px solid #2ecc71; border-radius:6px;
+  padding:12px 16px; margin-bottom:16px; font-size:14px; color:#1a7a40;
+}
+.qf-submit {
+  width:100%; padding:18px; background:linear-gradient(135deg,#cc0031,#e60038);
+  color:#fff; border:none; border-radius:8px; font-size:18px; font-weight:700;
+  cursor:pointer; box-shadow:0 4px 12px rgba(204,0,49,.3); transition:all .2s;
+}
+.qf-submit:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 20px rgba(204,0,49,.4); }
+.qf-submit:disabled { opacity:.6; cursor:default; transform:none; }
+.qf-error { background:#f8d7da; color:#721c24; border:2px solid #f5c6cb; border-radius:8px; padding:14px 18px; margin-bottom:16px; }
+.qf-success { background:#d4edda; color:#155724; border:2px solid #c3e6cb; border-radius:8px; padding:24px; text-align:center; }
+.qf-spinner {
+  display:inline-block; width:40px; height:40px;
+  border:4px solid #f3f3f3; border-top:4px solid #000744;
+  border-radius:50%; animation:qfspin .8s linear infinite; margin:20px auto;
+}
+@keyframes qfspin { to { transform:rotate(360deg); } }
+.qf-child-age-input { width:90px; padding:8px 12px; border:2px solid #e0e0e0; border-radius:6px; font-size:14px; margin-top:8px; }
+.qf-child-age-input:focus { outline:none; border-color:#000744; }
+@media (max-width:768px) {
+  .qf-header { padding:20px; }
+  .qf-body { padding:20px; }
+  .qf-grid { grid-template-columns:1fr; }
+  .qf-toggle-wrap { width:100%; }
+  .qf-toggle-btn { flex:1; text-align:center; }
+  .qf-counter-wrap { justify-content:center; }
+}
+</style>
+
 <section class="quote-form-section" id="richiedi-preventivo">
-  <div class="quote-form-inner">
+<div class="qf-wrap">
+  <div class="qf-header">
     <h2>Richiedi il tuo Preventivo</h2>
-    <p style="text-align:center;color:var(--grey);margin-bottom:2rem;">
-      Compila il modulo — Lorenzo ti risponde entro 24 ore.
-    </p>
+    <p>Compila il modulo — Lorenzo ti risponde entro 24 ore.</p>
+  </div>
+  <div class="qf-body">
 
     <div id="quote-form-wrap">
 
-      <!-- B2B/B2C toggle — default: Agenzia -->
-      <div class="client-toggle" id="client-toggle" style="margin-bottom:1.5rem;">
-        <button class="client-toggle__btn" data-type="privato" type="button">Privato</button>
-        <button class="client-toggle__btn active" data-type="agenzia" type="button">Agenzia</button>
+      <!-- B2B/B2C toggle -->
+      <div class="qf-toggle-wrap">
+        <button class="qf-toggle-btn active" type="button" data-type="agenzia" id="btn-agenzia">Agenzia</button>
+        <button class="qf-toggle-btn" type="button" data-type="privato" id="btn-privato">Privato</button>
       </div>
 
-      <!-- Agency code entry — visible in Agenzia mode by default -->
-      <div class="form-row" id="agency-code-row">
-        <label class="form-label" for="f-agency-code">Codice Agenzia *</label>
-        <input class="form-input" type="password" id="f-agency-code" name="agency_code"
-               placeholder="Inserisci il codice" autocomplete="off">
-        <div id="agency-code-feedback" style="font-size:0.8rem;margin-top:0.35rem;"></div>
+      <!-- Agency code unlock -->
+      <div id="agency-code-row" class="qf-section">
+        <div class="qf-field">
+          <label class="qf-label" for="f-agency-code">Codice Agenzia *</label>
+          <input class="qf-input" type="password" id="f-agency-code" autocomplete="off" placeholder="Inserisci il codice agenzia">
+          <div id="agency-code-feedback" style="font-size:13px;margin-top:4px;"></div>
+        </div>
       </div>
 
-      <div id="form-error-msg" class="form-error" style="display:none;"></div>
+      <div id="form-error-msg" style="display:none;" class="qf-error"></div>
 
       <form id="quote-form" novalidate>
+        <input type="hidden" id="tipo-cliente-hidden" name="tipo_cliente" value="agenzia">
 
-        <input type="hidden" name="trip_slug" value="<?php echo htmlspecialchars($trip['slug']); ?>">
-        <input type="hidden" name="trip_title" value="<?php echo htmlspecialchars($trip['title']); ?>">
-        <input type="hidden" name="tipo_cliente" id="tipo-cliente-hidden" value="agenzia">
-
-        <!-- Nome + Cognome -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-          <div class="form-row">
-            <label class="form-label" for="f-nome">Nome *</label>
-            <input class="form-input" type="text" id="f-nome" name="nome" required>
+        <!-- B2B Fields -->
+        <div id="b2b-fields">
+          <div class="qf-agency-banner">
+            <i class="fa-solid fa-shield-halved"></i> Preventivo riservato agenzie — prezzi netto B2B garantiti.
           </div>
-          <div class="form-row">
-            <label class="form-label" for="f-cognome">Cognome *</label>
-            <input class="form-input" type="text" id="f-cognome" name="cognome" required>
+          <div class="qf-section-title">Dati Agenzia</div>
+          <div class="qf-field">
+            <label class="qf-label" for="f-nome-agenzia">Nome Agenzia *</label>
+            <input class="qf-input" type="text" id="f-nome-agenzia" name="nome_agenzia">
           </div>
-        </div>
-
-        <!-- Email + Telefono -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-          <div class="form-row">
-            <label class="form-label" for="f-email">Email *</label>
-            <input class="form-input" type="email" id="f-email" name="email" required>
-          </div>
-          <div class="form-row">
-            <label class="form-label" for="f-telefono">Telefono</label>
-            <input class="form-input" type="tel" id="f-telefono" name="telefono">
-          </div>
-        </div>
-
-        <!-- Adulti counter -->
-        <div class="form-row">
-          <label class="form-label">Adulti *</label>
-          <div class="counter-input">
-            <button class="counter-btn" type="button" data-counter="adulti" data-action="dec">−</button>
-            <span class="counter-val" id="adulti-val">2</span>
-            <button class="counter-btn" type="button" data-counter="adulti" data-action="inc">+</button>
-          </div>
-          <input type="hidden" name="adulti" id="adulti-hidden" value="2">
-        </div>
-
-        <!-- Bambini counter -->
-        <div class="form-row">
-          <label class="form-label">Bambini <span style="font-size:0.8em;color:var(--grey)">(max 4 in totale)</span></label>
-          <div class="counter-input">
-            <button class="counter-btn" type="button" data-counter="bambini" data-action="dec">−</button>
-            <span class="counter-val" id="bambini-val">0</span>
-            <button class="counter-btn" type="button" data-counter="bambini" data-action="inc">+</button>
-          </div>
-          <input type="hidden" name="bambini" id="bambini-hidden" value="0">
-          <div class="child-ages" id="child-ages"></div>
-        </div>
-
-        <!-- Insurance checkbox -->
-        <div class="form-row addon-item" style="margin-top:0.5rem;">
-          <input type="checkbox" id="cb-assicurazione" name="assicurazione" value="1">
-          <label class="addon-item__label" for="cb-assicurazione">Aggiungi assicurazione viaggio</label>
-          <span class="addon-item__price" id="assicurazione-price-label"></span>
-        </div>
-
-        <!-- Price estimate box -->
-        <div class="price-estimate" id="price-estimate">
-          <div class="price-estimate__total" id="pe-total">€0</div>
-          <div class="price-estimate__breakdown" id="pe-breakdown"></div>
-          <div class="price-estimate__savings" id="pe-savings" style="display:none;"></div>
-        </div>
-
-        <!-- Agency fields — unlocked by valid code -->
-        <div class="agency-fields" id="agency-fields" style="display:none;">
-          <div class="form-row">
-            <div style="background:#f0f8f0;border:1px solid #2ecc71;border-radius:6px;padding:0.75rem 1rem;margin-bottom:1rem;font-size:0.85rem;color:#1a7a40;">
-              <i class="fa-solid fa-shield-halved"></i> Preventivo riservato agenzie — prezzi netto B2B garantiti.
+          <div class="qf-grid">
+            <div class="qf-field">
+              <label class="qf-label" for="f-email-agenzia">Email Agenzia *</label>
+              <input class="qf-input" type="email" id="f-email-agenzia" name="email_agenzia" required>
+            </div>
+            <div class="qf-field">
+              <label class="qf-label" for="f-telefono-b2b">Telefono</label>
+              <input class="qf-input" type="tel" id="f-telefono-b2b" name="telefono">
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-label" for="f-nome-agenzia">Nome Agenzia *</label>
-            <input class="form-input" type="text" id="f-nome-agenzia" name="nome_agenzia">
+          <div class="qf-field">
+            <label class="qf-label" for="f-nome-cliente">Nome Cliente Finale</label>
+            <input class="qf-input" type="text" id="f-nome-cliente" name="nome_cliente_finale">
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-            <div class="form-row">
-              <label class="form-label" for="f-iata">Codice IATA (opzionale)</label>
-              <input class="form-input" type="text" id="f-iata" name="codice_iata">
-            </div>
-            <div class="form-row">
-              <label class="form-label" for="f-citta">Città / Provincia *</label>
-              <input class="form-input" type="text" id="f-citta" name="citta">
-            </div>
+          <div class="qf-checkbox-group">
+            <label>
+              <input type="checkbox" id="cb-send-cliente" name="invia_al_cliente" value="1" onchange="toggleClientEmail(this.checked)">
+              Invia preventivo anche al cliente
+            </label>
           </div>
-          <div class="form-row">
-            <label class="form-label" for="f-commissione">Commissione richiesta (%)</label>
-            <input class="form-input" type="number" id="f-commissione" name="commissione" min="0" max="30" step="0.5">
-          </div>
-          <!-- Send quote to client too -->
-          <div class="form-row addon-item">
-            <input type="checkbox" id="cb-send-cliente" name="invia_al_cliente" value="1">
-            <label class="addon-item__label" for="cb-send-cliente">Invia preventivo anche al cliente</label>
+          <div id="cliente-email-row" class="qf-field" style="display:none;">
+            <label class="qf-label" for="f-email-cliente">Email Cliente</label>
+            <input class="qf-input" type="email" id="f-email-cliente" name="email_cliente">
           </div>
         </div>
+
+        <!-- B2C Fields -->
+        <div id="b2c-fields" style="display:none;">
+          <div class="qf-section-title">I tuoi dati</div>
+          <div class="qf-grid">
+            <div class="qf-field">
+              <label class="qf-label" for="f-nome">Nome *</label>
+              <input class="qf-input" type="text" id="f-nome" name="nome">
+            </div>
+            <div class="qf-field">
+              <label class="qf-label" for="f-cognome">Cognome *</label>
+              <input class="qf-input" type="text" id="f-cognome" name="cognome">
+            </div>
+          </div>
+          <div class="qf-grid">
+            <div class="qf-field">
+              <label class="qf-label" for="f-email">Email *</label>
+              <input class="qf-input" type="email" id="f-email" name="email">
+            </div>
+            <div class="qf-field">
+              <label class="qf-label" for="f-telefono">Telefono</label>
+              <input class="qf-input" type="tel" id="f-telefono" name="telefono">
+            </div>
+          </div>
+        </div>
+
+        <!-- Group Composition -->
+        <div class="qf-section" style="margin-top:20px;">
+          <div class="qf-section-title">Composizione Gruppo</div>
+          <div class="qf-field">
+            <label class="qf-label">Adulti</label>
+            <div class="qf-counter-wrap">
+              <button class="qf-counter-btn" type="button" id="btn-adulti-dec">−</button>
+              <span class="qf-counter-val" id="adulti-val">2</span>
+              <button class="qf-counter-btn" type="button" id="btn-adulti-inc">+</button>
+            </div>
+            <input type="hidden" name="adulti" id="adulti-hidden" value="2">
+          </div>
+          <div class="qf-field" id="bambini-row" style="display:<?php echo !empty($fc['child_discounts_enabled']) ? 'block' : 'none'; ?>;">
+            <label class="qf-label">Bambini</label>
+            <div class="qf-counter-wrap">
+              <button class="qf-counter-btn" type="button" id="btn-bambini-dec">−</button>
+              <span class="qf-counter-val" id="bambini-val">0</span>
+              <button class="qf-counter-btn" type="button" id="btn-bambini-inc">+</button>
+            </div>
+            <input type="hidden" name="bambini" id="bambini-hidden" value="0">
+            <div id="child-ages" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;"></div>
+          </div>
+          <div id="group-error" style="display:none;color:#cc0031;font-size:14px;margin-top:8px;font-weight:600;"></div>
+        </div>
+
+        <!-- Price Box -->
+        <div class="qf-price-box" id="price-box">
+          <div id="price-lines"></div>
+          <div class="qf-total-line">
+            <span>TOTALE FINALE</span>
+            <span id="pe-total">€0</span>
+          </div>
+          <div id="pe-savings" style="display:none;"></div>
+        </div>
+
+        <!-- Insurance -->
+        <?php if (!empty($fc['insurance_enabled'])): ?>
+        <div class="qf-checkbox-group">
+          <label>
+            <input type="checkbox" id="cb-assicurazione" name="assicurazione" value="1" onchange="updatePrice()">
+            Aggiungi assicurazione viaggio
+            <span id="assicurazione-price-label" style="color:#cc0031;font-weight:700;margin-left:4px;"></span>
+          </label>
+        </div>
+        <?php endif; ?>
 
         <!-- Note -->
-        <div class="form-row">
-          <label class="form-label" for="f-note">Note o domande</label>
-          <textarea class="form-textarea" id="f-note" name="note" placeholder="Hai richieste speciali? Scrivici qui…"></textarea>
+        <div class="qf-field">
+          <label class="qf-label" for="f-note">Note o domande</label>
+          <textarea class="qf-textarea" id="f-note" name="note" placeholder="Hai richieste speciali? Scrivici qui…"></textarea>
         </div>
 
-        <button type="submit" class="btn btn--gold" style="width:100%;padding:1rem;font-size:1rem;">
+        <button type="submit" class="qf-submit" id="qf-submit-btn">
           Invia Richiesta di Preventivo
         </button>
-
       </form>
     </div>
 
     <!-- WhatsApp CTA -->
-    <div class="whatsapp-cta">
+    <div class="whatsapp-cta" style="margin-top:24px;">
       <p>Preferisci scrivere su WhatsApp?
         <a href="https://wa.me/<?php echo str_replace([' ','+'], ['',''], WHATSAPP_NUMBER); ?>?text=<?php echo urlencode('Ciao Lorenzo! Sono interessato al viaggio ' . ($trip['title'] ?? '')); ?>" target="_blank" rel="noopener">
           <i class="fa-brands fa-whatsapp"></i> Scrivici ora
         </a>
       </p>
     </div>
-
   </div>
+</div>
 </section>
 <?php endif; ?>
 
@@ -681,281 +810,384 @@ const TRIP_TITLE = '<?= htmlspecialchars($trip['title'] ?? '') ?>';
   });
 
   // ----------------------------------------------------------------
-  // QUOTE FORM — parameter-based pricing, B2B default, SHA-256 agency code
+  // QUOTE FORM — CONFIG-driven pricing, B2B default, SHA-256 agency code
   // ----------------------------------------------------------------
   <?php if ($has_form): ?>
-  var adultCount = 2;
-  var childCount = 0;
+  function toggleClientEmail(show) {
+    var row = document.getElementById('cliente-email-row');
+    if (row) row.style.display = show ? 'block' : 'none';
+  }
+  (function() {
+    var adultCount = 2;
+    var childCount = 0;
+    var maxPersons = Math.max.apply(null, CONFIG.room_types.map(function(r){ return parseInt(r.replace('X','')); }));
+    var isAgency   = true;
+    var agencyUnlocked = false;
 
-  // -- Child age inputs --
-  function rebuildChildAges() {
-    var container = document.getElementById('child-ages');
-    container.innerHTML = '';
-    for (var i = 0; i < childCount; i++) {
-      var inp = document.createElement('input');
-      inp.type        = 'number';
-      inp.name        = 'eta_bambini[]';
-      inp.className   = 'form-input child-age-input';
-      inp.placeholder = 'Età bambino ' + (i + 1);
-      inp.min         = 0;
-      inp.max         = 17;
-      container.appendChild(inp);
+    var fmt = function(n) { return new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n); };
+
+    // -- Room type label --
+    function roomLabel() {
+      var n = adultCount + childCount;
+      return 'X' + n;
     }
-  }
 
-  // -- Base price (without insurance) --
-  function calcBase() {
-    var totalPersons  = adultCount + childCount;
-    // Special rule: 1 adult + 1 child → child pays adult price (treated as 2 adults)
-    var effectiveTotal = (adultCount === 1 && childCount === 1) ? 2 : totalPersons;
-    var total = 0;
-
-    if (adultCount === 1 && childCount === 0) {
-      total = PREZZO_ADULTO + SUPPLEMENTO_SINGOLA;
-    } else {
-      total = PREZZO_ADULTO * 2;
-      if (effectiveTotal >= 3) total += PREZZO_TERZO_QUARTO_LETTO;
-      if (effectiveTotal >= 4) total += PREZZO_TERZO_QUARTO_LETTO;
-    }
-    return total;
-  }
-
-  // -- Competitor total for savings comparison --
-  function calcCompetitor() {
-    var totalPersons   = adultCount + childCount;
-    var effectiveTotal = (adultCount === 1 && childCount === 1) ? 2 : totalPersons;
-    if (effectiveTotal <= 1) return PREZZO_MEDIO_CONCORRENZA_PER_PERSONA;
-    var ct = PREZZO_MEDIO_CONCORRENZA_PER_PERSONA * 2;
-    if (effectiveTotal >= 3) ct += PREZZO_TERZO_QUARTO_LETTO_CONCORRENZA;
-    if (effectiveTotal >= 4) ct += PREZZO_TERZO_QUARTO_LETTO_CONCORRENZA;
-    return ct;
-  }
-
-  // -- Update price display --
-  function updatePrice() {
-    var base       = calcBase();
-    var insChecked = document.getElementById('cb-assicurazione') && document.getElementById('cb-assicurazione').checked;
-    var insurance  = insChecked ? Math.round(base * PERCENTUALE_ASSICURAZIONE) : 0;
-    var total      = base + insurance;
-
-    // Build breakdown lines
-    var totalPersons   = adultCount + childCount;
-    var effectiveTotal = (adultCount === 1 && childCount === 1) ? 2 : totalPersons;
-    var lines = [];
-    if (adultCount === 1 && childCount === 0) {
-      lines.push('€' + (PREZZO_ADULTO + SUPPLEMENTO_SINGOLA).toLocaleString('it-IT') + ' (adulto singolo + suppl.)');
-    } else if (adultCount === 1 && childCount === 1) {
-      lines.push('€' + PREZZO_ADULTO.toLocaleString('it-IT') + ' × 2 (bambino come adulto)');
-    } else {
-      lines.push('€' + PREZZO_ADULTO.toLocaleString('it-IT') + ' × 2 adulti');
-      if (effectiveTotal >= 3) {
-        var s3 = PREZZO_TERZO_QUARTO_LETTO >= 0 ? '+€' : '−€';
-        lines.push(s3 + Math.abs(PREZZO_TERZO_QUARTO_LETTO).toLocaleString('it-IT') + ' (3° posto)');
+    // -- Child discount for a given age --
+    function childDiscountForAge(age) {
+      if (!CONFIG.child_discounts_enabled) return 0;
+      for (var i = 0; i < CONFIG.child_discount_brackets.length; i++) {
+        var b = CONFIG.child_discount_brackets[i];
+        if (age >= b.min_age && age <= b.max_age) return b.discount;
       }
-      if (effectiveTotal >= 4) {
-        var s4 = PREZZO_TERZO_QUARTO_LETTO >= 0 ? '+€' : '−€';
-        lines.push(s4 + Math.abs(PREZZO_TERZO_QUARTO_LETTO).toLocaleString('it-IT') + ' (4° posto)');
+      return 0;
+    }
+
+    // -- Child ages array --
+    function getChildAges() {
+      var ages = [];
+      document.querySelectorAll('.qf-child-age-input').forEach(function(inp) {
+        ages.push(inp.value !== '' ? parseInt(inp.value) : null);
+      });
+      return ages;
+    }
+
+    // -- Rebuild child age inputs --
+    function rebuildChildAges() {
+      var container = document.getElementById('child-ages');
+      if (!container) return;
+      var existing = container.querySelectorAll('.qf-child-age-input');
+      var oldVals = [];
+      existing.forEach(function(inp){ oldVals.push(inp.value); });
+      container.innerHTML = '';
+      for (var i = 0; i < childCount; i++) {
+        var inp = document.createElement('input');
+        inp.type = 'number'; inp.min = 0; inp.max = 17;
+        inp.className = 'qf-child-age-input';
+        inp.placeholder = 'Età bambino ' + (i+1);
+        inp.name = 'eta_bambini[]';
+        if (oldVals[i] !== undefined) inp.value = oldVals[i];
+        inp.addEventListener('input', updatePrice);
+        container.appendChild(inp);
       }
     }
-    if (insChecked) {
-      lines.push('+€' + insurance.toLocaleString('it-IT') + ' assicurazione (' + Math.round(PERCENTUALE_ASSICURAZIONE * 100) + '%)');
-    }
 
-    var peTotal   = document.getElementById('pe-total');
-    var peBreak   = document.getElementById('pe-breakdown');
-    var peSavings = document.getElementById('pe-savings');
-    var insLabel  = document.getElementById('assicurazione-price-label');
+    // -- Pricing logic --
+    function calcPricing() {
+      var n  = adultCount + childCount;
+      var pb = CONFIG.prezzo_base_persona;
+      var lines = [];
+      var subtotale = 0;
 
-    if (peTotal) peTotal.textContent = '€' + total.toLocaleString('it-IT');
-    if (peBreak) peBreak.textContent = lines.join('  ·  ');
-    if (insLabel) insLabel.textContent = '+€' + Math.round(base * PERCENTUALE_ASSICURAZIONE).toLocaleString('it-IT');
-
-    if (peSavings && PREZZO_MEDIO_CONCORRENZA_PER_PERSONA > 0) {
-      var savings = calcCompetitor() - total;
-      if (savings > 0) {
-        peSavings.textContent = '✓ Risparmi €' + savings.toLocaleString('it-IT') + ' rispetto ai prezzi di mercato';
-        peSavings.style.display = 'block';
+      if (n === 1) {
+        var singleTotal = pb + CONFIG.supplemento_singola;
+        subtotale = singleTotal;
+        lines.push({label: '1 Adulto × ' + fmt(pb), value: pb});
+        if (CONFIG.supplemento_singola) lines.push({label: 'Supplemento Singola', value: CONFIG.supplemento_singola});
       } else {
-        peSavings.style.display = 'none';
+        // First 2 people at full base price
+        lines.push({label: adultCount + ' Adult' + (adultCount > 1 ? 'i':'o') + ' × ' + fmt(pb), value: pb * 2});
+        subtotale += pb * 2;
+        if (n >= 3) {
+          var p3 = pb - CONFIG.sconto_terzo_letto;
+          lines.push({label: '3° Letto', value: p3});
+          subtotale += p3;
+        }
+        if (n >= 4) {
+          var p4 = pb - CONFIG.sconto_quarto_letto;
+          lines.push({label: '4° Letto', value: p4});
+          subtotale += p4;
+        }
+        if (n >= 5) {
+          var p5 = pb - CONFIG.sconto_quinto_letto;
+          lines.push({label: '5° Letto', value: p5});
+          subtotale += p5;
+        }
+        // Child discounts
+        var ages = getChildAges();
+        var totalChildDiscount = 0;
+        ages.forEach(function(age, i) {
+          if (age !== null && !isNaN(age)) {
+            var disc = childDiscountForAge(age);
+            if (disc > 0) {
+              totalChildDiscount += disc;
+              lines.push({label: 'Sconto Bambino ' + (i+1) + ' (' + age + ' anni)', value: -disc});
+            }
+          }
+        });
+        subtotale -= totalChildDiscount;
+      }
+
+      return {lines: lines, subtotale: subtotale};
+    }
+
+    function calcCompetitor() {
+      var n = adultCount + childCount;
+      if (n <= 1) return CONFIG.prezzo_concorrenza_persona;
+      var ct = CONFIG.prezzo_concorrenza_persona * 2;
+      if (n >= 3) ct += CONFIG.prezzo_concorrenza_letti_extra;
+      if (n >= 4) ct += CONFIG.prezzo_concorrenza_letti_extra;
+      return ct;
+    }
+
+    function updatePrice() {
+      var n = adultCount + childCount;
+      var groupErr = document.getElementById('group-error');
+      var submitBtn = document.getElementById('qf-submit-btn');
+
+      // Group size check
+      if (n > maxPersons) {
+        if (groupErr) { groupErr.textContent = 'Massimo ' + maxPersons + ' persone disponibili per questo viaggio.'; groupErr.style.display = 'block'; }
+        if (submitBtn) submitBtn.disabled = true;
+        return;
+      }
+      if (n === 1 && CONFIG.room_types.indexOf('X1') === -1) {
+        if (groupErr) { groupErr.textContent = 'La camera singola non è disponibile per questo viaggio.'; groupErr.style.display = 'block'; }
+        if (submitBtn) submitBtn.disabled = true;
+        return;
+      }
+      if (groupErr) groupErr.style.display = 'none';
+      if (submitBtn) submitBtn.disabled = false;
+
+      var pricing = calcPricing();
+      var subtotale = pricing.subtotale;
+      var cbAss = document.getElementById('cb-assicurazione');
+      var insChecked = cbAss && cbAss.checked;
+      var insurance  = insChecked ? Math.round(subtotale * CONFIG.percentuale_assicurazione) : 0;
+      var totale     = subtotale + insurance;
+
+      // Build price lines HTML
+      var linesHtml = '';
+      pricing.lines.forEach(function(l) {
+        linesHtml += '<div class="qf-price-line"><span>' + l.label + '</span><span>' + (l.value < 0 ? '−' + fmt(-l.value) : fmt(l.value)) + '</span></div>';
+      });
+      if (insChecked) {
+        linesHtml += '<div class="qf-price-line"><span>Assicurazione ' + Math.round(CONFIG.percentuale_assicurazione * 100) + '%</span><span>+' + fmt(insurance) + '</span></div>';
+      }
+      var plEl = document.getElementById('price-lines');
+      if (plEl) plEl.innerHTML = linesHtml;
+
+      var peTotal = document.getElementById('pe-total');
+      if (peTotal) peTotal.textContent = fmt(totale);
+
+      var insLabel = document.getElementById('assicurazione-price-label');
+      if (insLabel) insLabel.textContent = '+' + fmt(Math.round(subtotale * CONFIG.percentuale_assicurazione));
+
+      // Savings
+      if (CONFIG.competitor_enabled) {
+        var peSavings = document.getElementById('pe-savings');
+        var savings = calcCompetitor() - totale;
+        if (peSavings) {
+          if (savings > 0) {
+            peSavings.className = 'qf-savings positive';
+            peSavings.textContent = '✓ Risparmi ' + fmt(savings) + ' rispetto ai prezzi di mercato';
+            peSavings.style.display = 'block';
+          } else {
+            peSavings.className = 'qf-savings neutral';
+            peSavings.textContent = 'Prezzo in linea con il mercato';
+            peSavings.style.display = 'block';
+          }
+        }
       }
     }
-  }
 
-  // -- Counter buttons (max 4 total) --
-  document.querySelectorAll('.counter-btn').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var counter = btn.dataset.counter;
-      var action  = btn.dataset.action;
-      if (counter === 'adulti') {
-        var next = adultCount + (action === 'inc' ? 1 : -1);
-        if (next < 1 || next + childCount > 4) return;
-        adultCount = next;
+    // -- Counter logic --
+    function setCount(type, val) {
+      if (type === 'adulti') {
+        adultCount = val;
         document.getElementById('adulti-val').textContent = adultCount;
-        document.getElementById('adulti-hidden').value    = adultCount;
+        document.getElementById('adulti-hidden').value = adultCount;
       } else {
-        var nextC = childCount + (action === 'inc' ? 1 : -1);
-        if (nextC < 0 || adultCount + nextC > 4) return;
-        childCount = nextC;
+        childCount = val;
         document.getElementById('bambini-val').textContent = childCount;
-        document.getElementById('bambini-hidden').value    = childCount;
+        document.getElementById('bambini-hidden').value = childCount;
         rebuildChildAges();
       }
       updatePrice();
-    });
-  });
-
-  // Insurance toggle
-  var cbAss = document.getElementById('cb-assicurazione');
-  if (cbAss) cbAss.addEventListener('change', updatePrice);
-
-  updatePrice(); // Initial render
-
-  // -- Agency code SHA-256 validation --
-  function bufToHex(buf) {
-    return Array.from(new Uint8Array(buf))
-      .map(function (b) { return b.toString(16).padStart(2, '0'); })
-      .join('');
-  }
-
-  function validateAgencyCode(codeValue) {
-    var feedback     = document.getElementById('agency-code-feedback');
-    var agencyFields = document.getElementById('agency-fields');
-    if (!agencyFields) return;
-
-    if (!VALID_AGENCY_HASH) {
-      agencyFields.style.display = codeValue.trim() ? 'block' : 'none';
-      return;
     }
-    if (!codeValue.trim()) {
-      agencyFields.style.display = 'none';
-      if (feedback) { feedback.textContent = ''; feedback.style.color = ''; }
-      return;
+
+    document.getElementById('btn-adulti-inc').addEventListener('click', function() {
+      if (adultCount + childCount < maxPersons) setCount('adulti', adultCount + 1);
+    });
+    document.getElementById('btn-adulti-dec').addEventListener('click', function() {
+      if (adultCount > 1) setCount('adulti', adultCount - 1);
+    });
+    var bInc = document.getElementById('btn-bambini-inc');
+    var bDec = document.getElementById('btn-bambini-dec');
+    if (bInc) bInc.addEventListener('click', function() {
+      if (adultCount + childCount < maxPersons) setCount('bambini', childCount + 1);
+    });
+    if (bDec) bDec.addEventListener('click', function() {
+      if (childCount > 0) setCount('bambini', childCount - 1);
+    });
+
+    updatePrice();
+
+    // -- SHA-256 helper --
+    function bufToHex(buf) {
+      return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
     }
-    var encoder = new TextEncoder();
-    crypto.subtle.digest('SHA-256', encoder.encode(codeValue)).then(function (hashBuf) {
-      var hex = bufToHex(hashBuf);
-      if (hex === VALID_AGENCY_HASH) {
-        agencyFields.style.display = 'block';
-        if (feedback) { feedback.textContent = 'Codice valido — campi agenzia sbloccati.'; feedback.style.color = '#2ecc71'; }
-      } else {
-        agencyFields.style.display = 'none';
-        if (feedback) { feedback.textContent = 'Codice non valido.'; feedback.style.color = '#CC0031'; }
+
+    // -- Agency code validation --
+    function validateAgencyCode(val) {
+      var feedback = document.getElementById('agency-code-feedback');
+      var b2bFields = document.getElementById('b2b-fields');
+      if (!val.trim()) {
+        agencyUnlocked = false;
+        if (b2bFields) b2bFields.style.display = 'none';
+        if (feedback) { feedback.textContent = ''; }
+        return;
       }
-    });
-  }
-
-  var agencyCodeInput = document.getElementById('f-agency-code');
-  if (agencyCodeInput) {
-    agencyCodeInput.addEventListener('input', function () { validateAgencyCode(agencyCodeInput.value); });
-  }
-
-  // -- B2B/B2C toggle --
-  document.querySelectorAll('.client-toggle__btn').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      document.querySelectorAll('.client-toggle__btn').forEach(function (b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      var type          = btn.dataset.type;
-      var agencyCodeRow = document.getElementById('agency-code-row');
-      var agencyFields  = document.getElementById('agency-fields');
-      var feedback      = document.getElementById('agency-code-feedback');
-      document.getElementById('tipo-cliente-hidden').value = type;
-
-      if (type === 'agenzia') {
-        if (agencyCodeRow) agencyCodeRow.style.display = 'block';
-        if (agencyCodeInput) validateAgencyCode(agencyCodeInput.value);
-      } else {
-        if (agencyCodeRow) agencyCodeRow.style.display = 'none';
-        if (agencyFields)  agencyFields.style.display  = 'none';
-        if (feedback) { feedback.textContent = ''; feedback.style.color = ''; }
+      if (!CONFIG.agency_code_hash) {
+        agencyUnlocked = true;
+        if (b2bFields) b2bFields.style.display = 'block';
+        return;
       }
-    });
-  });
+      crypto.subtle.digest('SHA-256', new TextEncoder().encode(val)).then(function(hashBuf) {
+        var hex = bufToHex(hashBuf);
+        if (hex === CONFIG.agency_code_hash) {
+          agencyUnlocked = true;
+          if (b2bFields) b2bFields.style.display = 'block';
+          if (feedback) { feedback.textContent = 'Codice valido — campi agenzia sbloccati.'; feedback.style.color = '#2ecc71'; }
+        } else {
+          agencyUnlocked = false;
+          if (b2bFields) b2bFields.style.display = 'none';
+          if (feedback) { feedback.textContent = 'Codice non valido.'; feedback.style.color = '#cc0031'; }
+        }
+      });
+    }
 
-  // -- Form submission → direct webhook POST --
-  var quoteForm = document.getElementById('quote-form');
-  if (quoteForm) {
-    quoteForm.addEventListener('submit', function (e) {
+    var agencyInput = document.getElementById('f-agency-code');
+    if (agencyInput) agencyInput.addEventListener('input', function(){ validateAgencyCode(agencyInput.value); });
+
+    // Hide B2B fields initially (require code unlock)
+    var b2bFields = document.getElementById('b2b-fields');
+    if (b2bFields) b2bFields.style.display = 'none';
+
+    // -- B2B/B2C toggle --
+    document.getElementById('btn-agenzia').addEventListener('click', function() {
+      isAgency = true;
+      this.classList.add('active');
+      document.getElementById('btn-privato').classList.remove('active');
+      document.getElementById('tipo-cliente-hidden').value = 'agenzia';
+      document.getElementById('agency-code-row').style.display = 'block';
+      document.getElementById('b2c-fields').style.display = 'none';
+      if (agencyInput) validateAgencyCode(agencyInput.value);
+    });
+    document.getElementById('btn-privato').addEventListener('click', function() {
+      isAgency = false;
+      this.classList.add('active');
+      document.getElementById('btn-agenzia').classList.remove('active');
+      document.getElementById('tipo-cliente-hidden').value = 'privato';
+      document.getElementById('agency-code-row').style.display = 'none';
+      if (b2bFields) b2bFields.style.display = 'none';
+      document.getElementById('b2c-fields').style.display = 'block';
+    });
+
+    // -- Form submission --
+    document.getElementById('quote-form').addEventListener('submit', function(e) {
       e.preventDefault();
       var errorDiv = document.getElementById('form-error-msg');
       errorDiv.style.display = 'none';
 
-      var nome    = document.getElementById('f-nome').value.trim();
-      var cognome = document.getElementById('f-cognome').value.trim();
-      var email   = document.getElementById('f-email').value.trim();
-      if (!nome || !cognome || !email) {
-        errorDiv.textContent = 'Compila i campi obbligatori: Nome, Cognome, Email.';
-        errorDiv.style.display = 'block';
-        errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
+      // Validate required fields by mode
+      if (isAgency) {
+        if (!agencyUnlocked) {
+          errorDiv.textContent = 'Inserisci un codice agenzia valido.';
+          errorDiv.style.display = 'block';
+          return;
+        }
+        var nomeAg = (document.getElementById('f-nome-agenzia')||{}).value||'';
+        var emailAg = (document.getElementById('f-email-agenzia')||{}).value||'';
+        if (!nomeAg.trim() || !emailAg.trim()) {
+          errorDiv.textContent = 'Compila Nome Agenzia ed Email Agenzia.';
+          errorDiv.style.display = 'block';
+          return;
+        }
+      } else {
+        var nome    = (document.getElementById('f-nome')||{}).value||'';
+        var cognome = (document.getElementById('f-cognome')||{}).value||'';
+        var email   = (document.getElementById('f-email')||{}).value||'';
+        if (!nome.trim() || !cognome.trim() || !email.trim()) {
+          errorDiv.textContent = 'Compila Nome, Cognome ed Email.';
+          errorDiv.style.display = 'block';
+          return;
+        }
       }
-      if (!WEBHOOK_URL) {
+
+      if (!CONFIG.webhook_url) {
         errorDiv.textContent = 'Errore di configurazione: webhook non impostato.';
         errorDiv.style.display = 'block';
         return;
       }
 
-      var submitBtn = quoteForm.querySelector('button[type=submit]');
-      submitBtn.disabled    = true;
+      var submitBtn = document.getElementById('qf-submit-btn');
+      submitBtn.disabled = true;
       submitBtn.textContent = 'Invio in corso…';
 
-      var base       = calcBase();
-      var insChecked = document.getElementById('cb-assicurazione').checked;
-      var insurance  = insChecked ? Math.round(base * PERCENTUALE_ASSICURAZIONE) : 0;
-      var totalPrice = base + insurance;
-
-      var childAges = [];
-      document.querySelectorAll('.child-age-input').forEach(function (inp) {
-        if (inp.value) childAges.push(inp.value);
-      });
+      var pricing    = calcPricing();
+      var cbAss      = document.getElementById('cb-assicurazione');
+      var insChecked = cbAss && cbAss.checked;
+      var insurance  = insChecked ? Math.round(pricing.subtotale * CONFIG.percentuale_assicurazione) : 0;
+      var totale     = pricing.subtotale + insurance;
+      var childAges  = getChildAges();
+      var n          = adultCount + childCount;
 
       var payload = {
-        trip_slug:        document.querySelector('[name=trip_slug]').value,
-        trip_title:       TRIP_TITLE,
-        tipo_cliente:     document.getElementById('tipo-cliente-hidden').value,
-        nome:             nome,
-        cognome:          cognome,
-        email:            email,
-        telefono:         document.getElementById('f-telefono').value.trim(),
-        adulti:           adultCount,
-        bambini:          childCount,
-        eta_bambini:      childAges.join(', '),
-        assicurazione:    insChecked ? 'Si' : 'No',
-        prezzo_totale:    totalPrice,
-        note:             document.getElementById('f-note').value.trim(),
+        tipo_cliente:             isAgency ? 'agenzia' : 'privato',
+        nome_viaggio:             CONFIG.nome_viaggio,
+        numero_adulti:            adultCount,
+        numero_bambini:           childCount,
+        eta_bambini:              childAges.filter(function(a){ return a!==null; }).join(', '),
+        composizione_camera:      'X' + n,
+        prezzo_base_pp:           CONFIG.prezzo_base_persona,
+        supplemento_singola:      n === 1 ? CONFIG.supplemento_singola : 0,
+        sconto_letti_aggiuntivi:  (n >= 3 ? CONFIG.sconto_terzo_letto : 0) + (n >= 4 ? CONFIG.sconto_quarto_letto : 0) + (n >= 5 ? CONFIG.sconto_quinto_letto : 0),
+        sconto_bambini:           pricing.lines.filter(function(l){ return l.value < 0; }).reduce(function(s,l){ return s + (-l.value); }, 0),
+        subtotale:                pricing.subtotale,
+        assicurazione_percentuale: Math.round(CONFIG.percentuale_assicurazione * 100),
+        costo_assicurazione:      insurance,
+        totale_finale:            totale,
+        assicurazione_inclusa:    insChecked ? 'Si' : 'No',
+        note:                     (document.getElementById('f-note')||{}).value||'',
+        data_preventivo:          new Date().toLocaleDateString('it-IT'),
       };
 
-      var nomeAg = document.getElementById('f-nome-agenzia');
-      if (nomeAg)  payload.nome_agenzia  = nomeAg.value.trim();
-      var iataEl = document.getElementById('f-iata');
-      if (iataEl)  payload.codice_iata   = iataEl.value.trim();
-      var cittaEl = document.getElementById('f-citta');
-      if (cittaEl) payload.citta         = cittaEl.value.trim();
-      var commEl  = document.getElementById('f-commissione');
-      if (commEl)  payload.commissione   = commEl.value.trim();
-      var sendCl  = document.getElementById('cb-send-cliente');
-      if (sendCl)  payload.invia_al_cliente = sendCl.checked ? 'Si' : 'No';
+      if (isAgency) {
+        payload.nome_agenzia       = (document.getElementById('f-nome-agenzia')||{}).value||'';
+        payload.email_agenzia      = (document.getElementById('f-email-agenzia')||{}).value||'';
+        payload.telefono           = (document.getElementById('f-telefono-b2b')||{}).value||'';
+        payload.nome_cliente_finale= (document.getElementById('f-nome-cliente')||{}).value||'';
+        payload.invia_al_cliente   = document.getElementById('cb-send-cliente').checked ? 'Si' : 'No';
+        payload.email_cliente      = (document.getElementById('f-email-cliente')||{}).value||'';
+      } else {
+        payload.nome     = (document.getElementById('f-nome')||{}).value||'';
+        payload.cognome  = (document.getElementById('f-cognome')||{}).value||'';
+        payload.email    = (document.getElementById('f-email')||{}).value||'';
+        payload.telefono = (document.getElementById('f-telefono')||{}).value||'';
+      }
 
-      fetch(WEBHOOK_URL, {
+      fetch(CONFIG.webhook_url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
       })
-      .then(function () {
+      .then(function() {
         document.getElementById('quote-form-wrap').innerHTML =
-          '<div class="form-success">' +
-          '<i class="fa-solid fa-circle-check" style="font-size:2.5rem;color:#2ecc71;margin-bottom:1rem;display:block;"></i>' +
-          '<h3 style="font-family:var(--font-heading);margin-bottom:0.5rem;">Richiesta inviata!</h3>' +
+          '<div class="qf-success">' +
+          '<i class="fa-solid fa-circle-check" style="font-size:2.5rem;color:#28a745;margin-bottom:1rem;display:block;"></i>' +
+          '<h3 style="margin-bottom:.5rem;">Richiesta inviata!</h3>' +
           '<p>Lorenzo ti risponderà entro 24 ore. Grazie per aver scelto Viaggia col Baffo.</p>' +
           '</div>';
       })
-      .catch(function () {
+      .catch(function() {
         errorDiv.textContent = 'Errore di rete. Controlla la connessione e riprova.';
         errorDiv.style.display = 'block';
-        submitBtn.disabled    = false;
+        submitBtn.disabled = false;
         submitBtn.textContent = 'Invia Richiesta di Preventivo';
       });
     });
-  }
+
+  })(); // end IIFE
   <?php endif; ?>
 })();
 </script>

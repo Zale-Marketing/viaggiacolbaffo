@@ -82,16 +82,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // AJAX: action=save_form_config
     if ($action === 'save_form_config') {
         $slug = $_POST['slug'] ?? '';
+        $room_types_raw = $_POST['room_types'] ?? '[]';
+        $room_types = json_decode($room_types_raw, true);
+        if (!is_array($room_types)) $room_types = [];
+        $brackets_raw = $_POST['child_discount_brackets'] ?? '[]';
+        $brackets = json_decode($brackets_raw, true);
+        if (!is_array($brackets)) $brackets = [];
         $form_config = [
-            'prezzo_adulto'                   => (int)($_POST['prezzo_adulto'] ?? 0),
-            'supplemento_singola'             => (int)($_POST['supplemento_singola'] ?? 0),
-            'prezzo_terzo_letto'              => (int)($_POST['prezzo_terzo_letto'] ?? 0),
-            'prezzo_quarto_letto'             => (int)($_POST['prezzo_quarto_letto'] ?? 0),
-            'prezzo_concorrenza_per_persona'  => (int)($_POST['prezzo_concorrenza_per_persona'] ?? 0),
-            'prezzo_terzo_quarto_concorrenza' => (int)($_POST['prezzo_terzo_quarto_concorrenza'] ?? 0),
-            'percentuale_assicurazione'       => (float)($_POST['percentuale_assicurazione'] ?? 5),
-            'webhook_url'                     => trim($_POST['webhook_url'] ?? ''),
-            'agency_code_hash'                => trim($_POST['agency_code_hash'] ?? ''),
+            'webhook_url'                => trim($_POST['webhook_url'] ?? ''),
+            'prezzo_base_persona'        => (int)($_POST['prezzo_base_persona'] ?? 0),
+            'room_types'                 => $room_types,
+            'supplemento_singola'        => (int)($_POST['supplemento_singola'] ?? 0),
+            'sconto_terzo_letto'         => (int)($_POST['sconto_terzo_letto'] ?? 0),
+            'sconto_quarto_letto'        => (int)($_POST['sconto_quarto_letto'] ?? 0),
+            'sconto_quinto_letto'        => (int)($_POST['sconto_quinto_letto'] ?? 0),
+            'child_discounts_enabled'    => ($_POST['child_discounts_enabled'] ?? '0') === '1',
+            'child_discount_brackets'    => $brackets,
+            'insurance_enabled'          => ($_POST['insurance_enabled'] ?? '0') === '1',
+            'percentuale_assicurazione'  => (float)($_POST['percentuale_assicurazione'] ?? 5),
+            'competitor_enabled'         => ($_POST['competitor_enabled'] ?? '0') === '1',
+            'prezzo_concorrenza_persona' => (int)($_POST['prezzo_concorrenza_persona'] ?? 0),
+            'prezzo_concorrenza_letti_extra' => (int)($_POST['prezzo_concorrenza_letti_extra'] ?? 0),
+            'agency_code_hash'           => trim($_POST['agency_code_hash'] ?? ''),
         ];
         $trips = load_trips();
         foreach ($trips as &$t) {
@@ -1019,106 +1031,216 @@ $preview_token_val = $trip['preview_token'] ?? '';
         <!-- ══════════════════════════════════════════════════ -->
         <!-- TAB: Form Config                                   -->
         <!-- ══════════════════════════════════════════════════ -->
+        <?php
+        $fc = $trip['form_config'] ?? [];
+        $fc_room_types = $fc['room_types'] ?? ['X1','X2','X3','X4'];
+        $fc_brackets   = $fc['child_discount_brackets'] ?? [];
+        ?>
         <div class="tab-panel" id="tab-formconfig">
-          <div class="card">
-            <h3>Parametri Form Preventivo</h3>
-            <p style="color:var(--text-muted);font-size:0.875rem;margin-bottom:1.5rem;">
-              Configura i parametri numerici del form. Il form si genera automaticamente — nessun HTML da scrivere.
-            </p>
 
-            <div class="form-grid-2">
-              <div class="form-group">
-                <label for="fc-prezzo-adulto">Prezzo adulto (€) <span style="color:#cc0031">*</span></label>
-                <input type="number" id="fc-prezzo-adulto" min="0" step="1"
-                       value="<?= (int)($trip['form_config']['prezzo_adulto'] ?? 0) ?>"
-                       placeholder="es. 4350">
-                <small>Prezzo p.p. in camera doppia (min. 2 persone)</small>
-              </div>
-              <div class="form-group">
-                <label for="fc-suppl-singola">Supplemento singola (€)</label>
-                <input type="number" id="fc-suppl-singola" min="0" step="1"
-                       value="<?= (int)($trip['form_config']['supplemento_singola'] ?? 0) ?>"
-                       placeholder="es. 1600">
-              </div>
-              <div class="form-group">
-                <label for="fc-terzo-letto">3° posto letto (€)</label>
-                <input type="number" id="fc-terzo-letto" step="1"
-                       value="<?= (int)($trip['form_config']['prezzo_terzo_letto'] ?? 0) ?>"
-                       placeholder="es. 3000">
-                <small>Può essere negativo (sconto)</small>
-              </div>
-              <div class="form-group">
-                <label for="fc-quarto-letto">4° posto letto (€)</label>
-                <input type="number" id="fc-quarto-letto" step="1"
-                       value="<?= (int)($trip['form_config']['prezzo_quarto_letto'] ?? 0) ?>"
-                       placeholder="es. 3000">
-              </div>
-              <div class="form-group">
-                <label for="fc-concorrenza-pp">Concorrenza p.p. (€)</label>
-                <input type="number" id="fc-concorrenza-pp" min="0" step="1"
-                       value="<?= (int)($trip['form_config']['prezzo_concorrenza_per_persona'] ?? 0) ?>"
-                       placeholder="es. 7000">
-                <small>Per il riquadro "risparmio"</small>
-              </div>
-              <div class="form-group">
-                <label for="fc-concorrenza-34">Concorrenza 3°/4° letto (€)</label>
-                <input type="number" id="fc-concorrenza-34" min="0" step="1"
-                       value="<?= (int)($trip['form_config']['prezzo_terzo_quarto_concorrenza'] ?? 0) ?>"
-                       placeholder="es. 5000">
-              </div>
-              <div class="form-group">
-                <label for="fc-assicurazione">Assicurazione (%)</label>
-                <input type="number" id="fc-assicurazione" min="0" max="20" step="0.5"
-                       value="<?= (float)($trip['form_config']['percentuale_assicurazione'] ?? 5) ?>"
-                       placeholder="5">
-                <small>Percentuale del subtotale</small>
-              </div>
-            </div>
-
-            <div class="form-group" style="margin-top:1rem;">
-              <label for="fc-webhook">Webhook URL (Pabbly)</label>
+          <!-- SECTION A: Trip Info -->
+          <div class="card" style="margin-bottom:1.5rem;">
+            <h3 style="margin-bottom:1.25rem;">A — Informazioni Viaggio</h3>
+            <div class="form-group">
+              <label for="fc-webhook">Webhook URL (Pabbly) <span style="color:#cc0031">*</span></label>
               <input type="text" id="fc-webhook"
-                     value="<?= htmlspecialchars($trip['form_config']['webhook_url'] ?? '') ?>"
+                     value="<?= htmlspecialchars($fc['webhook_url'] ?? '') ?>"
                      placeholder="https://connect.pabbly.com/...">
             </div>
-
             <div class="form-group">
-              <label for="fc-agency-hash">Hash PIN agenzia (SHA-256)</label>
-              <input type="text" id="fc-agency-hash"
-                     value="<?= htmlspecialchars($trip['form_config']['agency_code_hash'] ?? 'af97d1baebca1eaae1ce418c082402e60c2529ef719983ad7c8dda6ea1f8e8ee') ?>"
-                     placeholder="SHA-256 hex lowercase">
-              <small>Default: hash del PIN "admin" — sostituisci con l'hash del tuo PIN segreto</small>
+              <label for="fc-prezzo-base">Prezzo base p.p. (€) — camera doppia <span style="color:#cc0031">*</span></label>
+              <input type="number" id="fc-prezzo-base" min="0" step="1"
+                     value="<?= (int)($fc['prezzo_base_persona'] ?? 0) ?>"
+                     placeholder="es. 4350">
             </div>
+          </div>
 
-            <div style="display:flex;gap:12px;align-items:center;margin-top:1.5rem;">
-              <button type="button" class="btn-primary" onclick="saveFormConfig()">
-                <i class="fa-solid fa-save"></i> Salva Parametri
+          <!-- SECTION B: Room Types -->
+          <div class="card" style="margin-bottom:1.5rem;">
+            <h3 style="margin-bottom:0.5rem;">B — Tipologie Camera</h3>
+            <p style="color:var(--text-muted);font-size:0.875rem;margin-bottom:1rem;">Seleziona le tipologie disponibili. Ogni tipo attivato mostra un campo di configurazione.</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.25rem;">
+              <?php foreach (['X1','X2','X3','X4','X5'] as $rt): ?>
+              <button type="button" class="room-pill <?= in_array($rt, $fc_room_types) ? 'active' : '' ?>"
+                      data-room="<?= $rt ?>" onclick="toggleRoom(this)">
+                <?= $rt ?>
               </button>
-              <span id="save-fc-msg" style="display:none; color:var(--success);">
-                <i class="fa-solid fa-check"></i> Salvato
-              </span>
+              <?php endforeach; ?>
             </div>
+            <div id="room-config-panels">
+              <div class="room-panel" id="rp-X1" style="display:<?= in_array('X1',$fc_room_types)?'block':'none' ?>;">
+                <div class="form-group">
+                  <label for="fc-suppl-singola">X1 — Supplemento Singola (€)</label>
+                  <input type="number" id="fc-suppl-singola" min="0" step="1"
+                         value="<?= (int)($fc['supplemento_singola'] ?? 0) ?>" placeholder="es. 1600">
+                  <small>Aggiunto al prezzo base per camera singola</small>
+                </div>
+              </div>
+              <div class="room-panel" id="rp-X3" style="display:<?= in_array('X3',$fc_room_types)?'block':'none' ?>;">
+                <div class="form-group">
+                  <label for="fc-sconto-3">X3 — Sconto 3° letto (€)</label>
+                  <input type="number" id="fc-sconto-3" min="0" step="1"
+                         value="<?= (int)($fc['sconto_terzo_letto'] ?? 0) ?>" placeholder="es. 1350">
+                  <small>Sottratto dal prezzo base per la 3ª persona</small>
+                </div>
+              </div>
+              <div class="room-panel" id="rp-X4" style="display:<?= in_array('X4',$fc_room_types)?'block':'none' ?>;">
+                <div class="form-group">
+                  <label for="fc-sconto-4">X4 — Sconto 4° letto (€)</label>
+                  <input type="number" id="fc-sconto-4" min="0" step="1"
+                         value="<?= (int)($fc['sconto_quarto_letto'] ?? 0) ?>" placeholder="es. 1350">
+                  <small>Sottratto dal prezzo base per la 4ª persona</small>
+                </div>
+              </div>
+              <div class="room-panel" id="rp-X5" style="display:<?= in_array('X5',$fc_room_types)?'block':'none' ?>;">
+                <div class="form-group">
+                  <label for="fc-sconto-5">X5 — Sconto 5° letto (€)</label>
+                  <input type="number" id="fc-sconto-5" min="0" step="1"
+                         value="<?= (int)($fc['sconto_quinto_letto'] ?? 0) ?>" placeholder="es. 0">
+                  <small>Sottratto dal prezzo base per la 5ª persona</small>
+                </div>
+              </div>
+            </div>
+          </div>
 
-            <hr style="margin:2rem 0;">
+          <!-- SECTION C: Child Discounts -->
+          <div class="card" style="margin-bottom:1.5rem;">
+            <h3 style="margin-bottom:0.75rem;">C — Sconti Bambini</h3>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:1rem;">
+              <label class="toggle-switch">
+                <input type="checkbox" id="fc-child-enabled"
+                       <?= !empty($fc['child_discounts_enabled']) ? 'checked' : '' ?>
+                       onchange="toggleSection('child-brackets-panel',this.checked)">
+                <span class="toggle-slider"></span>
+              </label>
+              <span>Abilita sconti bambini</span>
+            </div>
+            <div id="child-brackets-panel" style="display:<?= !empty($fc['child_discounts_enabled'])?'block':'none' ?>;">
+              <p style="font-size:0.875rem;color:var(--text-muted);margin-bottom:0.75rem;">I bambini contano nei posti letto (X2/X3/X4/X5). Aggiungi fasce di età con lo sconto applicato.</p>
+              <div id="fc-brackets-list">
+                <?php foreach ($fc_brackets as $i => $b): ?>
+                <div class="bracket-row" style="display:flex;gap:10px;align-items:center;margin-bottom:8px;">
+                  <input type="number" class="br-min" min="0" max="17" value="<?= (int)$b['min_age'] ?>" placeholder="Min" style="width:70px;">
+                  <span>–</span>
+                  <input type="number" class="br-max" min="0" max="17" value="<?= (int)$b['max_age'] ?>" placeholder="Max" style="width:70px;">
+                  <span>anni: sconto</span>
+                  <input type="number" class="br-discount" min="0" value="<?= (int)$b['discount'] ?>" placeholder="€" style="width:90px;">
+                  <button type="button" onclick="this.parentElement.remove()" style="color:#cc0031;background:none;border:none;cursor:pointer;font-size:1.2rem;">×</button>
+                </div>
+                <?php endforeach; ?>
+              </div>
+              <button type="button" class="btn-secondary" style="margin-top:8px;" onclick="addBracket()">
+                <i class="fa-solid fa-plus"></i> Aggiungi fascia
+              </button>
+            </div>
+          </div>
 
-            <!-- AI helper — suggests numeric values only -->
-            <h4>Suggerisci parametri con AI <span style="font-size:0.8em;color:var(--text-muted);font-weight:normal;">(opzionale)</span></h4>
-            <p style="font-size:0.875rem;color:var(--text-muted);margin-bottom:1rem;">
-              Descrivi il viaggio e l'AI suggerirà i valori numerici. Verifica e modifica prima di salvare.
-            </p>
+          <!-- SECTION D: Insurance -->
+          <div class="card" style="margin-bottom:1.5rem;">
+            <h3 style="margin-bottom:0.75rem;">D — Assicurazione</h3>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:1rem;">
+              <label class="toggle-switch">
+                <input type="checkbox" id="fc-insurance-enabled"
+                       <?= !empty($fc['insurance_enabled']) ? 'checked' : '' ?>
+                       onchange="toggleSection('insurance-panel',this.checked)">
+                <span class="toggle-slider"></span>
+              </label>
+              <span>Abilita opzione assicurazione</span>
+            </div>
+            <div id="insurance-panel" style="display:<?= !empty($fc['insurance_enabled'])?'block':'none' ?>;">
+              <div class="form-group">
+                <label for="fc-assicurazione">Percentuale assicurazione (%)</label>
+                <input type="number" id="fc-assicurazione" min="0" max="20" step="0.5"
+                       value="<?= (float)($fc['percentuale_assicurazione'] ?? 5) ?>" placeholder="5">
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION E: Competitor -->
+          <div class="card" style="margin-bottom:1.5rem;">
+            <h3 style="margin-bottom:0.75rem;">E — Confronto Concorrenza</h3>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:1rem;">
+              <label class="toggle-switch">
+                <input type="checkbox" id="fc-competitor-enabled"
+                       <?= !empty($fc['competitor_enabled']) ? 'checked' : '' ?>
+                       onchange="toggleSection('competitor-panel',this.checked)">
+                <span class="toggle-slider"></span>
+              </label>
+              <span>Mostra risparmio vs concorrenza</span>
+            </div>
+            <div id="competitor-panel" style="display:<?= !empty($fc['competitor_enabled'])?'block':'none' ?>;">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="fc-concorrenza-pp">Prezzo concorrenza p.p. (€)</label>
+                  <input type="number" id="fc-concorrenza-pp" min="0" step="1"
+                         value="<?= (int)($fc['prezzo_concorrenza_persona'] ?? 0) ?>" placeholder="es. 7000">
+                </div>
+                <div class="form-group">
+                  <label for="fc-concorrenza-extra">Concorrenza letti extra (€)</label>
+                  <input type="number" id="fc-concorrenza-extra" min="0" step="1"
+                         value="<?= (int)($fc['prezzo_concorrenza_letti_extra'] ?? 0) ?>" placeholder="es. 5000">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION F: Agency Code -->
+          <div class="card" style="margin-bottom:1.5rem;">
+            <h3 style="margin-bottom:0.75rem;">F — Codice Agenzia</h3>
             <div class="form-group">
-              <label for="ai_description">Descrizione per AI</label>
-              <textarea id="ai_description" rows="4"
-                placeholder="Es: Tour West America 15 giorni da €4.350 p.p. in doppia. Concorrenza vende a €7.000. Supplemento singola €1.600..."></textarea>
+              <label for="fc-agency-plain">Codice agenzia (testo)</label>
+              <input type="text" id="fc-agency-plain" placeholder="es. 8823" autocomplete="off">
+              <small>Digita il codice — l'hash SHA-256 viene calcolato in tempo reale</small>
             </div>
-            <button type="button" id="btn-generate-ai" class="btn-secondary" onclick="generateAI()">
-              <i class="fa-solid fa-wand-magic-sparkles"></i> Suggerisci numeri con AI
+            <div class="form-group">
+              <label for="fc-agency-hash">Hash SHA-256 (salvato)</label>
+              <input type="text" id="fc-agency-hash"
+                     value="<?= htmlspecialchars($fc['agency_code_hash'] ?? 'af97d1baebca1eaae1ce418c082402e60c2529ef719983ad7c8dda6ea1f8e8ee') ?>"
+                     placeholder="SHA-256 hex">
+              <small id="fc-hash-preview" style="font-family:monospace;word-break:break-all;color:var(--text-muted);"></small>
+            </div>
+          </div>
+
+          <!-- Save -->
+          <div style="display:flex;gap:12px;align-items:center;margin-bottom:2rem;">
+            <button type="button" class="btn-primary" onclick="saveFormConfig()">
+              <i class="fa-solid fa-save"></i> Salva Configurazione Form
             </button>
-            <span id="ai-loading" style="display:none; margin-left:12px;">
-              <i class="fa-solid fa-spinner fa-spin"></i> Analisi in corso...
+            <span id="save-fc-msg" style="display:none; color:var(--success);">
+              <i class="fa-solid fa-check"></i> Salvato
             </span>
           </div>
+
         </div><!-- /tab-formconfig -->
+
+        <style>
+        .room-pill {
+          padding: 8px 18px;
+          border: 2px solid var(--border);
+          border-radius: 20px;
+          background: white;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all .15s;
+        }
+        .room-pill.active {
+          background: var(--primary);
+          border-color: var(--primary);
+          color: white;
+        }
+        .toggle-switch { position:relative; display:inline-block; width:44px; height:24px; }
+        .toggle-switch input { opacity:0; width:0; height:0; }
+        .toggle-slider {
+          position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0;
+          background:#ccc; border-radius:24px; transition:.3s;
+        }
+        .toggle-slider:before {
+          position:absolute; content:''; height:18px; width:18px;
+          left:3px; bottom:3px; background:white; border-radius:50%; transition:.3s;
+        }
+        .toggle-switch input:checked + .toggle-slider { background:var(--primary); }
+        .toggle-switch input:checked + .toggle-slider:before { transform:translateX(20px); }
+        </style>
 
     </div><!-- /edit-container -->
 
@@ -1483,22 +1605,93 @@ function generateAI() {
     });
 }
 
+// ─── Form Config helpers ─────────────────────────────────────────────────────
+let activeRoomTypes = <?= json_encode($fc_room_types ?? ['X1','X2','X3','X4']) ?>;
+
+function toggleRoom(btn) {
+    const room = btn.dataset.room;
+    const panel = document.getElementById('rp-' + room);
+    if (btn.classList.contains('active')) {
+        btn.classList.remove('active');
+        activeRoomTypes = activeRoomTypes.filter(r => r !== room);
+        if (panel) panel.style.display = 'none';
+    } else {
+        btn.classList.add('active');
+        if (!activeRoomTypes.includes(room)) activeRoomTypes.push(room);
+        activeRoomTypes.sort();
+        if (panel) panel.style.display = 'block';
+    }
+}
+
+function toggleSection(panelId, show) {
+    const el = document.getElementById(panelId);
+    if (el) el.style.display = show ? 'block' : 'none';
+}
+
+function addBracket() {
+    const list = document.getElementById('fc-brackets-list');
+    const row = document.createElement('div');
+    row.className = 'bracket-row';
+    row.style.cssText = 'display:flex;gap:10px;align-items:center;margin-bottom:8px;';
+    row.innerHTML = '<input type="number" class="br-min" min="0" max="17" placeholder="Min" style="width:70px;">'
+        + '<span>–</span>'
+        + '<input type="number" class="br-max" min="0" max="17" placeholder="Max" style="width:70px;">'
+        + '<span>anni: sconto</span>'
+        + '<input type="number" class="br-discount" min="0" placeholder="€" style="width:90px;">'
+        + '<button type="button" onclick="this.parentElement.remove()" style="color:#cc0031;background:none;border:none;cursor:pointer;font-size:1.2rem;">×</button>';
+    list.appendChild(row);
+}
+
+// SHA-256 hash preview for agency code
+(function() {
+    const plain = document.getElementById('fc-agency-plain');
+    const hashField = document.getElementById('fc-agency-hash');
+    const preview = document.getElementById('fc-hash-preview');
+    if (!plain) return;
+    plain.addEventListener('input', async function() {
+        const val = plain.value;
+        if (!val) { if (preview) preview.textContent = ''; return; }
+        const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(val));
+        const hex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+        if (hashField) hashField.value = hex;
+        if (preview) preview.textContent = 'Hash: ' + hex;
+    });
+})();
+
 function saveFormConfig() {
+    // Collect brackets
+    const brackets = [];
+    document.querySelectorAll('#fc-brackets-list .bracket-row').forEach(row => {
+        const min = parseInt(row.querySelector('.br-min').value);
+        const max = parseInt(row.querySelector('.br-max').value);
+        const disc = parseInt(row.querySelector('.br-discount').value);
+        if (!isNaN(min) && !isNaN(max) && !isNaN(disc)) brackets.push({min_age:min,max_age:max,discount:disc});
+    });
+
+    const val = (id, fallback) => { const el = document.getElementById(id); return el ? el.value : fallback; };
+    const checked = id => { const el = document.getElementById(id); return el && el.checked ? '1' : '0'; };
+
     fetch(window.location.href, {
         method: 'POST',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         body: new URLSearchParams({
-            action:                          'save_form_config',
-            slug:                            tripSlug,
-            prezzo_adulto:                   document.getElementById('fc-prezzo-adulto').value,
-            supplemento_singola:             document.getElementById('fc-suppl-singola').value,
-            prezzo_terzo_letto:              document.getElementById('fc-terzo-letto').value,
-            prezzo_quarto_letto:             document.getElementById('fc-quarto-letto').value,
-            prezzo_concorrenza_per_persona:  document.getElementById('fc-concorrenza-pp').value,
-            prezzo_terzo_quarto_concorrenza: document.getElementById('fc-concorrenza-34').value,
-            percentuale_assicurazione:       document.getElementById('fc-assicurazione').value,
-            webhook_url:                     document.getElementById('fc-webhook').value.trim(),
-            agency_code_hash:                document.getElementById('fc-agency-hash').value.trim(),
+            action:                        'save_form_config',
+            slug:                          tripSlug,
+            webhook_url:                   val('fc-webhook','').trim(),
+            prezzo_base_persona:           val('fc-prezzo-base',0),
+            room_types:                    JSON.stringify(activeRoomTypes),
+            supplemento_singola:           val('fc-suppl-singola',0),
+            sconto_terzo_letto:            val('fc-sconto-3',0),
+            sconto_quarto_letto:           val('fc-sconto-4',0),
+            sconto_quinto_letto:           val('fc-sconto-5',0),
+            child_discounts_enabled:       checked('fc-child-enabled'),
+            child_discount_brackets:       JSON.stringify(brackets),
+            insurance_enabled:             checked('fc-insurance-enabled'),
+            percentuale_assicurazione:     val('fc-assicurazione',5),
+            competitor_enabled:            checked('fc-competitor-enabled'),
+            prezzo_concorrenza_persona:    val('fc-concorrenza-pp',0),
+            prezzo_concorrenza_letti_extra:val('fc-concorrenza-extra',0),
+            agency_code_hash:              val('fc-agency-hash','').trim(),
         })
     })
     .then(r => r.json())
