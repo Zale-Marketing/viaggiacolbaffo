@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-03-06)
 Phase: 1 of 6 (Foundation)
 Plan: 0 of TBD in current phase
 Status: Ready to plan
-Last activity: 2026-03-06 — Roadmap created, 56 v1 requirements mapped to 6 phases
+Last activity: 2026-03-09 - Completed quick task 5: Fix 4 bugs: room toggles inverted, B2B fields missing, checkbox labels invisible, counter room limits
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -161,6 +161,7 @@ None yet.
 | 2 | Timeline itinerary, accompagnatore section, Dettagli Volo, tag pills on viaggio.php | 2026-03-06 | 1ccd33d | [2-timeline-itinerary-accompagnatore-sectio](./quick/2-timeline-itinerary-accompagnatore-sectio/) |
 | 3 | Fix timeline visuals (red gradient line + red dots), redesign volo section (two-column card grid), add Alloggi tab with 3 hotel cards | 2026-03-06 | b961c05 | [3-fix-timeline-visuals-redesign-volo-secti](./quick/3-fix-timeline-visuals-redesign-volo-secti/) |
 | 4 | destinazione.php text alignment, waitlist form redesign, agenzie B2B inline form, 404 for unknown slugs | 2026-03-06 | 35a698f | [4-fix-destinazione-php-text-alignment-wait](./quick/4-fix-destinazione-php-text-alignment-wait/) |
+| 5 | Fix 4 bugs: room toggles inverted, B2B fields missing, checkbox labels invisible, counter room limits | 2026-03-09 | af8d755 | [5-fix-4-bugs-room-toggles-inverted-b2b-fie](./quick/5-fix-4-bugs-room-toggles-inverted-b2b-fie/) |
 
 ## Session Continuity
 
