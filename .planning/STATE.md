@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-03-06)
 Phase: 1 of 6 (Foundation)
 Plan: 0 of TBD in current phase
 Status: Ready to plan
-Last activity: 2026-03-09 - Completed quick task 15: Topbar redesign — 3-column grid with status pills, title+dates left, savings+status center
+Last activity: 2026-03-09 - Completed quick task 16: Center trip-tabs nav + hotel cards Villa Mercede style
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -172,9 +172,10 @@ None yet.
 | 13 | Admin UI redesign — navy #000744 primary, red #CC0031 CTA, zero gold across all 7 admin files (admin.css, login, index, edit-trip, settings, tags, destinations) | 2026-03-09 | 0f2cd15 | [13-admin-ui-redesign-navy-red-brand-colors-](./quick/13-admin-ui-redesign-navy-red-brand-colors-/) |
 | 14 | Drag & drop image upload system — admin/upload.php endpoint + .img-uploader/.gallery-uploader widgets across hero, gallery, itinerary, hotel, accompagnatore fields | 2026-03-09 | ad30288 | [14-drag-and-drop-image-upload-system-for-ad](./quick/14-drag-and-drop-image-upload-system-for-ad/) |
 | 15 | Topbar redesign — 3-column grid (title+dates left, savings+status center, CTA right), status pill colour variants, piggy-bank savings badge | 2026-03-09 | 6d84341 | [15-topbar-redesign-title-dates-left-savings](./quick/15-topbar-redesign-title-dates-left-savings/) |
+| 16 | Center trip-tabs nav (justify-content: center) and upgrade hotel cards to Villa Mercede horizontal-row style (45% image, red accent line, hover lift/zoom, 768px mobile stack) | 2026-03-09 | 3dc1118 | [16-center-trip-tabs-nav-hotel-cards-villa-m](./quick/16-center-trip-tabs-nav-hotel-cards-villa-m/) |
 
 ## Session Continuity
 
-Last session: 2026-03-09T15:00:00Z
-Stopped at: Completed quick task 15: Topbar redesign — 3-column grid layout with status pills
+Last session: 2026-03-09T15:08:00Z
+Stopped at: Completed quick task 16: Center trip-tabs nav and hotel cards Villa Mercede style
 Resume file: None
