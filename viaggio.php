@@ -1087,7 +1087,7 @@ function toggleClientEmail() {
     var topbarVisible = heroBottom < 80;
     if (topbar) topbar.classList.toggle('visible', topbarVisible);
     // Keep tabs below topbar when it's visible, below header when not
-    if (tabs) tabs.style.top = topbarVisible ? '56px' : '60px';
+    var topbarH = (topbar && topbar.classList.contains('visible')) ? 56 : 60;
   }
   window.addEventListener('scroll', onScroll, { passive: true });
 
@@ -1112,7 +1112,8 @@ function toggleClientEmail() {
       btn.classList.add('active');
       var target = document.getElementById(btn.dataset.target);
       if (!target) return;
-      var topbarH = (topbar && topbar.classList.contains('visible')) ? 56 : 60;
+      var topbarH = (topbar && topbar.classList.contains('visible')) ? topbar.offsetHeight : 60;
+if (tabs) tabs.style.top = topbarH + 'px';
       var offset = topbarH + (tabs ? tabs.offsetHeight : 0) + 8;
       var top = target.getBoundingClientRect().top + window.scrollY - offset;
       window.scrollTo({ top: top, behavior: 'smooth' });
