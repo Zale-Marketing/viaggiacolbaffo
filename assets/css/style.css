@@ -1485,7 +1485,7 @@ body.has-hero #site-header.scrolled nav a {
     grid-template-rows: auto auto;
     padding: 8px 14px 6px;
     height: auto;
-    gap: 5px 10px;
+    gap: 4px 10px;
   }
 
   .trip-topbar__left {
@@ -1501,6 +1501,7 @@ body.has-hero #site-header.scrolled nav a {
     grid-row: 1;
     display: flex;
     align-items: center;
+    justify-content: flex-end;
   }
 
   .trip-topbar__center {
@@ -1509,15 +1510,14 @@ body.has-hero #site-header.scrolled nav a {
     display: flex;
     justify-content: center;
     gap: 8px;
-    padding-bottom: 4px;
+    padding-bottom: 2px;
   }
 
-  .trip-topbar__status { display: none; }
+  .trip-topbar__status { display: none !important; }
 
   .trip-topbar__savings {
     font-size: 0.7rem;
     padding: 3px 10px;
-    border-radius: 12px;
   }
 
   .trip-topbar__name {
@@ -1597,21 +1597,22 @@ body.has-hero #site-header.scrolled nav a {
 }
 
 @media (max-width: 768px) {
-  .trip-tabs { top: 70px; }
+  .trip-tabs { top: 80px; }
 }
 
 @media (max-width: 480px) {
-  .trip-tabs { top: 66px; }
+  .trip-tabs { top: 75px; }
 }
 
 .trip-tabs__nav {
   display: flex;
   justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  padding: 0 1rem;
-  gap: 0;
 }
 
 .trip-tabs__nav::-webkit-scrollbar {
@@ -1647,7 +1648,7 @@ body.has-hero #site-header.scrolled nav a {
 @media (max-width: 600px) {
   .trip-tabs__btn {
     font-size: 0.8rem;
-    padding: 14px 12px;
+    padding: 14px 10px;
     white-space: nowrap;
   }
 }
