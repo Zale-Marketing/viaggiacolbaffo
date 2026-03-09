@@ -933,10 +933,8 @@ function toggleClientEmail() {
   var lgSubmit     = document.getElementById('lg-submit');
   var lgError      = document.getElementById('lg-error');
 
-  // The sentinel element: bottom of the 2nd visible day
-  // We watch the last .timeline-item NOT inside .gated-content
-  var visibleDays  = document.querySelectorAll('.timeline-item:not(.gated-content .timeline-item)');
-  var sentinel     = visibleDays.length ? visibleDays[visibleDays.length - 1] : null;
+  // Sentinel = first gated element. Bar appears when it hits mid-screen.
+  var sentinel = document.querySelector('.gated-content');
 
   function isUnlocked() {
     try { return localStorage.getItem(STORAGE_KEY) === '1'; } catch(e) { return false; }
@@ -976,22 +974,34 @@ function toggleClientEmail() {
       el.classList.add('gated-content--hidden');
     });
 
-    // IntersectionObserver: show bar when sentinel scrolls out of view (user passed it)
+    // Show bar when first gated element reaches middle of screen (rootMargin -50% bottom)
+    // Hide bar when user scrolls back up and gated content is below mid-screen
     if (sentinel && gateBar && 'IntersectionObserver' in window) {
+      var barShown = false;
       var observer = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
-          if (!isUnlocked()) {
-            if (!entry.isIntersecting) {
-              // Sentinel is above the viewport = user scrolled past it
+          if (isUnlocked()) return;
+          var rect = sentinel.getBoundingClientRect();
+          if (entry.isIntersecting) {
+            // Sentinel top is in the active zone (above mid-screen)
+            if (!barShown) {
+              barShown = true;
               gateBar.classList.add('gate-bar--visible');
-            } else {
-              // Sentinel back in view = user scrolled back up
+            }
+          } else {
+            // Check if it's below viewport (user hasn't reached it yet)
+            if (rect.top > window.innerHeight * 0.5) {
+              barShown = false;
               gateBar.classList.remove('gate-bar--visible');
               closeSheet();
             }
+            // If above viewport (scrolled past) — keep bar visible
           }
         });
-      }, { threshold: 0 });
+      }, {
+        rootMargin: '0px 0px -50% 0px',
+        threshold: 0
+      });
       observer.observe(sentinel);
     }
 

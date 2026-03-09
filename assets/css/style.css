@@ -1480,22 +1480,58 @@ body.has-hero #site-header.scrolled nav a {
 /* Mobile */
 @media (max-width: 768px) {
   .trip-topbar {
+    display: grid;
     grid-template-columns: 1fr auto;
-    padding: 0 16px;
-    height: 56px;
+    grid-template-rows: auto auto;
+    padding: 10px 16px 8px;
+    height: auto;
+    gap: 4px 12px;
+  }
+
+  .trip-topbar__left {
+    grid-column: 1;
+    grid-row: 1;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1px;
+  }
+
+  .trip-topbar__right {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
   }
 
   .trip-topbar__center {
-    display: none;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
   }
 
   .trip-topbar__name { font-size: 0.85rem; }
-  .trip-topbar__dates { display: none; }
-  .trip-topbar__cta { padding: 8px 16px; font-size: 0.8rem; }
+  .trip-topbar__dates { font-size: 0.7rem; }
+  .trip-topbar__status { display: none; }
+
+  .trip-topbar__savings {
+    font-size: 0.72rem;
+    padding: 4px 10px;
+  }
+
+  .trip-topbar__cta {
+    padding: 8px 14px;
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
 }
 
 @media (max-width: 480px) {
-  .trip-topbar__cta { display: none; }
+  .trip-topbar { padding: 8px 12px 6px; }
+  .trip-topbar__name { font-size: 0.8rem; }
+  .trip-topbar__cta { padding: 7px 12px; font-size: 0.75rem; }
 }
 
 /* --- 3. Highlights bar --- */
