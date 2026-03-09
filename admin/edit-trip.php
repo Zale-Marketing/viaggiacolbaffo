@@ -1239,8 +1239,11 @@ $preview_token_val = $trip['preview_token'] ?? '';
           position:absolute; content:''; height:18px; width:18px;
           left:3px; bottom:3px; background:white; border-radius:50%; transition:.3s;
         }
-        .toggle-switch input:checked + .toggle-slider { background:var(--primary); }
+        .toggle-switch input:checked + .toggle-slider { background:#000744; }
         .toggle-switch input:checked + .toggle-slider:before { transform:translateX(20px); }
+        .bracket-row input[type="number"] { padding: 7px 10px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 13px; font-family: inherit; color: var(--text); background: var(--white); }
+        .bracket-row input[type="number"]:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,.15); }
+        .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
         </style>
 
     </div><!-- /edit-container -->
