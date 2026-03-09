@@ -1599,7 +1599,7 @@ body.has-hero #site-header.scrolled nav a {
 }
 
 @media (max-width: 768px) {
-  .trip-tabs { top: 94px; }
+  .trip-tabs { top: 88px; }
 }
 
 @media (max-width: 480px) {
