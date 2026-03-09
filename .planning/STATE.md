@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-03-06)
 Phase: 1 of 6 (Foundation)
 Plan: 0 of TBD in current phase
 Status: Ready to plan
-Last activity: 2026-03-09 - Completed quick task 18: Refactor lead gate UX — sticky bottom bar + bottom sheet with IntersectionObserver
+Last activity: 2026-03-09 - Completed quick task 19: Fix gate bar trigger logic and mobile topbar CSS with IntersectionObserver
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -179,9 +179,10 @@ None yet.
 | 16 | Center trip-tabs nav (justify-content: center) and upgrade hotel cards to Villa Mercede horizontal-row style (45% image, red accent line, hover lift/zoom, 768px mobile stack) | 2026-03-09 | 3dc1118 | [16-center-trip-tabs-nav-hotel-cards-villa-m](./quick/16-center-trip-tabs-nav-hotel-cards-villa-m/) |
 | 17 | Lead gate on viaggio.php — hero+highlights+days 1-2 free, day 3+ and all sections blurred behind Nome/Cognome/Email/Telefono form; localStorage unlock persists; webhook POST silent-fail | 2026-03-09 | f59705a | [17-lead-gate-on-viaggio-php-unlock-full-tri](./quick/17-lead-gate-on-viaggio-php-unlock-full-tri/) |
 | 18 | Refactor lead gate UX — sticky bottom bar slides up via IntersectionObserver; clicking opens bottom sheet with privacy/marketing checkboxes; old full-page overlay removed | 2026-03-09 | fa7aeb8 | [18-refactor-lead-gate-ux-sticky-bottom-bar-](./quick/18-refactor-lead-gate-ux-sticky-bottom-bar-/) |
+| 19 | Fix gate bar trigger — sentinel = first .gated-content, rootMargin -50% fires at mid-screen, barShown flag; topbar mobile 2-row grid with visible dates + CTA at all sizes | 2026-03-09 | fe3c41a | [19-fix-gate-bar-trigger-logic-and-mobile-to](./quick/19-fix-gate-bar-trigger-logic-and-mobile-to/) |
 
 ## Session Continuity
 
-Last session: 2026-03-09T15:18:00Z
-Stopped at: Completed quick task 18: Refactor lead gate UX — sticky bottom bar + bottom sheet
+Last session: 2026-03-09T19:03:00Z
+Stopped at: Completed quick task 19: Fix gate bar trigger logic and mobile topbar CSS
 Resume file: None
