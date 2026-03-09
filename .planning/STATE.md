@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-03-06)
 Phase: 1 of 6 (Foundation)
 Plan: 0 of TBD in current phase
 Status: Ready to plan
-Last activity: 2026-03-09 - Completed quick task 12: Fix 8 bugs — date_start/date_end mismatch, preserve accompagnatore/volo/hotel, itinerary fields, admin tabs, child age validation, NaN filter, bambini label
+Last activity: 2026-03-09 - Completed quick task 13: Admin UI redesign — navy #000744 primary, red #CC0031 CTA, zero gold across all 7 admin files
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -169,9 +169,10 @@ None yet.
 | 10 | Fix 4 bugs: updatePrice global scope, insurance event listener via addEventListener, child age labels read CONFIG maxBracket, B2C telefono required + validated | 2026-03-09 | 5fa4d2c | [10-fix-viaggio-php-updateprice-global-scope](./quick/10-fix-viaggio-php-updateprice-global-scope/) |
 | 11 | Fix 3 issues: null-safe date rendering in trip cards (show "Date da definire"), 12 complete month tags in tags.json, hyphenated chip IDs in admin/tags.php | 2026-03-09 | acdbec5 | [11-fix-3-issues-date-null-checks-missing-mo](./quick/11-fix-3-issues-date-null-checks-missing-mo/) |
 | 12 | Fix 8 bugs: date_start/date_end mismatch, preserve accompagnatore/volo/hotel, itinerary location/date/image_url, admin tabs Accompagnatore/Volo/Hotel, child age validation, NaN filter, bambini label dynamic | 2026-03-09 | d590e41 | [12-fix-8-bugs-date-key-mismatch-preserve-ac](./quick/12-fix-8-bugs-date-key-mismatch-preserve-ac/) |
+| 13 | Admin UI redesign — navy #000744 primary, red #CC0031 CTA, zero gold across all 7 admin files (admin.css, login, index, edit-trip, settings, tags, destinations) | 2026-03-09 | 0f2cd15 | [13-admin-ui-redesign-navy-red-brand-colors-](./quick/13-admin-ui-redesign-navy-red-brand-colors-/) |
 
 ## Session Continuity
 
-Last session: 2026-03-09T13:00:00Z
-Stopped at: Completed quick task 12: Fix 8 bugs — date keys, preserve fields, itinerary, tabs, child age validation, NaN, bambini label
+Last session: 2026-03-09T14:00:00Z
+Stopped at: Completed quick task 13: Admin UI redesign — navy/red brand colors, kill gold
 Resume file: None
