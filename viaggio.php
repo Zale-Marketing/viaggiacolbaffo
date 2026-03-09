@@ -663,8 +663,8 @@ if (!CONFIG.room_types || CONFIG.room_types.length === 0) {
               <input class="qf-input" type="email" id="f-email" name="email">
             </div>
             <div class="qf-field">
-              <label class="qf-label" for="f-telefono">Telefono</label>
-              <input class="qf-input" type="tel" id="f-telefono" name="telefono">
+              <label class="qf-label" for="f-telefono">Telefono *</label>
+              <input class="qf-input" type="tel" id="f-telefono" name="telefono" required>
             </div>
           </div>
         </div>
@@ -899,12 +899,16 @@ function toggleClientEmail() {
         wrap.style.cssText = 'display:flex;flex-direction:column;gap:4px;';
         var lbl = document.createElement('label');
         lbl.className = 'qf-label';
-        lbl.textContent = 'Età bambino ' + (i+1) + ' *';
+        var maxBracket = 17;
+        if (CONFIG.child_discount_brackets && CONFIG.child_discount_brackets.length > 0) {
+          maxBracket = Math.max.apply(null, CONFIG.child_discount_brackets.map(function(b){ return b.max_age; }));
+        }
+        lbl.textContent = 'Età bambino ' + (i+1) + ' * (0–' + maxBracket + ' anni per sconto)';
         var inp = document.createElement('input');
         inp.type = 'number'; inp.min = 0; inp.max = 17;
         inp.className = 'qf-input qf-child-age-input';
         inp.style.cssText = 'width:130px;padding:10px 14px;';
-        inp.placeholder = 'Anni (0-17)';
+        inp.placeholder = '0–' + maxBracket + ' anni';
         inp.name = 'eta_bambini[]';
         inp.required = true;
         if (oldVals[i] !== undefined) inp.value = oldVals[i];
@@ -1166,8 +1170,14 @@ function toggleClientEmail() {
         var nome    = (document.getElementById('f-nome')||{}).value||'';
         var cognome = (document.getElementById('f-cognome')||{}).value||'';
         var email   = (document.getElementById('f-email')||{}).value||'';
+        var tel2    = (document.getElementById('f-telefono')||{}).value||'';
         if (!nome.trim() || !cognome.trim() || !email.trim()) {
           errorDiv.textContent = 'Compila Nome, Cognome ed Email.';
+          errorDiv.style.display = 'block';
+          return;
+        }
+        if (!tel2.trim()) {
+          errorDiv.textContent = 'Inserisci il numero di telefono.';
           errorDiv.style.display = 'block';
           return;
         }
