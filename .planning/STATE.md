@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-03-06)
 Phase: 1 of 6 (Foundation)
 Plan: 0 of TBD in current phase
 Status: Ready to plan
-Last activity: 2026-03-09 - Completed quick task 17: Lead gate on viaggio.php — unlock full trip on form submit
+Last activity: 2026-03-09 - Completed quick task 18: Refactor lead gate UX — sticky bottom bar + bottom sheet with IntersectionObserver
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -178,9 +178,10 @@ None yet.
 | 15 | Topbar redesign — 3-column grid (title+dates left, savings+status center, CTA right), status pill colour variants, piggy-bank savings badge | 2026-03-09 | 6d84341 | [15-topbar-redesign-title-dates-left-savings](./quick/15-topbar-redesign-title-dates-left-savings/) |
 | 16 | Center trip-tabs nav (justify-content: center) and upgrade hotel cards to Villa Mercede horizontal-row style (45% image, red accent line, hover lift/zoom, 768px mobile stack) | 2026-03-09 | 3dc1118 | [16-center-trip-tabs-nav-hotel-cards-villa-m](./quick/16-center-trip-tabs-nav-hotel-cards-villa-m/) |
 | 17 | Lead gate on viaggio.php — hero+highlights+days 1-2 free, day 3+ and all sections blurred behind Nome/Cognome/Email/Telefono form; localStorage unlock persists; webhook POST silent-fail | 2026-03-09 | f59705a | [17-lead-gate-on-viaggio-php-unlock-full-tri](./quick/17-lead-gate-on-viaggio-php-unlock-full-tri/) |
+| 18 | Refactor lead gate UX — sticky bottom bar slides up via IntersectionObserver; clicking opens bottom sheet with privacy/marketing checkboxes; old full-page overlay removed | 2026-03-09 | fa7aeb8 | [18-refactor-lead-gate-ux-sticky-bottom-bar-](./quick/18-refactor-lead-gate-ux-sticky-bottom-bar-/) |
 
 ## Session Continuity
 
 Last session: 2026-03-09T15:18:00Z
-Stopped at: Completed quick task 17: Lead gate on viaggio.php unlock full trip on form submit
+Stopped at: Completed quick task 18: Refactor lead gate UX — sticky bottom bar + bottom sheet
 Resume file: None
