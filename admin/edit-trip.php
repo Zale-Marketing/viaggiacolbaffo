@@ -43,7 +43,7 @@ if ($is_new) {
         'tags'              => [],
         'accompagnatore'    => null,
         'volo'              => null,
-        'hotels'            => [],
+        'hotel'             => [],
         'webhook_url'       => '',
         'form_config'       => [],
     ];
@@ -156,9 +156,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         : [];
 
     // Itinerary
-    $itin_titles = $_POST['itinerary_title'] ?? [];
-    $itin_descs  = $_POST['itinerary_desc']  ?? [];
-    $itinerary   = [];
+    $itin_titles    = $_POST['itinerary_title']    ?? [];
+    $itin_descs     = $_POST['itinerary_desc']     ?? [];
+    $itin_locations = $_POST['itinerary_location'] ?? [];
+    $itin_dates     = $_POST['itinerary_date']     ?? [];
+    $itin_images    = $_POST['itinerary_image']    ?? [];
+    $itinerary      = [];
     foreach ($itin_titles as $i => $title_val) {
         $title_val = trim($title_val);
         $desc_val  = trim($itin_descs[$i] ?? '');
@@ -166,7 +169,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $itinerary[] = [
                 'day'         => $i + 1,
                 'title'       => $title_val,
+                'location'    => trim($itin_locations[$i] ?? ''),
+                'date'        => trim($itin_dates[$i] ?? ''),
                 'description' => $desc_val,
+                'image_url'   => trim($itin_images[$i] ?? ''),
             ];
         }
     }
@@ -186,6 +192,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tags = json_decode($tags_json, true);
     if (!is_array($tags)) $tags = [];
 
+    // ── Accompagnatore ────────────────────────────────────────────
+    $acc_nome = trim($_POST['accompagnatore_nome'] ?? '');
+    $new_accompagnatore = $acc_nome !== '' ? [
+        'nome'      => $acc_nome,
+        'titolo'    => trim($_POST['accompagnatore_titolo'] ?? ''),
+        'bio'       => trim($_POST['accompagnatore_bio'] ?? ''),
+        'foto'      => trim($_POST['accompagnatore_foto'] ?? ''),
+        'whatsapp'  => trim($_POST['accompagnatore_whatsapp'] ?? ''),
+        'instagram' => trim($_POST['accompagnatore_instagram'] ?? ''),
+    ] : ($trip['accompagnatore'] ?? null);
+
+    // ── Volo ──────────────────────────────────────────────────────
+    $volo_incluso = isset($_POST['volo_incluso']);
+    if ($volo_incluso) {
+        $new_volo = [
+            'incluso' => true,
+            'andata' => [
+                'data'               => trim($_POST['volo_andata_data'] ?? ''),
+                'compagnia'          => trim($_POST['volo_andata_compagnia'] ?? ''),
+                'partenza_aeroporto' => trim($_POST['volo_andata_partenza'] ?? ''),
+                'arrivo_aeroporto'   => trim($_POST['volo_andata_arrivo'] ?? ''),
+                'numero_volo'        => trim($_POST['volo_andata_numero'] ?? ''),
+                'orario_partenza'    => trim($_POST['volo_andata_orario_partenza'] ?? ''),
+                'scalo'              => trim($_POST['volo_andata_scalo'] ?? ''),
+            ],
+            'ritorno' => [
+                'data'               => trim($_POST['volo_ritorno_data'] ?? ''),
+                'compagnia'          => trim($_POST['volo_ritorno_compagnia'] ?? ''),
+                'partenza_aeroporto' => trim($_POST['volo_ritorno_partenza'] ?? ''),
+                'arrivo_aeroporto'   => trim($_POST['volo_ritorno_arrivo'] ?? ''),
+                'numero_volo'        => trim($_POST['volo_ritorno_numero'] ?? ''),
+                'orario_partenza'    => trim($_POST['volo_ritorno_orario_partenza'] ?? ''),
+                'scalo'              => trim($_POST['volo_ritorno_scalo'] ?? ''),
+            ],
+        ];
+    } else {
+        $new_volo = $trip['volo'] ?? ['incluso' => false];
+    }
+
+    // ── Hotel ─────────────────────────────────────────────────────
+    $hotel_citta       = $_POST['hotel_citta']       ?? [];
+    $hotel_nome        = $_POST['hotel_nome']        ?? [];
+    $hotel_stelle      = $_POST['hotel_stelle']      ?? [];
+    $hotel_notti       = $_POST['hotel_notti']       ?? [];
+    $hotel_descrizione = $_POST['hotel_descrizione'] ?? [];
+    $hotel_foto        = $_POST['hotel_foto']        ?? [];
+    $hotel_indirizzo   = $_POST['hotel_indirizzo']   ?? [];
+    $new_hotel = [];
+    foreach ($hotel_citta as $i => $citta) {
+        if (trim($citta) === '' && trim($hotel_nome[$i] ?? '') === '') continue;
+        $new_hotel[] = [
+            'citta'            => trim($citta),
+            'nome'             => trim($hotel_nome[$i] ?? ''),
+            'stelle'           => (int)($hotel_stelle[$i] ?? 4),
+            'notti'            => (int)($hotel_notti[$i] ?? 1),
+            'descrizione'      => trim($hotel_descrizione[$i] ?? ''),
+            'image_url'        => trim($hotel_foto[$i] ?? ''),
+            'indirizzo'        => trim($hotel_indirizzo[$i] ?? ''),
+            'inclusa_colazione'=> isset($_POST['hotel_colazione_' . $i]),
+        ];
+    }
+    if (empty($new_hotel) && !isset($_POST['hotel_citta'])) {
+        $new_hotel = $trip['hotel'] ?? [];
+    }
+
     // Assemble trip data
     $trip_data = [
         'slug'              => $new_slug,
@@ -197,8 +268,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'position'          => $trip['position'] ?? 0,
         'preview_token'     => $preview_token,
         'commission_rate'   => (float)($_POST['commission_rate'] ?? 10),
-        'start_date'        => $_POST['start_date'] ?? '',
-        'end_date'          => $_POST['end_date'] ?? '',
+        'date_start'        => $_POST['start_date'] ?? '',
+        'date_end'          => $_POST['end_date'] ?? '',
         'duration'          => trim($_POST['duration'] ?? ''),
         'price_from'        => (int)($_POST['price_from'] ?? 0),
         'hero_image'        => trim($_POST['hero_image'] ?? ''),
@@ -210,6 +281,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'excluded'          => $excluded,
         'tags'              => $tags,
         'form_config'       => $trip['form_config'] ?? [],
+        'accompagnatore'    => $new_accompagnatore,
+        'volo'              => $new_volo,
+        'hotel'             => $new_hotel,
     ];
 
     if (empty($errors)) {
@@ -806,6 +880,9 @@ $preview_token_val = $trip['preview_token'] ?? '';
             <button type="button" class="tab-btn" data-tab="content">Contenuto</button>
             <button type="button" class="tab-btn" data-tab="itinerario">Itinerario</button>
             <button type="button" class="tab-btn" data-tab="formconfig">Form Config</button>
+            <button type="button" class="tab-btn" data-tab="accompagnatore">Accompagnatore</button>
+            <button type="button" class="tab-btn" data-tab="volo">Volo</button>
+            <button type="button" class="tab-btn" data-tab="hotel">Hotel</button>
         </nav>
 
         <!-- ══════════════════════════════════════════════════ -->
@@ -852,11 +929,11 @@ $preview_token_val = $trip['preview_token'] ?? '';
             <div class="form-grid thirds" style="margin-bottom:16px;">
                 <div class="form-group">
                     <label for="start_date">Data inizio</label>
-                    <input type="date" id="start_date" name="start_date" value="<?= htmlspecialchars($trip['start_date'] ?? '') ?>">
+                    <input type="date" id="start_date" name="start_date" value="<?= htmlspecialchars($trip['date_start'] ?? '') ?>">
                 </div>
                 <div class="form-group">
                     <label for="end_date">Data fine</label>
-                    <input type="date" id="end_date" name="end_date" value="<?= htmlspecialchars($trip['end_date'] ?? '') ?>">
+                    <input type="date" id="end_date" name="end_date" value="<?= htmlspecialchars($trip['date_end'] ?? '') ?>">
                 </div>
                 <div class="form-group">
                     <label>Durata <span class="muted">(calcolata automaticamente)</span></label>
@@ -1011,6 +1088,15 @@ $preview_token_val = $trip['preview_token'] ?? '';
                         <input type="text" name="itinerary_title[]"
                             value="<?= htmlspecialchars($day['title'] ?? '') ?>"
                             placeholder="Titolo giorno">
+                        <input type="text" name="itinerary_location[]"
+                            value="<?= htmlspecialchars($day['location'] ?? '') ?>"
+                            placeholder="Città / Luogo (es. Las Vegas, NV)">
+                        <input type="text" name="itinerary_date[]"
+                            value="<?= htmlspecialchars($day['date'] ?? '') ?>"
+                            placeholder="Data (es. 5 Aprile 2026)">
+                        <input type="url" name="itinerary_image[]"
+                            value="<?= htmlspecialchars($day['image_url'] ?? '') ?>"
+                            placeholder="URL Immagine giorno">
                         <textarea name="itinerary_desc[]" rows="3"
                             placeholder="Descrizione..."><?= htmlspecialchars($day['description'] ?? '') ?></textarea>
                     </div>
@@ -1121,9 +1207,9 @@ $preview_token_val = $trip['preview_token'] ?? '';
               <div id="fc-brackets-list">
                 <?php foreach ($fc_brackets as $i => $b): ?>
                 <div class="bracket-row" style="display:flex;gap:10px;align-items:center;margin-bottom:8px;">
-                  <input type="number" class="br-min" min="0" max="17" value="<?= (int)$b['min_age'] ?>" placeholder="Min" style="width:70px;">
+                  <input type="number" class="br-min" min="0" max="7" value="<?= (int)$b['min_age'] ?>" placeholder="Min" style="width:70px;">
                   <span>–</span>
-                  <input type="number" class="br-max" min="0" max="17" value="<?= (int)$b['max_age'] ?>" placeholder="Max" style="width:70px;">
+                  <input type="number" class="br-max" min="0" max="7" value="<?= (int)$b['max_age'] ?>" placeholder="Max" style="width:70px;">
                   <span>anni: sconto</span>
                   <input type="number" class="br-discount" min="0" value="<?= (int)$b['discount'] ?>" placeholder="€" style="width:90px;">
                   <button type="button" onclick="this.parentElement.remove()" style="color:#cc0031;background:none;border:none;cursor:pointer;font-size:1.2rem;">×</button>
@@ -1213,6 +1299,122 @@ $preview_token_val = $trip['preview_token'] ?? '';
 
         </div><!-- /tab-formconfig -->
 
+<?php
+$acc        = $trip['accompagnatore'] ?? [];
+$volo_data  = $trip['volo'] ?? [];
+$hotels_data = $trip['hotel'] ?? [];
+?>
+
+<!-- ══ TAB: ACCOMPAGNATORE ══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-accompagnatore">
+  <h3 class="section-title">Accompagnatore del Viaggio</h3>
+  <p style="color:#888;font-size:13px;margin-bottom:20px;">Lascia vuoto se il viaggio non ha un accompagnatore dedicato.</p>
+  <div class="form-group" style="margin-bottom:16px;">
+    <label>Nome Accompagnatore</label>
+    <input type="text" name="accompagnatore_nome" value="<?= htmlspecialchars($acc['nome'] ?? '') ?>" placeholder="es. Lorenzo D'Alessandro">
+  </div>
+  <div class="form-group" style="margin-bottom:16px;">
+    <label>Titolo / Ruolo</label>
+    <input type="text" name="accompagnatore_titolo" value="<?= htmlspecialchars($acc['titolo'] ?? '') ?>" placeholder="es. Il Baffo — Fondatore e Accompagnatore">
+  </div>
+  <div class="form-group" style="margin-bottom:16px;">
+    <label>Biografia</label>
+    <textarea name="accompagnatore_bio" rows="4" placeholder="Breve bio..."><?= htmlspecialchars($acc['bio'] ?? '') ?></textarea>
+  </div>
+  <div class="form-group" style="margin-bottom:8px;">
+    <label>Foto URL</label>
+    <input type="url" name="accompagnatore_foto" id="acc-foto-url"
+           value="<?= htmlspecialchars($acc['foto'] ?? '') ?>"
+           placeholder="https://..."
+           oninput="var i=document.getElementById('acc-foto-preview');i.src=this.value;i.style.display=this.value?'block':'none';">
+  </div>
+  <img id="acc-foto-preview"
+       src="<?= htmlspecialchars($acc['foto'] ?? '') ?>"
+       style="<?= !empty($acc['foto']) ? 'display:block;' : 'display:none;' ?>max-height:120px;border-radius:50%;border:2px solid #ddd;margin-bottom:16px;">
+  <div class="form-group" style="margin-bottom:16px;">
+    <label>WhatsApp</label>
+    <input type="text" name="accompagnatore_whatsapp" value="<?= htmlspecialchars($acc['whatsapp'] ?? '') ?>" placeholder="es. +39 333 1234567">
+  </div>
+  <div class="form-group" style="margin-bottom:24px;">
+    <label>Instagram (handle senza @)</label>
+    <input type="text" name="accompagnatore_instagram" value="<?= htmlspecialchars($acc['instagram'] ?? '') ?>" placeholder="es. lorenzobaffo">
+  </div>
+</div><!-- /tab-accompagnatore -->
+
+<!-- ══ TAB: VOLO ════════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-volo">
+  <h3 class="section-title">Dettagli Volo</h3>
+  <div class="form-group" style="margin-bottom:20px;">
+    <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+      <input type="checkbox" name="volo_incluso" id="volo_incluso" value="1"
+             <?= !empty($volo_data['incluso']) ? 'checked' : '' ?>
+             onchange="document.getElementById('volo-details-panel').style.display=this.checked?'block':'none'">
+      <span>Volo incluso nel prezzo</span>
+    </label>
+  </div>
+  <div id="volo-details-panel" style="display:<?= !empty($volo_data['incluso']) ? 'block' : 'none' ?>;">
+    <?php $va = $volo_data['andata'] ?? []; $vr = $volo_data['ritorno'] ?? []; ?>
+    <h3 class="section-title">Volo Andata</h3>
+    <div class="form-grid" style="margin-bottom:16px;">
+      <div class="form-group"><label>Data</label><input type="text" name="volo_andata_data" value="<?= htmlspecialchars($va['data'] ?? '') ?>" placeholder="es. 17 Aprile 2026"></div>
+      <div class="form-group"><label>Compagnia</label><input type="text" name="volo_andata_compagnia" value="<?= htmlspecialchars($va['compagnia'] ?? '') ?>" placeholder="es. Lufthansa"></div>
+    </div>
+    <div class="form-grid" style="margin-bottom:16px;">
+      <div class="form-group"><label>Aeroporto Partenza</label><input type="text" name="volo_andata_partenza" value="<?= htmlspecialchars($va['partenza_aeroporto'] ?? '') ?>" placeholder="es. Milano Malpensa (MXP)"></div>
+      <div class="form-group"><label>Aeroporto Arrivo</label><input type="text" name="volo_andata_arrivo" value="<?= htmlspecialchars($va['arrivo_aeroporto'] ?? '') ?>" placeholder="es. Los Angeles (LAX)"></div>
+    </div>
+    <div class="form-grid" style="margin-bottom:16px;">
+      <div class="form-group"><label>Numero Volo</label><input type="text" name="volo_andata_numero" value="<?= htmlspecialchars($va['numero_volo'] ?? '') ?>" placeholder="es. LH 234"></div>
+      <div class="form-group"><label>Orario Partenza</label><input type="text" name="volo_andata_orario_partenza" value="<?= htmlspecialchars($va['orario_partenza'] ?? '') ?>" placeholder="es. 10:30"></div>
+    </div>
+    <div class="form-group" style="margin-bottom:24px;"><label>Scalo (opzionale)</label><input type="text" name="volo_andata_scalo" value="<?= htmlspecialchars($va['scalo'] ?? '') ?>" placeholder="es. Frankfurt (FRA) — 2h layover"></div>
+    <h3 class="section-title">Volo Ritorno</h3>
+    <div class="form-grid" style="margin-bottom:16px;">
+      <div class="form-group"><label>Data</label><input type="text" name="volo_ritorno_data" value="<?= htmlspecialchars($vr['data'] ?? '') ?>" placeholder="es. 1 Maggio 2026"></div>
+      <div class="form-group"><label>Compagnia</label><input type="text" name="volo_ritorno_compagnia" value="<?= htmlspecialchars($vr['compagnia'] ?? '') ?>" placeholder="es. Lufthansa"></div>
+    </div>
+    <div class="form-grid" style="margin-bottom:16px;">
+      <div class="form-group"><label>Aeroporto Partenza</label><input type="text" name="volo_ritorno_partenza" value="<?= htmlspecialchars($vr['partenza_aeroporto'] ?? '') ?>" placeholder="es. San Francisco (SFO)"></div>
+      <div class="form-group"><label>Aeroporto Arrivo</label><input type="text" name="volo_ritorno_arrivo" value="<?= htmlspecialchars($vr['arrivo_aeroporto'] ?? '') ?>" placeholder="es. Milano Malpensa (MXP)"></div>
+    </div>
+    <div class="form-grid" style="margin-bottom:16px;">
+      <div class="form-group"><label>Numero Volo</label><input type="text" name="volo_ritorno_numero" value="<?= htmlspecialchars($vr['numero_volo'] ?? '') ?>" placeholder="es. LH 456"></div>
+      <div class="form-group"><label>Orario Partenza</label><input type="text" name="volo_ritorno_orario_partenza" value="<?= htmlspecialchars($vr['orario_partenza'] ?? '') ?>" placeholder="es. 16:20"></div>
+    </div>
+    <div class="form-group" style="margin-bottom:24px;"><label>Scalo (opzionale)</label><input type="text" name="volo_ritorno_scalo" value="<?= htmlspecialchars($vr['scalo'] ?? '') ?>" placeholder="es. Frankfurt (FRA) — 1h 45min layover"></div>
+  </div>
+</div><!-- /tab-volo -->
+
+<!-- ══ TAB: HOTEL ════════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-hotel">
+  <h3 class="section-title">Alloggi</h3>
+  <div id="hotels-rows">
+    <?php foreach ($hotels_data as $hi => $h): ?>
+    <div class="hotel-admin-row" style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px;margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <strong style="font-size:14px;color:#000744;">Hotel <?= $hi + 1 ?></strong>
+        <button type="button" class="btn-icon btn-danger-icon" onclick="this.closest('.hotel-admin-row').remove()" title="Rimuovi"><i class="fa-solid fa-trash"></i></button>
+      </div>
+      <div class="form-grid" style="margin-bottom:12px;">
+        <div class="form-group"><label>Città</label><input type="text" name="hotel_citta[]" value="<?= htmlspecialchars($h['citta'] ?? '') ?>" placeholder="es. Los Angeles"></div>
+        <div class="form-group"><label>Nome Hotel</label><input type="text" name="hotel_nome[]" value="<?= htmlspecialchars($h['nome'] ?? '') ?>" placeholder="es. Hotel Santa Monica"></div>
+      </div>
+      <div class="form-grid" style="margin-bottom:12px;">
+        <div class="form-group"><label>Stelle</label><select name="hotel_stelle[]"><?php for($s=1;$s<=5;$s++): ?><option value="<?= $s ?>" <?= ($h['stelle']??4)==$s?'selected':'' ?>><?= $s ?> ★</option><?php endfor; ?></select></div>
+        <div class="form-group"><label>Notti</label><input type="number" name="hotel_notti[]" min="1" value="<?= (int)($h['notti'] ?? 1) ?>"></div>
+      </div>
+      <div class="form-group" style="margin-bottom:12px;"><label>Indirizzo</label><input type="text" name="hotel_indirizzo[]" value="<?= htmlspecialchars($h['indirizzo'] ?? '') ?>" placeholder="es. Santa Monica, CA"></div>
+      <div class="form-group" style="margin-bottom:12px;"><label>Descrizione</label><textarea name="hotel_descrizione[]" rows="2"><?= htmlspecialchars($h['descrizione'] ?? '') ?></textarea></div>
+      <div class="form-group" style="margin-bottom:12px;"><label>Foto URL</label><input type="url" name="hotel_foto[]" value="<?= htmlspecialchars($h['image_url'] ?? '') ?>" placeholder="https://..."></div>
+      <div class="form-group" style="margin-bottom:0;"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:400;"><input type="checkbox" name="hotel_colazione_<?= $hi ?>[]" value="1" <?= !empty($h['inclusa_colazione'])?'checked':'' ?>> Colazione inclusa</label></div>
+    </div>
+    <?php endforeach; ?>
+  </div>
+  <button type="button" class="btn-small" onclick="addHotelRow()" style="margin-top:12px;padding:8px 16px;">
+    <i class="fa-solid fa-plus"></i> Aggiungi Hotel
+  </button>
+</div><!-- /tab-hotel -->
+
         <style>
         .room-pill {
           padding: 8px 18px;
@@ -1298,7 +1500,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 
 // Restore last active tab (URL param ?tab= takes priority over localStorage)
 (function() {
-    const validTabs = ['info', 'media', 'content', 'itinerario', 'formconfig'];
+    const validTabs = ['info', 'media', 'content', 'itinerario', 'formconfig', 'accompagnatore', 'volo', 'hotel'];
     const urlTab = new URLSearchParams(window.location.search).get('tab');
     let last = 'info';
     try { last = localStorage.getItem('edit_trip_tab') || 'info'; } catch(e) {}
@@ -1551,6 +1753,9 @@ function addItineraryRow() {
         <span class="day-num">${n}</span>
         <div class="itinerary-fields">
             <input type="text" name="itinerary_title[]" placeholder="Titolo giorno">
+            <input type="text" name="itinerary_location[]" placeholder="Città / Luogo (es. Las Vegas, NV)">
+            <input type="text" name="itinerary_date[]" placeholder="Data (es. 5 Aprile 2026)">
+            <input type="url" name="itinerary_image[]" placeholder="URL Immagine giorno">
             <textarea name="itinerary_desc[]" rows="3" placeholder="Descrizione..."></textarea>
         </div>
         <div class="itinerary-actions">
@@ -1560,6 +1765,25 @@ function addItineraryRow() {
         </div>`;
     container.appendChild(div);
     initDrag(); // re-bind drag events to new row
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Hotel admin rows
+// ─────────────────────────────────────────────────────────────────────────────
+function addHotelRow() {
+    var hi = document.getElementById('hotels-rows').querySelectorAll('.hotel-admin-row').length;
+    var div = document.createElement('div');
+    div.className = 'hotel-admin-row';
+    div.style.cssText = 'background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px;margin-bottom:12px;';
+    div.innerHTML =
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><strong style="font-size:14px;color:#000744;">Hotel ' + (hi + 1) + '</strong><button type="button" class="btn-icon btn-danger-icon" onclick="this.closest(\'.hotel-admin-row\').remove()" title="Rimuovi"><i class="fa-solid fa-trash"></i></button></div>'
+      + '<div class="form-grid" style="margin-bottom:12px;"><div class="form-group"><label>Città</label><input type="text" name="hotel_citta[]" placeholder="es. Roma"></div><div class="form-group"><label>Nome Hotel</label><input type="text" name="hotel_nome[]" placeholder="es. Hotel De Russie"></div></div>'
+      + '<div class="form-grid" style="margin-bottom:12px;"><div class="form-group"><label>Stelle</label><select name="hotel_stelle[]"><option value="1">1 ★</option><option value="2">2 ★</option><option value="3">3 ★</option><option value="4" selected>4 ★</option><option value="5">5 ★</option></select></div><div class="form-group"><label>Notti</label><input type="number" name="hotel_notti[]" min="1" value="1"></div></div>'
+      + '<div class="form-group" style="margin-bottom:12px;"><label>Indirizzo</label><input type="text" name="hotel_indirizzo[]" placeholder="es. Via Veneto, Roma"></div>'
+      + '<div class="form-group" style="margin-bottom:12px;"><label>Descrizione</label><textarea name="hotel_descrizione[]" rows="2"></textarea></div>'
+      + '<div class="form-group" style="margin-bottom:12px;"><label>Foto URL</label><input type="url" name="hotel_foto[]" placeholder="https://..."></div>'
+      + '<div class="form-group" style="margin-bottom:0;"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:400;"><input type="checkbox" name="hotel_colazione_new[]" value="1"> Colazione inclusa</label></div>';
+    document.getElementById('hotels-rows').appendChild(div);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1649,9 +1873,9 @@ function addBracket() {
     const row = document.createElement('div');
     row.className = 'bracket-row';
     row.style.cssText = 'display:flex;gap:10px;align-items:center;margin-bottom:8px;';
-    row.innerHTML = '<input type="number" class="br-min" min="0" max="17" placeholder="Min" style="width:70px;">'
+    row.innerHTML = '<input type="number" class="br-min" min="0" max="7" placeholder="Min" style="width:70px;">'
         + '<span>–</span>'
-        + '<input type="number" class="br-max" min="0" max="17" placeholder="Max" style="width:70px;">'
+        + '<input type="number" class="br-max" min="0" max="7" placeholder="Max" style="width:70px;">'
         + '<span>anni: sconto</span>'
         + '<input type="number" class="br-discount" min="0" placeholder="€" style="width:90px;">'
         + '<button type="button" onclick="this.parentElement.remove()" style="color:#cc0031;background:none;border:none;cursor:pointer;font-size:1.2rem;">×</button>';

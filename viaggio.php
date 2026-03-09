@@ -683,7 +683,7 @@ if (!CONFIG.room_types || CONFIG.room_types.length === 0) {
               <input type="hidden" name="adulti" id="adulti-hidden" value="2">
             </div>
             <div class="qf-field" id="bambini-row" style="display:block;">
-              <label class="qf-label">Bambini <small style="font-weight:400;color:#666;">(0–17 anni)</small></label>
+              <label class="qf-label" style="margin-bottom:10px;display:block;" id="bambini-label">Bambini <small id="bambini-label-age" style="font-weight:400;color:#666;font-size:12px;">(0–17 anni)</small></label>
               <div class="qf-counter-wrap">
                 <button class="qf-counter-btn" type="button" id="btn-bambini-dec">−</button>
                 <span class="qf-counter-val" id="bambini-val">0</span>
@@ -899,13 +899,13 @@ function toggleClientEmail() {
         wrap.style.cssText = 'display:flex;flex-direction:column;gap:4px;';
         var lbl = document.createElement('label');
         lbl.className = 'qf-label';
-        var maxBracket = 17;
+        var maxBracket = 7;
         if (CONFIG.child_discount_brackets && CONFIG.child_discount_brackets.length > 0) {
           maxBracket = Math.max.apply(null, CONFIG.child_discount_brackets.map(function(b){ return b.max_age; }));
         }
         lbl.textContent = 'Età bambino ' + (i+1) + ' * (0–' + maxBracket + ' anni per sconto)';
         var inp = document.createElement('input');
-        inp.type = 'number'; inp.min = 0; inp.max = 17;
+        inp.type = 'number'; inp.min = 0; inp.max = 7;
         inp.className = 'qf-input qf-child-age-input';
         inp.style.cssText = 'width:130px;padding:10px 14px;';
         inp.placeholder = '0–' + maxBracket + ' anni';
@@ -1099,6 +1099,18 @@ function toggleClientEmail() {
 
     updatePrice();
     updateButtonStates();
+
+    // Aggiorna label bambini con max età reale da brackets
+    var bambiniLabelAge = document.getElementById('bambini-label-age');
+    if (bambiniLabelAge) {
+      if (CONFIG.child_discounts_enabled && CONFIG.child_discount_brackets && CONFIG.child_discount_brackets.length > 0) {
+        var maxB = Math.max.apply(null, CONFIG.child_discount_brackets.map(function(b){ return b.max_age; }));
+        bambiniLabelAge.textContent = '(0\u2013' + maxB + ' anni per sconto)';
+      } else {
+        bambiniLabelAge.textContent = '(0\u201317 anni)';
+      }
+    }
+
     var cbAss2 = document.getElementById('cb-assicurazione');
     if (cbAss2) cbAss2.addEventListener('change', updatePrice);
 
@@ -1183,6 +1195,20 @@ function toggleClientEmail() {
         }
       }
 
+      // Valida età bambini se sconti abilitati
+      if (CONFIG.child_discounts_enabled && childCount > 0) {
+        var ageInputsAll = document.querySelectorAll('#child-ages .qf-child-age-input');
+        var allAgesFilled = true;
+        ageInputsAll.forEach(function(inp) {
+          if (inp.value === '' || inp.value === null) allAgesFilled = false;
+        });
+        if (!allAgesFilled) {
+          errorDiv.textContent = 'Inserisci l\'età di tutti i bambini per calcolare correttamente il preventivo.';
+          errorDiv.style.display = 'block';
+          return;
+        }
+      }
+
       if (!CONFIG.webhook_url) {
         errorDiv.textContent = 'Errore di configurazione: webhook non impostato.';
         errorDiv.style.display = 'block';
@@ -1205,7 +1231,7 @@ function toggleClientEmail() {
         nome_viaggio:             CONFIG.nome_viaggio,
         numero_adulti:            adultCount,
         numero_bambini:           childCount,
-        eta_bambini:              childAges.filter(function(a){ return a!==null; }).join(', '),
+        eta_bambini:              childAges.filter(function(a){ return a!==null && !isNaN(a); }).join(', '),
         composizione_camera:      'X' + n,
         prezzo_base_pp:           CONFIG.prezzo_base_persona,
         supplemento_singola:      n === 1 ? CONFIG.supplemento_singola : 0,
