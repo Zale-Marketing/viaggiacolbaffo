@@ -1621,6 +1621,13 @@ body.has-hero #site-header.scrolled nav a {
   display: none;
 }
 
+@media (max-width: 768px) {
+  .trip-tabs__nav {
+    justify-content: flex-start;
+    padding: 0 16px;
+  }
+}
+
 .trip-tabs__btn {
   display: inline-block;
   padding: 1rem 1.25rem;
