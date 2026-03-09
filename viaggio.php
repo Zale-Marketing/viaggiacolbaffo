@@ -167,47 +167,6 @@ $volo           = $trip['volo'] ?? null;
   </nav>
 </div>
 
-<!-- ========================================================
-     LEAD GATE OVERLAY
-     ======================================================== -->
-<div id="lead-gate" class="lead-gate">
-  <div class="lead-gate__blur-hint">
-    <i class="fa-solid fa-lock"></i>
-    <span>Sblocca il programma completo</span>
-  </div>
-  <div class="lead-gate__card">
-    <div class="lead-gate__icon"><i class="fa-solid fa-map-location-dot"></i></div>
-    <h2 class="lead-gate__title">Scopri tutti i dettagli del viaggio</h2>
-    <p class="lead-gate__subtitle">Inserisci i tuoi dati per accedere all'itinerario completo, agli alloggi, ai prezzi e a tutto quello che è incluso.</p>
-    <div class="lead-gate__form" id="lead-gate-form">
-      <div class="lead-gate__row">
-        <div class="lead-gate__field">
-          <input type="text" id="lg-nome" placeholder="Nome" autocomplete="given-name">
-        </div>
-        <div class="lead-gate__field">
-          <input type="text" id="lg-cognome" placeholder="Cognome" autocomplete="family-name">
-        </div>
-      </div>
-      <div class="lead-gate__row">
-        <div class="lead-gate__field">
-          <input type="email" id="lg-email" placeholder="Email" autocomplete="email">
-        </div>
-        <div class="lead-gate__field">
-          <input type="tel" id="lg-telefono" placeholder="Telefono" autocomplete="tel">
-        </div>
-      </div>
-      <div id="lg-error" class="lead-gate__error" style="display:none;"></div>
-      <button type="button" id="lg-submit" class="lead-gate__btn">
-        <span id="lg-btn-text">Scopri il programma completo</span>
-        <span id="lg-btn-spinner" style="display:none;"><i class="fa-solid fa-spinner fa-spin"></i></span>
-      </button>
-      <p class="lead-gate__privacy">
-        <i class="fa-solid fa-shield-halved"></i>
-        Nessuno spam. I tuoi dati sono al sicuro.
-      </p>
-    </div>
-  </div>
-</div>
 
 <!-- ========================================================
      ITINERARY SECTION — TIMELINE
@@ -885,6 +844,67 @@ if (!CONFIG.room_types || CONFIG.room_types.length === 0) {
 </div>
 
 </main>
+
+<!-- ========================================================
+     LEAD GATE — sticky bar + bottom sheet
+     ======================================================== -->
+
+<!-- Sticky bottom bar -->
+<div id="gate-bar" class="gate-bar">
+  <div class="gate-bar__text">
+    <i class="fa-solid fa-lock"></i>
+    <span>Scopri l'itinerario completo, gli alloggi e i prezzi</span>
+  </div>
+  <button type="button" id="gate-bar-btn" class="gate-bar__btn">Sblocca ora</button>
+</div>
+
+<!-- Bottom sheet overlay -->
+<div id="gate-overlay" class="gate-overlay"></div>
+
+<!-- Bottom sheet -->
+<div id="gate-sheet" class="gate-sheet">
+  <div class="gate-sheet__handle"></div>
+  <div class="gate-sheet__inner">
+    <div class="gate-sheet__icon"><i class="fa-solid fa-map-location-dot"></i></div>
+    <h2 class="gate-sheet__title">Scopri tutti i dettagli del viaggio</h2>
+    <p class="gate-sheet__subtitle">Inserisci i tuoi dati per accedere all'itinerario completo, agli alloggi, ai prezzi e a tutto quello che è incluso.</p>
+    <div class="gate-sheet__row">
+      <div class="gate-sheet__field">
+        <input type="text" id="lg-nome" placeholder="Nome" autocomplete="given-name">
+      </div>
+      <div class="gate-sheet__field">
+        <input type="text" id="lg-cognome" placeholder="Cognome" autocomplete="family-name">
+      </div>
+    </div>
+    <div class="gate-sheet__row">
+      <div class="gate-sheet__field">
+        <input type="email" id="lg-email" placeholder="Email" autocomplete="email">
+      </div>
+      <div class="gate-sheet__field">
+        <input type="tel" id="lg-telefono" placeholder="Telefono" autocomplete="tel">
+      </div>
+    </div>
+    <div class="gate-sheet__checks">
+      <label class="gate-sheet__check">
+        <input type="checkbox" id="lg-privacy" required>
+        <span>Ho letto e accetto la <a href="/privacy-policy" target="_blank">Privacy Policy</a>. Consenso obbligatorio. *</span>
+      </label>
+      <label class="gate-sheet__check">
+        <input type="checkbox" id="lg-marketing">
+        <span>Acconsento a ricevere comunicazioni promozionali e offerte personalizzate. (Facoltativo)</span>
+      </label>
+    </div>
+    <div id="lg-error" class="gate-sheet__error" style="display:none;"></div>
+    <button type="button" id="lg-submit" class="gate-sheet__btn">
+      <span id="lg-btn-text">Scopri il programma completo</span>
+      <span id="lg-btn-spinner" style="display:none;"><i class="fa-solid fa-spinner fa-spin"></i></span>
+    </button>
+    <p class="gate-sheet__privacy-note">
+      <i class="fa-solid fa-shield-halved"></i>
+      Nessuno spam. I tuoi dati sono al sicuro.
+    </p>
+  </div>
+</div>
 
 <?php require_once ROOT . '/includes/footer.php'; ?>
 
