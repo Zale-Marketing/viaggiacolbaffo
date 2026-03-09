@@ -124,7 +124,7 @@ foreach ($tags as $tag) {
 
 <!-- ── Admin navigation ── -->
 <nav class="admin-nav">
-    <span class="admin-nav__logo">Viaggia Col Baffo</span>
+    <span class="admin-nav__logo"><span class="logo-icon"><i class="fa-solid fa-compass"></i></span> Viaggia col Baffo</span>
     <ul class="admin-nav__links">
         <li><a href="index.php" class="admin-nav__link">Pannello</a></li>
         <li><a href="tags.php" class="admin-nav__link admin-nav__link--active">Tag</a></li>

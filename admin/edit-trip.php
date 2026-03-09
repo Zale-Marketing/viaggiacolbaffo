@@ -416,8 +416,8 @@ $preview_token_val = $trip['preview_token'] ?? '';
         }
         .tab-btn:hover { color: var(--text); }
         .tab-btn.active {
-            color: var(--gold);
-            border-bottom-color: var(--gold);
+            color: var(--navy);
+            border-bottom-color: #CC0031;
         }
         .tab-panel { display: none; }
         .tab-panel.active { display: block; }
@@ -467,8 +467,8 @@ $preview_token_val = $trip['preview_token'] ?? '';
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: var(--gold);
-            box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.15);
+            border-color: #000744;
+            box-shadow: 0 0 0 3px rgba(0,7,68,0.1);
         }
         .form-group input[readonly] {
             background: #f8f8f8;
@@ -568,9 +568,9 @@ $preview_token_val = $trip['preview_token'] ?? '';
         .tag-pill {
             padding: 5px 12px;
             border-radius: 20px;
-            border: 1.5px solid var(--gold);
+            border: 1.5px solid #000744;
             background: transparent;
-            color: var(--gold);
+            color: #000744;
             font-size: 12px;
             font-weight: 500;
             cursor: pointer;
@@ -578,7 +578,7 @@ $preview_token_val = $trip['preview_token'] ?? '';
             font-family: inherit;
         }
         .tag-pill.selected {
-            background: var(--gold);
+            background: #000744;
             color: var(--white);
         }
         .custom-tag-row {
@@ -596,7 +596,7 @@ $preview_token_val = $trip['preview_token'] ?? '';
         }
         .custom-tag-row input:focus {
             outline: none;
-            border-color: var(--gold);
+            border-color: #000744;
         }
 
         /* ── Media tab ── */
@@ -682,7 +682,7 @@ $preview_token_val = $trip['preview_token'] ?? '';
             justify-content: center;
         }
         .day-num {
-            background: var(--gold);
+            background: #000744;
             color: var(--white);
             font-weight: 700;
             font-size: 12px;
@@ -712,7 +712,7 @@ $preview_token_val = $trip['preview_token'] ?? '';
         .itinerary-fields input:focus,
         .itinerary-fields textarea:focus {
             outline: none;
-            border-color: var(--gold);
+            border-color: #000744;
         }
         .btn-icon {
             background: none;
@@ -794,14 +794,14 @@ $preview_token_val = $trip['preview_token'] ?? '';
             padding: 8px 20px;
             border: none;
             border-radius: var(--radius);
-            background: var(--gold);
+            background: #CC0031;
             font-size: 13px;
             font-weight: 700;
             cursor: pointer;
             color: var(--white);
             font-family: inherit;
         }
-        .btn-publish:hover { background: var(--gold-dark); }
+        .btn-publish:hover { background: #a80028; }
 
         /* ── Form config placeholder ── */
         .coming-soon-box {
@@ -836,7 +836,7 @@ $preview_token_val = $trip['preview_token'] ?? '';
 
 <!-- ── Admin navigation ── -->
 <nav class="admin-nav">
-    <span class="admin-nav__logo">Viaggia Col Baffo</span>
+    <span class="admin-nav__logo"><span class="logo-icon"><i class="fa-solid fa-compass"></i></span> Viaggia col Baffo</span>
     <ul class="admin-nav__links">
         <li><a href="/admin/" class="admin-nav__link">Pannello</a></li>
         <li><a href="/admin/settings.php" class="admin-nav__link">Impostazioni</a></li>
@@ -963,7 +963,7 @@ $preview_token_val = $trip['preview_token'] ?? '';
                         <i class="fa-solid fa-rotate"></i> Rigenera
                     </button>
                 </div>
-                <span class="field-hint">URL anteprima: <a href="<?= htmlspecialchars($preview_url) ?>" target="_blank" style="color:var(--gold);"><?= htmlspecialchars($preview_url) ?></a></span>
+                <span class="field-hint">URL anteprima: <a href="<?= htmlspecialchars($preview_url) ?>" target="_blank" style="color:#000744;"><?= htmlspecialchars($preview_url) ?></a></span>
             </div>
             <?php endif; ?>
 
@@ -1289,7 +1289,7 @@ $preview_token_val = $trip['preview_token'] ?? '';
 
           <!-- Save -->
           <div style="display:flex;gap:12px;align-items:center;margin-bottom:2rem;">
-            <button type="button" class="btn-primary" onclick="saveFormConfig()">
+            <button type="button" class="btn btn-primary" onclick="saveFormConfig()">
               <i class="fa-solid fa-save"></i> Salva Configurazione Form
             </button>
             <span id="save-fc-msg" style="display:none; color:var(--success);">
@@ -1444,7 +1444,7 @@ $hotels_data = $trip['hotel'] ?? [];
         .toggle-switch input:checked + .toggle-slider { background:#000744; }
         .toggle-switch input:checked + .toggle-slider:before { transform:translateX(20px); }
         .bracket-row input[type="number"] { padding: 7px 10px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 13px; font-family: inherit; color: var(--text); background: var(--white); }
-        .bracket-row input[type="number"]:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,.15); }
+        .bracket-row input[type="number"]:focus { outline: none; border-color: #000744; box-shadow: 0 0 0 3px rgba(0,7,68,0.1); }
         .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
         </style>
 

@@ -154,69 +154,13 @@ function status_label(string $status): string {
   <!-- Admin stylesheet -->
   <link rel="stylesheet" href="/admin/admin.css">
 
-  <style>
-    /* Drag-and-drop row visual states */
-    .trip-row.dragging          { opacity: 0.45; }
-    .trip-row.drag-over         { border-top: 2px solid var(--gold); }
-    .drag-handle                { cursor: grab; }
-    .drag-handle:active         { cursor: grabbing; }
-
-    /* Publish toggle pill — clickable */
-    .pill-toggle {
-      cursor: pointer;
-      user-select: none;
-      transition: opacity 0.15s;
-    }
-    .pill-toggle:hover { opacity: 0.8; }
-
-    /* Toast */
-    #toast {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: var(--text);
-      color: #fff;
-      padding: 12px 20px;
-      border-radius: var(--radius);
-      font-size: 13px;
-      font-weight: 500;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 0.2s, transform 0.2s;
-      pointer-events: none;
-      z-index: 999;
-    }
-    #toast.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Cestino section header */
-    .trash-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .trash-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--danger);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-  </style>
 </head>
 <body>
 
 <!-- ── Admin navigation ─────────────────────────────────────────────────────── -->
 <nav class="admin-nav">
   <span class="admin-nav__logo">
-    <i class="fa-solid fa-compass" style="color: var(--gold); margin-right: 6px;"></i>
+    <span class="logo-icon"><i class="fa-solid fa-compass"></i></span>
     Viaggia col Baffo
   </span>
 
@@ -225,7 +169,7 @@ function status_label(string $status): string {
     <li><a href="/admin/settings.php">Impostazioni</a></li>
     <li><a href="/admin/tags.php">Tag</a></li>
     <li><a href="/admin/destinations.php">Destinazioni</a></li>
-    <li><a href="/" target="_blank">Vai al sito <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a></li>
+    <li><a href="/" target="_blank" class="admin-nav__visit">Vai al sito <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a></li>
   </ul>
 
   <div class="admin-nav__actions">
@@ -248,7 +192,7 @@ function status_label(string $status): string {
       <h1 class="admin-page__title">Pannello di controllo</h1>
       <p class="admin-page__subtitle">Gestisci i tuoi viaggi, pubblicazioni e contenuti.</p>
     </div>
-    <a href="/admin/edit-trip.php?new=1" class="btn btn-primary">
+    <a href="/admin/edit-trip.php?new=1" class="btn btn-cta">
       <i class="fa-solid fa-plus"></i>
       Crea Nuovo Viaggio
     </a>
@@ -260,11 +204,11 @@ function status_label(string $status): string {
       <div class="admin-stat-card__number"><?php echo $total; ?></div>
       <div class="admin-stat-card__label">Viaggi Totali</div>
     </div>
-    <div class="admin-stat-card">
+    <div class="admin-stat-card admin-stat-card--red">
       <div class="admin-stat-card__number"><?php echo $published; ?></div>
       <div class="admin-stat-card__label">Pubblicati</div>
     </div>
-    <div class="admin-stat-card">
+    <div class="admin-stat-card admin-stat-card--green">
       <div class="admin-stat-card__number"><?php echo $draft; ?></div>
       <div class="admin-stat-card__label">Bozze</div>
     </div>
@@ -277,7 +221,7 @@ function status_label(string $status): string {
         <div class="admin-empty__icon"><i class="fa-regular fa-map"></i></div>
         <div class="admin-empty__title">Nessun viaggio ancora</div>
         <div class="admin-empty__text">Crea il tuo primo viaggio per iniziare.</div>
-        <a href="/admin/edit-trip.php?new=1" class="btn btn-primary">
+        <a href="/admin/edit-trip.php?new=1" class="btn btn-cta">
           <i class="fa-solid fa-plus"></i>
           Crea Nuovo Viaggio
         </a>
@@ -449,11 +393,10 @@ function status_label(string $status): string {
   var toastEl = document.getElementById('toast');
   var toastTimer = null;
   function showToast(msg, isError) {
-    toastEl.textContent = msg;
-    toastEl.style.background = isError ? 'var(--danger)' : 'var(--text)';
-    toastEl.classList.add('show');
+    toastEl.innerHTML = (isError ? '<i class="fa-solid fa-circle-xmark"></i> ' : '<i class="fa-solid fa-circle-check"></i> ') + msg;
+    toastEl.className = isError ? 'toast-error show' : 'toast-success show';
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 2200);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 2500);
   }
 
   // ── Generic AJAX POST ─────────────────────────────────────────────────────

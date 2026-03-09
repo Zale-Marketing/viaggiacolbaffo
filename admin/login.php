@@ -63,10 +63,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <div class="admin-login__card">
 
     <div class="admin-login__logo">
-      <i class="fa-solid fa-compass" style="color: var(--gold); margin-right: 6px;"></i>
-      Viaggia col Baffo Admin
+      <i class="fa-solid fa-compass"></i>
     </div>
-    <p class="admin-login__subtitle">Inserisci la password per accedere al pannello.</p>
+    <div class="admin-login__title">Viaggia col Baffo</div>
+    <p class="admin-login__subtitle">Inserisci la password per accedere al pannello di controllo.</p>
 
     <form method="POST" action="/admin/login.php" autocomplete="on">
       <div class="form-group">
