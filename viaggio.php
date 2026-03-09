@@ -83,19 +83,43 @@ require_once ROOT . '/includes/header.php';
 <!-- ========================================================
      STICKY TOP BAR (appears after hero on scroll)
      ======================================================== -->
-<div class="trip-topbar" id="trip-topbar">
-  <div class="trip-topbar__left">
-    <span class="trip-topbar__name"><?php echo htmlspecialchars($trip['title'] ?? ''); ?></span>
-    <?php if (!empty($fc['competitor_enabled'])): ?>
-    <span class="trip-topbar__savings" id="topbar-savings"></span>
-    <?php endif; ?>
+  <div class="trip-topbar" id="trip-topbar">
+
+    <!-- LEFT: title + dates -->
+    <div class="trip-topbar__left">
+      <div class="trip-topbar__name"><?php echo htmlspecialchars($trip['title'] ?? ''); ?></div>
+      <div class="trip-topbar__dates">
+        <i class="fa-regular fa-calendar"></i>
+        <?php echo htmlspecialchars($date_display); ?>
+      </div>
+    </div>
+
+    <!-- CENTER: savings + status -->
+    <div class="trip-topbar__center">
+      <?php if (!empty($fc['competitor_enabled'])): ?>
+      <span class="trip-topbar__savings" id="topbar-savings"></span>
+      <?php endif; ?>
+      <span class="trip-topbar__status trip-topbar__status--<?php echo htmlspecialchars($trip_status); ?>">
+        <?php
+        $topbar_icons = [
+          'confermata'   => '✓',
+          'ultimi-posti' => '⚡',
+          'sold-out'     => '✕',
+          'programmata'  => '◷',
+        ];
+        echo ($topbar_icons[$trip_status] ?? '●') . ' ' . htmlspecialchars($status_label);
+        ?>
+      </span>
+    </div>
+
+    <!-- RIGHT: CTA -->
+    <div class="trip-topbar__right">
+      <?php if ($has_form): ?>
+      <a href="#richiedi-preventivo" class="trip-topbar__cta">Richiedi Preventivo</a>
+      <?php endif; ?>
+    </div>
+
   </div>
-  <div class="trip-topbar__right">
-    <?php if ($has_form): ?>
-    <a href="#richiedi-preventivo" class="trip-topbar__cta">Richiedi Preventivo</a>
-    <?php endif; ?>
-  </div>
-</div>
 
 <!-- ========================================================
      HIGHLIGHTS BAR
@@ -812,7 +836,7 @@ function toggleClientEmail() {
       var ref_comp = CONFIG.prezzo_concorrenza_persona * 2;
       var ref_save = ref_comp - ref_ours;
       if (ref_save > 0) {
-        topbarSavings.textContent = '✓ Risparmi fino a €' + ref_save.toLocaleString('it-IT') + ' vs altre agenzie';
+          topbarSavings.innerHTML = '<i class="fa-solid fa-piggy-bank"></i> Con il Baffo risparmi <strong>€' + ref_save.toLocaleString('it-IT') + '</strong>';
         topbarSavings.style.display = 'inline-flex';
       }
     }
