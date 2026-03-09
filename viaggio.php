@@ -683,7 +683,7 @@ if (!CONFIG.room_types || CONFIG.room_types.length === 0) {
               <input type="hidden" name="adulti" id="adulti-hidden" value="2">
             </div>
             <div class="qf-field" id="bambini-row" style="display:block;">
-              <label class="qf-label">Bambini</label>
+              <label class="qf-label">Bambini <small style="font-weight:400;color:#666;">(0–17 anni)</small></label>
               <div class="qf-counter-wrap">
                 <button class="qf-counter-btn" type="button" id="btn-bambini-dec">−</button>
                 <span class="qf-counter-val" id="bambini-val">0</span>
@@ -700,7 +700,7 @@ if (!CONFIG.room_types || CONFIG.room_types.length === 0) {
         <?php if (!empty($fc['insurance_enabled'])): ?>
         <div class="qf-checkbox-group">
           <label>
-            <input type="checkbox" id="cb-assicurazione" name="assicurazione" value="1" onchange="updatePrice()">
+            <input type="checkbox" id="cb-assicurazione" name="assicurazione" value="1">
             <span>
               <strong>Aggiungi Assicurazione Viaggio (+<?= (int)($fc['percentuale_assicurazione'] ?? 5) ?>%)</strong><br>
               <small>Protezione completa per il tuo viaggio</small>
@@ -1055,6 +1055,7 @@ function toggleClientEmail() {
       }
       updateButtonStates();
     }
+    window.updatePrice = updatePrice;
 
     // -- Counter logic --
     function setCount(type, val) {
@@ -1094,6 +1095,8 @@ function toggleClientEmail() {
 
     updatePrice();
     updateButtonStates();
+    var cbAss2 = document.getElementById('cb-assicurazione');
+    if (cbAss2) cbAss2.addEventListener('change', updatePrice);
 
     // -- B2B/B2C toggle --
     document.getElementById('btn-agenzia').addEventListener('click', function() {
