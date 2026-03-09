@@ -831,18 +831,17 @@ const CONFIG = {
     var box = document.getElementById('emailClienteBox');
     var emailInput = document.getElementById('emailCliente');
     if (!checkbox || !box || !emailInput) return;
-    if (checkbox.checked) {
-      box.style.display = 'block';
-      emailInput.required = true;
-    } else {
-      box.style.display = 'none';
-      emailInput.required = false;
-    }
+    box.style.display = checkbox.checked ? 'block' : 'none';
+    emailInput.required = checkbox.checked;
+    if (!checkbox.checked) emailInput.value = '';
   }
   (function() {
-    var adultCount = 2;
-    var childCount = 0;
     var maxPersons = Math.max.apply(null, CONFIG.room_types.map(function(r){ return parseInt(r.replace('X','')); }));
+    var adultCount = Math.min(2, maxPersons);
+    var childCount = 0;
+    if (!CONFIG.child_discounts_enabled) { childCount = 0; }
+    document.getElementById('adulti-val').textContent = adultCount;
+    document.getElementById('adulti-hidden').value = adultCount;
     var isAgency   = true;
     var agencyUnlocked = false;
 
@@ -908,11 +907,18 @@ const CONFIG = {
           subtotale += CONFIG.supplemento_singola;
         }
       } else {
-        lines.push({label: adultCount + ' Adult' + (adultCount > 1 ? 'i' : 'o') + ' × ' + fmt(pb), value: pb * 2});
+        var primiDue;
+        if (adultCount >= 2) {
+          primiDue = '2 adulti';
+        } else {
+          primiDue = '1 adulto + 1 bambino';
+        }
+        lines.push({label: 'Camera doppia (' + primiDue + ') × ' + fmt(pb), value: pb * 2});
         subtotale += pb * 2;
         if (n >= 3) {
           var p3 = pb - CONFIG.sconto_terzo_letto;
-          lines.push({label: '➕ 3° Letto (Adulto/Bambino)', value: p3});
+          var tipo3 = (adultCount >= 3) ? 'adulto' : 'bambino';
+          lines.push({label: '➕ 3° letto (' + tipo3 + ')', value: p3});
           subtotale += p3;
         }
         if (n >= 4) {
@@ -1096,8 +1102,7 @@ const CONFIG = {
       });
     }
 
-    var agencyInput = document.getElementById('codiceAgenzia');
-    if (agencyInput) agencyInput.addEventListener('input', function(){ validateAgencyCode(agencyInput.value); });
+    // Agency code validation runs only on submit
 
     // -- B2B/B2C toggle --
     document.getElementById('btn-agenzia').addEventListener('click', function() {
