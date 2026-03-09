@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-03-06)
 Phase: 1 of 6 (Foundation)
 Plan: 0 of TBD in current phase
 Status: Ready to plan
-Last activity: 2026-03-09 - Completed quick task 16: Center trip-tabs nav + hotel cards Villa Mercede style
+Last activity: 2026-03-09 - Completed quick task 17: Lead gate on viaggio.php — unlock full trip on form submit
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -144,6 +144,10 @@ Recent decisions affecting current work:
 - [Phase 06-admin-panel]: save_form_config merges webhook_url inside form_config before writing to trips.json — matches existing schema
 - [Phase 06-admin-panel]: regenerate_token AJAX posts to same page instead of /admin/ajax.php — self-contained handler in edit-trip.php
 - [Phase 06-admin-panel]: previewToken declared as let (not const) to allow update by regenerateToken() without page reload
+- [Quick-17-lead-gate]: GATE object placed in unconditional script block (not inside if ($has_form)) — gate is always active regardless of quote form config
+- [Quick-17-lead-gate]: Webhook POST fails silently (catch calls doUnlock) — gate never blocks a conversion due to webhook infrastructure issues
+- [Quick-17-lead-gate]: localStorage key is per-trip vcb_unlocked_{slug} — unlock state is trip-scoped, not site-wide
+- [Quick-17-lead-gate]: Lightbox left outside gated-galleria wrapper — lightbox is a UI utility, not gated content
 
 ### Pending Todos
 
@@ -173,9 +177,10 @@ None yet.
 | 14 | Drag & drop image upload system — admin/upload.php endpoint + .img-uploader/.gallery-uploader widgets across hero, gallery, itinerary, hotel, accompagnatore fields | 2026-03-09 | ad30288 | [14-drag-and-drop-image-upload-system-for-ad](./quick/14-drag-and-drop-image-upload-system-for-ad/) |
 | 15 | Topbar redesign — 3-column grid (title+dates left, savings+status center, CTA right), status pill colour variants, piggy-bank savings badge | 2026-03-09 | 6d84341 | [15-topbar-redesign-title-dates-left-savings](./quick/15-topbar-redesign-title-dates-left-savings/) |
 | 16 | Center trip-tabs nav (justify-content: center) and upgrade hotel cards to Villa Mercede horizontal-row style (45% image, red accent line, hover lift/zoom, 768px mobile stack) | 2026-03-09 | 3dc1118 | [16-center-trip-tabs-nav-hotel-cards-villa-m](./quick/16-center-trip-tabs-nav-hotel-cards-villa-m/) |
+| 17 | Lead gate on viaggio.php — hero+highlights+days 1-2 free, day 3+ and all sections blurred behind Nome/Cognome/Email/Telefono form; localStorage unlock persists; webhook POST silent-fail | 2026-03-09 | f59705a | [17-lead-gate-on-viaggio-php-unlock-full-tri](./quick/17-lead-gate-on-viaggio-php-unlock-full-tri/) |
 
 ## Session Continuity
 
-Last session: 2026-03-09T15:08:00Z
-Stopped at: Completed quick task 16: Center trip-tabs nav and hotel cards Villa Mercede style
+Last session: 2026-03-09T15:18:00Z
+Stopped at: Completed quick task 17: Lead gate on viaggio.php unlock full trip on form submit
 Resume file: None
