@@ -65,8 +65,15 @@ require_once ROOT . '/includes/header.php';
             <div class="trip-card__content">
               <h3 class="trip-card__title"><?= htmlspecialchars($trip['title']) ?></h3>
               <p class="trip-card__dates">
-                <?= date('j M', strtotime($trip['date_start'])) ?> &ndash;
-                <?= date('j M Y', strtotime($trip['date_end'])) ?>
+                <?php
+                  $ds = $trip['date_start'] ?? '';
+                  $de = $trip['date_end'] ?? '';
+                  if (!empty($ds) && !empty($de)):
+                    echo date('j M', strtotime($ds)) . ' &ndash; ' . date('j M Y', strtotime($de));
+                  else:
+                    echo 'Date da definire';
+                  endif;
+                ?>
               </p>
               <p class="trip-card__price">Da <?= number_format($trip['price_from'], 0, ',', '.') ?> &euro;</p>
               <a class="trip-card__cta btn btn--gold"

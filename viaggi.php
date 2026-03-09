@@ -214,7 +214,8 @@ require_once ROOT . '/includes/header.php';
       <!-- Trip grid -->
       <div id="trips-grid" class="trip-grid">
         <?php foreach ($all_trips as $idx => $trip):
-          $trip_month = (int) date('n', strtotime($trip['date_start']));
+          $ds_raw = $trip['date_start'] ?? '';
+          $trip_month = !empty($ds_raw) ? (int) date('n', strtotime($ds_raw)) : 0;
           $search_text = strtolower(
             $trip['title'] . ' ' .
             $trip['continent'] . ' ' .
@@ -227,7 +228,7 @@ require_once ROOT . '/includes/header.php';
              data-tags="<?= htmlspecialchars(implode(' ', $trip['tags'] ?? [])) ?>"
              data-month="<?= $trip_month ?>"
              data-price="<?= (int)($trip['price_from'] ?? 0) ?>"
-             data-date="<?= htmlspecialchars($trip['date_start']) ?>"
+             data-date="<?= htmlspecialchars($ds_raw) ?>"
              data-index="<?= $idx ?>"
              data-search="<?= htmlspecialchars($search_text) ?>">
           <div class="trip-card">
@@ -249,8 +250,15 @@ require_once ROOT . '/includes/header.php';
             <div class="trip-card__content">
               <h3 class="trip-card__title"><?= htmlspecialchars($trip['title']) ?></h3>
               <p class="trip-card__dates">
-                <?= date('j M', strtotime($trip['date_start'])) ?> &ndash;
-                <?= date('j M Y', strtotime($trip['date_end'])) ?>
+                <?php
+                  $ds = $trip['date_start'] ?? '';
+                  $de = $trip['date_end'] ?? '';
+                  if (!empty($ds) && !empty($de)):
+                    echo date('j M', strtotime($ds)) . ' &ndash; ' . date('j M Y', strtotime($de));
+                  else:
+                    echo 'Date da definire';
+                  endif;
+                ?>
               </p>
               <p class="trip-card__price">Da <?= number_format($trip['price_from'], 0, ',', '.') ?> &euro;</p>
               <a class="trip-card__cta btn btn--gold"
